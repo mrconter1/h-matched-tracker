@@ -190,7 +190,12 @@ export default function BrokenBenchmarks() {
                     value: 'Time to Human Level (Years)', 
                     angle: -90, 
                     position: 'insideLeft',
-                    offset: 10
+                    offset: 15,
+                    style: { 
+                      textAnchor: 'middle',
+                      dominantBaseline: 'middle'
+                    },
+                    dy: 'middle'
                   }}
                 />
                 <Tooltip
