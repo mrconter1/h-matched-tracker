@@ -143,7 +143,7 @@ export default function BrokenBenchmarks() {
         <div className="text-center space-y-8 mb-16">
           <div className="space-y-2">
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
-              h-matched <span className="text-primary">Timeline</span>
+              h-matched <span className="text-primary">Tracker</span>
             </h1>
             <p className="text-sm text-muted-foreground">
               h = human-level performance | Tracking time from release to h-matched
@@ -242,6 +242,8 @@ export default function BrokenBenchmarks() {
                   stroke="hsl(var(--primary))"
                   strokeWidth={2}
                   r={6}
+                  x="released"
+                  y="timeToSolve"
                 />
                 <Line 
                   type="linear" 
