@@ -248,7 +248,8 @@ export default function BrokenBenchmarks() {
                   dataKey="trend" 
                   data={trendLineData} 
                   stroke="red" 
-                  strokeWidth={2} 
+                  strokeWidth={2}
+                  strokeDasharray="5 5" 
                   dot={false} 
                 />
               </ComposedChart>
