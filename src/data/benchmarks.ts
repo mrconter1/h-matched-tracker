@@ -138,7 +138,13 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "MMLU",
     release: "2020-09-07",
     solved: {
-      date: "2024-12-05"
+      date: "2022-12-15",
+      source: {
+        text: "AI systems reached human-level performance on the Massive Multitask Language Understanding benchmark around December 2022<sup class='reference'>[1]</sup>",
+        references: [{
+          url: "https://aiindex.stanford.edu/wp-content/uploads/2024/05/HAI_AI-Index-Report-2024.pdf"
+        }]
+      }
     },
     url: "https://crfm.stanford.edu/helm/mmlu/latest/",
     paperUrl: "https://arxiv.org/pdf/2009.03300"
