@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# h-matched Tracker
+
+<div align="center">
+  <h3>Tracking progress towards human level intelligence in AI</h3>
+  <p>
+    <a href="https://h-matched.vercel.app">View Live Site</a>
+    ·
+    <a href="https://github.com/mrconter1/broken-benchmarks/issues">Report Bug</a>
+    ·
+    <a href="mailto:rasmus.lindahl1996@gmail.com">Contact</a>
+  </p>
+</div>
+
+## About The Project
+
+h-matched Tracker measures and visualizes the acceleration of AI capabilities by tracking how quickly AI systems achieve human-level performance on various benchmarks. The project specifically monitors the duration between a benchmark's release and when it becomes "h-matched" (reached by AI at human-level performance).
+
+### Key Features
+
+- 📊 Interactive visualization of AI benchmark completion trends
+- 📈 Detailed timeline of benchmark achievements
+- 🔍 Comprehensive data on release dates, completion dates, and time-to-solve metrics
+
+## Why This Matters
+
+As AI systems continue to advance, the time between benchmark release and human-level achievement is shrinking. This tracker helps visualize this acceleration, providing insights into:
+
+- The pace of AI capability development
+- Areas where AI is rapidly approaching or surpassing human performance
+- Trends in the difficulty of creating benchmarks that humans can reliably outperform
+
+## Built With
+
+- [Next.js 14](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Recharts](https://recharts.org/)
+- [Radix UI](https://www.radix-ui.com/)
+- [Shadcn/ui](https://ui.shadcn.com/)
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/h-matched.git
+```
 
+2. Install dependencies
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Run the development server
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Contributing
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Notice something missing or have suggestions for improvement? Get in touch:
 
-## Learn More
+- [Open a GitHub Issue](https://github.com/mrconter1/broken-benchmarks/issues)
+- [Send an Email](mailto:rasmus.lindahl1996@gmail.com)
+- [Visit Portfolio](https://lindahl.works)
 
-To learn more about Next.js, take a look at the following resources:
+## Contact
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Rasmus Lindahl - [Portfolio](https://lindahl.works) - rasmus.lindahl1996@gmail.com
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Project Link: [https://h-matched.vercel.app](https://h-matched.vercel.app)
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Distributed under the MIT License. See `LICENSE` for more information.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Acknowledgments
+
+- [Next.js](https://nextjs.org/)
+- [Vercel](https://vercel.com/)
+- All contributors and maintainers of the AI benchmarks tracked in this project
