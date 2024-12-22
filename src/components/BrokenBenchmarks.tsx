@@ -139,7 +139,7 @@ export default function BrokenBenchmarks() {
             <Card className="text-left p-6 card-hover">
               <CardTitle className="text-lg mb-3">Why does it matter?</CardTitle>
               <p className="text-muted-foreground">
-                While there may be other ways to measure AI progress, the shrinking time between a benchmark&apos;s release and its solution suggests we&apos;re approaching a pivotal moment—when AI can match or exceed human performance on any measurable task we can devise.
+                While there may be other ways to measure AI progress, the shrinking time between a benchmark&apos;s release and the time for AI&apos;s to reach human level performance suggests we&apos;re approaching a pivotal moment—when AI can match or exceed human performance on any measurable task we can devise.
               </p>
             </Card>
           </div>
