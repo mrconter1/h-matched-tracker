@@ -227,6 +227,15 @@ export default function BrokenBenchmarks() {
                     dy: 'middle'
                   }}
                 />
+                <Line 
+                  type="linear" 
+                  dataKey="trend" 
+                  data={trendLineData} 
+                  stroke="red" 
+                  strokeWidth={2}
+                  strokeDasharray="5 5" 
+                  dot={false} 
+                />
                 <Scatter
                   data={prepareGraphData(benchmarkData)}
                   fill="hsl(var(--primary))"
@@ -245,15 +254,6 @@ export default function BrokenBenchmarks() {
                     fontSize: 11,
                     fontWeight: 500
                   }}
-                />
-                <Line 
-                  type="linear" 
-                  dataKey="trend" 
-                  data={trendLineData} 
-                  stroke="red" 
-                  strokeWidth={2}
-                  strokeDasharray="5 5" 
-                  dot={false} 
                 />
               </ComposedChart>
             </ResponsiveContainer>
