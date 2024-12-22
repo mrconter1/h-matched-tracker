@@ -47,7 +47,7 @@ export const benchmarkData: Benchmark[] = [
     solved: {
       date: "2018-09-15",
       source: {
-        text: "Stanford's 2021 AI Index Report reported that AI surpassed human performance on SQuAD 1.1 in September 2018<sup class='reference'>[1]</sup>",
+        text: "Performance improved from 67.75% in August 2016 to surpass human performance (91.22%) in September 2018<sup class='reference'>[1]</sup>",
         references: [{
           url: "https://aiindex.stanford.edu/wp-content/uploads/2021/11/2021-AI-Index-Report_Master.pdf"
         }]
@@ -60,7 +60,13 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "SQuAD 2.0",
     release: "2018-06-11",
     solved: {
-      date: "2019-03-15"
+      date: "2019-03-15",
+      source: {
+        text: "Took just 10 months to surpass human performance, improving from 66.3% in May 2018 to 89.47% in March 2019<sup class='reference'>[1]</sup>",
+        references: [{
+          url: "https://aiindex.stanford.edu/wp-content/uploads/2021/11/2021-AI-Index-Report_Master.pdf"
+        }]
+      }
     },
     url: "https://rajpurkar.github.io/SQuAD-explorer/explore/v2.0/dev/",
     paperUrl: "https://arxiv.org/pdf/1806.03822"
