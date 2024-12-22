@@ -177,7 +177,7 @@ export default function BrokenBenchmarks() {
                   domain={['auto', 'auto']}
                   tickCount={7}
                   label={{ 
-                    value: 'Release Year', 
+                    value: 'Benchmark Release Date',
                     position: 'bottom',
                     offset: 0
                   }}
