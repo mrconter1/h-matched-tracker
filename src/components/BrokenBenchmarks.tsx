@@ -125,7 +125,7 @@ export default function BrokenBenchmarks() {
         {/* Hero Section */}
         <div className="text-center space-y-8 mb-16">
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
-            Broken <span className="text-primary">Benchmarks</span>
+            Human-matched <span className="text-primary">Benchmarks</span>
           </h1>
           
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
