@@ -37,20 +37,24 @@ const benchmarkData = [
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', { 
+  const options: Intl.DateTimeFormatOptions = { 
     year: 'numeric',
     month: 'short',
-    day: 'numeric'
-  });
+    day: 'numeric',
+    timeZone: 'UTC'
+  };
+  return new Intl.DateTimeFormat('en-US', options).format(date);
 };
 
 export default function BrokenBenchmarks() {
+  const [mounted, setMounted] = useState(false);
   const [formattedDates, setFormattedDates] = useState<{[key: string]: string}>({});
-  const [formattedDate, setFormattedDate] = useState<string>("");
   const [latestSolved, setLatestSolved] = useState<string>("");
   const averageTimeToSolve = (benchmarkData.reduce((acc, curr) => acc + curr.timeToSolve, 0) / benchmarkData.length).toFixed(1);
+  const [currentDate, setCurrentDate] = useState("");
 
   useEffect(() => {
+    setMounted(true);
     const dates: {[key: string]: string} = {};
     benchmarkData.forEach(item => {
       dates[`${item.benchmark}-release`] = formatDate(item.release);
@@ -58,8 +62,12 @@ export default function BrokenBenchmarks() {
     });
     setFormattedDates(dates);
     setLatestSolved(formatDate(benchmarkData.sort((a, b) => new Date(b.solved).getTime() - new Date(a.solved).getTime())[0].solved));
-    setFormattedDate(new Date().toLocaleDateString());
+    setCurrentDate(formatDate(new Date().toISOString()));
   }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted">
@@ -151,7 +159,7 @@ export default function BrokenBenchmarks() {
         <Separator className="my-12" />
 
         <footer className="text-center text-sm text-muted-foreground">
-          <p>Data last updated {formattedDate}</p>
+          <p suppressHydrationWarning>Data last updated {currentDate}</p>
         </footer>
       </div>
     </div>
