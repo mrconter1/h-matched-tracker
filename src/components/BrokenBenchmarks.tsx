@@ -54,12 +54,13 @@ const calculateTimeToSolve = (releaseDate: string, solvedDate: string): number =
 
 const prepareGraphData = (data: typeof benchmarkData) => {
   return data
-    .sort((a, b) => new Date(a.solved).getTime() - new Date(b.solved).getTime())
+    .sort((a, b) => new Date(a.release).getTime() - new Date(b.release).getTime())
     .map(item => ({
       name: item.benchmark,
-      solved: Number(getDecimalYear(item.solved).toFixed(2)),
+      released: Number(getDecimalYear(item.release).toFixed(2)),
       timeToSolve: calculateTimeToSolve(item.release, item.solved),
-      solvedDate: formatDate(item.solved)
+      solvedDate: formatDate(item.solved),
+      releaseDate: formatDate(item.release)
     }));
 };
 
@@ -171,12 +172,12 @@ export default function BrokenBenchmarks() {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
                   type="number"
-                  dataKey="solved"
-                  name="Year Solved"
+                  dataKey="released"
+                  name="Release Year"
                   domain={['auto', 'auto']}
                   tickCount={7}
                   label={{ 
-                    value: 'Year Solved', 
+                    value: 'Release Year', 
                     position: 'bottom',
                     offset: 0
                   }}
@@ -199,6 +200,9 @@ export default function BrokenBenchmarks() {
                       return (
                         <div className="rounded-lg border bg-background p-2 shadow-sm">
                           <p className="font-medium">{payload[0].payload.name}</p>
+                          <p className="text-sm text-muted-foreground">
+                            Released: {payload[0].payload.releaseDate}
+                          </p>
                           <p className="text-sm text-muted-foreground">
                             Solved: {payload[0].payload.solvedDate}
                           </p>
