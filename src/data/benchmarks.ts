@@ -24,7 +24,7 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "ImageNet Challenge",
     release: "2009-01-01",
     solved: {
-      date: "2015-03",
+      date: "2015-03-01",
       model: "AlexNet",
       score: "82.7%",
       source: "https://www.image-net.org/",
@@ -36,7 +36,7 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "WinoGrande",
     release: "2012-06-10",
     solved: {
-      date: "2023-07",
+      date: "2023-07-11",
       model: "GPT-3",
       score: "95.1%",
       source: "https://winogrande.allenai.org/",
@@ -48,7 +48,7 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "SQuAD 1.1",
     release: "2016-06-16",
     solved: {
-      date: "2017-06",
+      date: "2017-06-15",
       model: "BERT",
       score: "88.5%",
       source: "https://rajpurkar.github.io/SQuAD-explorer/explore/1.1/dev/",
@@ -60,7 +60,7 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "SQuAD 2.0",
     release: "2018-06-11",
     solved: {
-      date: "2018-06",
+      date: "2018-06-15",
       model: "BERT",
       score: "91.0%",
       source: "https://rajpurkar.github.io/SQuAD-explorer/explore/v2.0/dev/",
@@ -72,7 +72,7 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "VQA",
     release: "2019-05-03",
     solved: {
-      date: "2021-06",
+      date: "2021-06-15",
       model: "GPT-3",
       score: "90.0%",
       source: "https://visualqa.org/",
@@ -84,7 +84,7 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "HellaSwag",
     release: "2019-06-19",
     solved: {
-      date: "2023-03",
+      date: "2023-03-14",
       model: "GPT-3",
       score: "95.1%",
       source: "https://rowanzellers.com/hellaswag/",
@@ -96,7 +96,7 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "Adversarial NLI", 
     release: "2019-10-31", 
     solved: {
-      date: "2020-06",
+      date: "2020-06-15",
       model: "BERT",
       score: "90.0%",
       source: "https://github.com/facebookresearch/anli",
@@ -104,17 +104,23 @@ export const benchmarkData: Benchmark[] = [
     url: "https://github.com/facebookresearch/anli",
     paperUrl: "https://arxiv.org/pdf/1910.14599"
   },
-  { benchmark: "ARC-AGI", release: "2019-11-05", solved: {
-    date: "2024-12",
-    model: "GPT-3",
-    score: "95.1%",
-    source: "https://arcprize.org/arc"
-  }, url: "https://arcprize.org/arc", paperUrl: "https://arxiv.org/abs/1911.01547" },
+  { 
+    benchmark: "ARC-AGI", 
+    release: "2019-11-05", 
+    solved: {
+      date: "2024-12-21",
+      model: "GPT-3",
+      score: "95.1%",
+      source: "https://arcprize.org/arc"
+    }, 
+    url: "https://arcprize.org/arc", 
+    paperUrl: "https://arxiv.org/abs/1911.01547" 
+  },
   { 
     benchmark: "SuperGLUE", 
     release: "2020-02-13", 
     solved: {
-      date: "2020-03",
+      date: "2020-03-15",
       model: "BERT",
       score: "90.0%",
       source: "https://super.gluebenchmark.com/",
@@ -126,7 +132,7 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "MMLU", 
     release: "2020-09-07", 
     solved: {
-      date: "2024-12",
+      date: "2024-12-05",
       model: "GPT-3",
       score: "95.1%",
       source: "https://crfm.stanford.edu/helm/mmlu/latest/",
@@ -138,7 +144,7 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "MATH", 
     release: "2021-11-08", 
     solved: {
-      date: "2024-06",
+      date: "2024-06-15",
       model: "GPT-3",
       score: "95.1%",
       source: "https://github.com/hendrycks/math/",
@@ -150,14 +156,14 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "BIG-Bench-Hard", 
     release: "2022-10-17", 
     solved: {
-      date: "2024-03",
+      date: "2024-03-04",
       model: "Claude-3-Sonnet",
       score: "93.1%",
       source: "https://www.anthropic.com/news/claude-3-5-sonnet",
       humanPerformance: {
         score: "94.4%",
         source: "https://arxiv.org/pdf/2210.09261",
-        date: "October 2022"
+        date: "2022-10-17"
       }
     },
     url: "https://github.com/suzgunmirac/BIG-Bench-Hard",
@@ -167,7 +173,7 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "GPQA", 
     release: "2023-11-29", 
     solved: {
-      date: "2024-09",
+      date: "2024-09-21",
       model: "GPT-3",
       score: "78.3%",
       source: "https://github.com/idavidrein/gpqa",
@@ -175,7 +181,7 @@ export const benchmarkData: Benchmark[] = [
       humanPerformance: {
         score: "69.7%",
         source: "https://openai.com/index/learning-to-reason-with-llms/",
-        date: "2023-11"
+        date: "2023-11-29"
       }
     },
     url: "https://github.com/idavidrein/gpqa",
@@ -185,7 +191,7 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "GSM8K", 
     release: "2021-11-18", 
     solved: {
-      date: "2024-03",
+      date: "2024-06-21",
       model: "GPT-3",
       score: "95.1%",
       source: "https://github.com/openai/grade-school-math",
