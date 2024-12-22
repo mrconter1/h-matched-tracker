@@ -240,5 +240,21 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://github.com/openai/human-eval",
     paperUrl: "https://arxiv.org/pdf/2107.03374v2"
+  },
+  {
+    benchmark: "TriviaQA",
+    release: "2017-05-13",
+    solved: {
+      date: "2022-08-08",
+      source: {
+        text: "Meta AI's Atlas model achieved 84.7% accuracy, surpassing human performance of around 79.7%<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
+        references: [
+          { url: "https://arxiv.org/pdf/1705.03551" },
+          { url: "https://arxiv.org/pdf/2208.03299" }
+        ]
+      }
+    },
+    url: "https://nlp.cs.washington.edu/triviaqa/",
+    paperUrl: "https://arxiv.org/pdf/1705.03551"
   }
 ]; 
