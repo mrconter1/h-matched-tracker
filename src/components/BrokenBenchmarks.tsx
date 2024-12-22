@@ -458,19 +458,22 @@ export default function BrokenBenchmarks() {
                         </Button>
                       </TableHead>
                       <TableHead>
-                        <Button
-                          variant="ghost"
-                          onClick={() => requestSort('timeToSolve')}
-                          className="hover:bg-muted/50 -ml-4 h-8 data-[state=open]:bg-accent flex items-center"
-                        >
-                          <span>Time to Human Level</span>
-                          <ArrowUpDown className="ml-2 h-4 w-4" />
+                        <div className="flex items-center">
+                          <Button
+                            variant="ghost"
+                            onClick={() => requestSort('timeToSolve')}
+                            className="hover:bg-muted/50 -ml-4 h-8 data-[state=open]:bg-accent flex items-center"
+                          >
+                            <span>Time to Human Level</span>
+                            <ArrowUpDown className="ml-2 h-4 w-4" />
+                          </Button>
+                          
                           <TooltipProvider>
                             <RadixTooltip>
-                              <TooltipTrigger asChild>
-                                <Button variant="ghost" className="h-4 w-4 p-0 ml-1">
-                                  <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                                </Button>
+                              <TooltipTrigger>
+                                <div className="inline-flex h-4 w-4 p-0 ml-1 cursor-help">
+                                  <HelpCircle className="h-4 w-4 text-muted-foreground hover:text-primary transition-colors" />
+                                </div>
                               </TooltipTrigger>
                               <TooltipContent 
                                 side="top" 
@@ -482,7 +485,7 @@ export default function BrokenBenchmarks() {
                               </TooltipContent>
                             </RadixTooltip>
                           </TooltipProvider>
-                        </Button>
+                        </div>
                       </TableHead>
                     </TableRow>
                   </TableHeader>
