@@ -533,7 +533,7 @@ export default function BrokenBenchmarks() {
                             <span className={DATE_TAG_CLASS}>
                               {formattedDates[`${item.benchmark}-solved`] || ''}
                             </span>
-                            {item.solved && (item.solved.source || item.solved.humanPerformance || item.solved.achievementSource) && (
+                            {item.solved && (
                               <TooltipProvider>
                                 <RadixTooltip>
                                   <TooltipTrigger className="cursor-help inline-flex">
@@ -544,28 +544,11 @@ export default function BrokenBenchmarks() {
                                     className="bg-background border-border" 
                                     sideOffset={5}
                                   >
-                                    <div className="space-y-2">
-                                      <div>
-                                        <p className="font-semibold">Achievement Details</p>
-                                        <p className="text-sm text-muted-foreground">
-                                          Score: {item.solved.score}
-                                          {item.solved.source && (
-                                            <> • <a href={item.solved.source} target="_blank" rel="noopener noreferrer" className="underline">
-                                              Source
-                                            </a></>
-                                          )}
-                                        </p>
-                                      </div>
-                                      {item.solved.humanPerformance && (
-                                        <div>
-                                          <p className="font-semibold">Human Performance</p>
-                                          <p className="text-sm text-muted-foreground">
-                                            Score: {item.solved.humanPerformance.score} • <a href={item.solved.humanPerformance.source} target="_blank" rel="noopener noreferrer" className="underline">
-                                              Source
-                                            </a>
-                                          </p>
-                                        </div>
-                                      )}
+                                    <div>
+                                      <p className="font-semibold">Achievement Date</p>
+                                      <p className="text-sm text-muted-foreground">
+                                        {formattedDates[`${item.benchmark}-solved`] || ''}
+                                      </p>
                                     </div>
                                   </TooltipContent>
                                 </RadixTooltip>
