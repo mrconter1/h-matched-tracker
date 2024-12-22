@@ -58,7 +58,8 @@ const prepareGraphData = (data: typeof benchmarkData) => {
     .map(item => ({
       name: item.benchmark,
       solved: Number(getDecimalYear(item.solved).toFixed(2)),
-      timeToSolve: calculateTimeToSolve(item.release, item.solved)
+      timeToSolve: calculateTimeToSolve(item.release, item.solved),
+      solvedDate: formatDate(item.solved)
     }));
 };
 
@@ -178,7 +179,7 @@ export default function BrokenBenchmarks() {
                         <div className="rounded-lg border bg-background p-2 shadow-sm">
                           <p className="font-medium">{payload[0].payload.name}</p>
                           <p className="text-sm text-muted-foreground">
-                            Solved: {payload[0].payload.solved}
+                            Solved: {payload[0].payload.solvedDate}
                           </p>
                           <p className="text-sm text-muted-foreground">
                             Time to Solve: {payload[0].payload.timeToSolve} years
