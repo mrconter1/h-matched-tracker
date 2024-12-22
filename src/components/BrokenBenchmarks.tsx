@@ -129,6 +129,28 @@ const GradientBackground = () => (
   </div>
 );
 
+const formatTimeToSolve = (years: number): string => {
+  const totalDays = years * 365.25; // Using 365.25 to account for leap years
+  
+  const wholeYears = Math.floor(years);
+  const remainingDays = totalDays - (wholeYears * 365.25);
+  const months = Math.floor(remainingDays / 30.44); // Average days per month
+  const days = Math.round(remainingDays % 30.44);
+  
+  const parts = [];
+  if (wholeYears > 0) {
+    parts.push(`${wholeYears} ${wholeYears === 1 ? 'year' : 'years'}`);
+  }
+  if (months > 0) {
+    parts.push(`${months} ${months === 1 ? 'month' : 'months'}`);
+  }
+  if (days > 0) {
+    parts.push(`${days} ${days === 1 ? 'day' : 'days'}`);
+  }
+  
+  return parts.join(', ');
+};
+
 export default function BrokenBenchmarks() {
   const [mounted, setMounted] = useState(false);
   const [formattedDates, setFormattedDates] = useState<{[key: string]: string}>({});
@@ -562,7 +584,7 @@ export default function BrokenBenchmarks() {
                         </TableCell>
                         <TableCell className="font-mono">
                           <span className="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
-                            {calculateTimeToSolve(item.release, item.solved)} years
+                            {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved))}
                           </span>
                         </TableCell>
                       </TableRow>
@@ -635,7 +657,7 @@ export default function BrokenBenchmarks() {
           <div className="mt-2 flex flex-col items-center">
             <footer className="text-center text-sm text-muted-foreground">
               <p suppressHydrationWarning>
-                Data last updated {currentDate} • Created by <a href="https://lindahl.works" className="hover:text-primary transition-colors">Rasmus Lindahl</a>
+                Data last updated {currentDate}  Created by <a href="https://lindahl.works" className="hover:text-primary transition-colors">Rasmus Lindahl</a>
               </p>
             </footer>
           </div>
