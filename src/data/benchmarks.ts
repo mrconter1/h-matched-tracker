@@ -1,5 +1,9 @@
 export type BenchmarkSolved = {
   date: string;
+  source?: {
+    text: string;
+    url: string;
+  };
 };
 
 export type Benchmark = {
@@ -33,7 +37,11 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "SQuAD 1.1",
     release: "2016-06-16",
     solved: {
-      date: "2018-09-15"
+      date: "2018-09-15",
+      source: {
+        text: "Stanford's 2021 AI Index Report reported that AI surpassed human performance on SQuAD 1.1 in September 2018",
+        url: "https://aiindex.stanford.edu/wp-content/uploads/2021/11/2021-AI-Index-Report_Master.pdf"
+      }
     },
     url: "https://rajpurkar.github.io/SQuAD-explorer/explore/1.1/dev/",
     paperUrl: "https://arxiv.org/pdf/1606.05250"

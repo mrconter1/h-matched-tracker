@@ -533,7 +533,7 @@ export default function BrokenBenchmarks() {
                             <span className={DATE_TAG_CLASS}>
                               {formattedDates[`${item.benchmark}-solved`] || ''}
                             </span>
-                            {item.solved && (
+                            {item.solved && item.solved.source && (
                               <TooltipProvider>
                                 <RadixTooltip>
                                   <TooltipTrigger className="cursor-help inline-flex">
@@ -541,14 +541,25 @@ export default function BrokenBenchmarks() {
                                   </TooltipTrigger>
                                   <TooltipContent 
                                     side="top"
-                                    className="bg-background border-border" 
+                                    className="bg-background border-border max-w-[400px]" 
                                     sideOffset={5}
                                   >
-                                    <div>
+                                    <div className="space-y-2">
                                       <p className="font-semibold">Achievement Date</p>
                                       <p className="text-sm text-muted-foreground">
-                                        {formattedDates[`${item.benchmark}-solved`] || ''}
+                                        {item.solved.source.text}
                                       </p>
+                                      {item.solved.source.url && (
+                                        <a 
+                                          href={item.solved.source.url}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="text-xs text-primary hover:underline inline-flex items-center gap-1"
+                                        >
+                                          View source
+                                          <ExternalLink className="h-3 w-3" />
+                                        </a>
+                                      )}
                                     </div>
                                   </TooltipContent>
                                 </RadixTooltip>
