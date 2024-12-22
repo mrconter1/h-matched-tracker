@@ -127,13 +127,21 @@ export default function BrokenBenchmarks() {
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
             Broken <span className="text-primary">Benchmarks</span>
           </h1>
-          <div className="space-y-4">
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
-              Tracking how quickly AI systems achieve human-level performance on benchmarks, revealing an uncomfortable trend: we&apos;re running out of tasks that humans can solve but AI cannot.
-            </p>
-            <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
-              As the time between a benchmark&apos;s release and its solution by AI rapidly shrinks, we approach a pivotal moment: when AI can solve new challenges as quickly as humans can create them—perhaps the clearest signal yet of artificial general intelligence.
-            </p>
+          
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            <Card className="text-left p-6 card-hover">
+              <CardTitle className="text-lg mb-3">What is this?</CardTitle>
+              <p className="text-muted-foreground">
+                Tracking how quickly AI systems achieve human-level performance on benchmarks, revealing an uncomfortable trend: soon we may not be able to create any benchmarks where humans outperform AI.
+              </p>
+            </Card>
+            
+            <Card className="text-left p-6 card-hover">
+              <CardTitle className="text-lg mb-3">Why does it matter?</CardTitle>
+              <p className="text-muted-foreground">
+                While there may be other ways to measure AI progress, the shrinking time between a benchmark&apos;s release and its solution suggests we&apos;re approaching a pivotal moment—when AI can match or exceed human performance on any measurable task we can devise.
+              </p>
+            </Card>
           </div>
         </div>
 
