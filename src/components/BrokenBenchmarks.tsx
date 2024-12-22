@@ -544,22 +544,31 @@ export default function BrokenBenchmarks() {
                                     className="bg-background border-border max-w-[400px]" 
                                     sideOffset={5}
                                   >
-                                    <div className="space-y-2">
+                                    <div className="space-y-4">
                                       <p className="font-semibold">Achievement Date</p>
-                                      <p className="text-sm text-muted-foreground">
-                                        {item.solved.source.text}
-                                      </p>
-                                      {item.solved.source.url && (
-                                        <a 
-                                          href={item.solved.source.url}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          className="text-xs text-primary hover:underline inline-flex items-center gap-1"
-                                        >
-                                          View source
-                                          <ExternalLink className="h-3 w-3" />
-                                        </a>
-                                      )}
+                                      <div>
+                                        <p className="text-sm text-muted-foreground mb-2">
+                                          {item.solved.source.text}
+                                        </p>
+                                        
+                                        <div className="border-t border-border/40 pt-2 mt-4 space-y-1.5">
+                                          <p className="text-xs text-muted-foreground font-medium">Sources:</p>
+                                          {item.solved.source.references.map((ref, index) => (
+                                            <div key={index} className="flex gap-2">
+                                              <span className="text-xs text-muted-foreground">[{index + 1}]</span>
+                                              <a 
+                                                href={ref.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-xs text-primary hover:underline inline-flex items-center gap-1"
+                                              >
+                                                {new URL(ref.url).hostname.replace('www.', '')}
+                                                <ExternalLink className="h-3 w-3" />
+                                              </a>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </div>
                                     </div>
                                   </TooltipContent>
                                 </RadixTooltip>

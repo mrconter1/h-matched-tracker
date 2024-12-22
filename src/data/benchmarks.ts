@@ -2,7 +2,9 @@ export type BenchmarkSolved = {
   date: string;
   source?: {
     text: string;
-    url: string;
+    references: {
+      url: string;
+    }[];
   };
 };
 
@@ -39,8 +41,10 @@ export const benchmarkData: Benchmark[] = [
     solved: {
       date: "2018-09-15",
       source: {
-        text: "Stanford's 2021 AI Index Report reported that AI surpassed human performance on SQuAD 1.1 in September 2018",
-        url: "https://aiindex.stanford.edu/wp-content/uploads/2021/11/2021-AI-Index-Report_Master.pdf"
+        text: "Stanford's 2021 AI Index Report reported that AI surpassed human performance on SQuAD 1.1 in September 2018[1]",
+        references: [{
+          url: "https://aiindex.stanford.edu/wp-content/uploads/2021/11/2021-AI-Index-Report_Master.pdf"
+        }]
       }
     },
     url: "https://rajpurkar.github.io/SQuAD-explorer/explore/1.1/dev/",
@@ -113,7 +117,14 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "MATH",
     release: "2021-11-08",
     solved: {
-      date: "2024-09-12"
+      date: "2024-09-12",
+      source: {
+        text: "IMO gold medalists achieved 90% accuracy on sample problems[1], later surpassed by O1 models reaching 94.8% accuracy[2]",
+        references: [
+          { url: "https://arxiv.org/pdf/2103.03874" },
+          { url: "https://openai.com/index/learning-to-reason-with-llms/" }
+        ]
+      }
     },
     url: "https://github.com/hendrycks/math/",
     paperUrl: "https://arxiv.org/pdf/2103.03874v2"
@@ -133,8 +144,10 @@ export const benchmarkData: Benchmark[] = [
     solved: {
       date: "2024-09-12",
       source: {
-        text: "OpenAI's O1 models achieved 78.3% accuracy, exceeding human expert performance of 69.7%",
-        url: "https://openai.com/index/learning-to-reason-with-llms/"
+        text: "OpenAI's O1 models achieved 78.3% accuracy, exceeding human expert performance of 69.7%[1]",
+        references: [{
+          url: "https://openai.com/index/learning-to-reason-with-llms/"
+        }]
       }
     },
     url: "https://github.com/idavidrein/gpqa",
