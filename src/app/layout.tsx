@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Broken Benchmarks | AI Benchmark Timeline",
-  description: "A timeline of AI benchmarks and how quickly they were solved, showing the rapid pace of AI development.",
+  title: "h-matched Timeline | Tracking AI Benchmarks",
+  description: "Track how long it takes for AI benchmarks to become h-matched (reach human-level performance), from release to completion.",
 };
 
 export default function RootLayout({

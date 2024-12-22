@@ -126,10 +126,10 @@ export default function BrokenBenchmarks() {
         <div className="text-center space-y-8 mb-16">
           <div className="space-y-2">
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
-              h-matched <span className="text-primary">Benchmarks</span>
+              h-matched <span className="text-primary">Timeline</span>
             </h1>
             <p className="text-sm text-muted-foreground">
-              h = human level performance
+              h = human-level performance | Tracking time from release to h-matched
             </p>
           </div>
           
@@ -137,14 +137,14 @@ export default function BrokenBenchmarks() {
             <Card className="text-left p-6 card-hover">
               <CardTitle className="text-lg mb-3">What is this?</CardTitle>
               <p className="text-muted-foreground">
-                Tracking how quickly AI systems achieve human-level performance on benchmarks, revealing an uncomfortable trend: soon we may not be able to create any benchmarks where humans outperform AI.
+                A tracker measuring the duration between a benchmark&apos;s release and when it becomes h-matched (reached by AI at human-level performance).
               </p>
             </Card>
             
             <Card className="text-left p-6 card-hover">
-              <CardTitle className="text-lg mb-3">Why does it matter?</CardTitle>
+              <CardTitle className="text-lg mb-3">Why track this?</CardTitle>
               <p className="text-muted-foreground">
-                While there may be other ways to measure AI progress, the shrinking time between a benchmark&apos;s release and the time for AI&apos;s to reach human level performance suggests we&apos;re approaching a pivotal moment—when AI can match or exceed human performance on any measurable task we can devise.
+                By monitoring how quickly benchmarks become h-matched, we can observe the accelerating pace at which AI systems achieve human-level capabilities across different domains.
               </p>
             </Card>
           </div>
@@ -153,9 +153,9 @@ export default function BrokenBenchmarks() {
         {/* Graph Card */}
         <Card className="mb-16 shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="space-y-1">
-            <CardTitle>Time to Human Level Trend</CardTitle>
+            <CardTitle>Time to h-matched Trend</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Visualization of how quickly AI systems reached human-level performance on each benchmark
+              Visualization of duration between benchmark release and becoming h-matched
             </p>
           </CardHeader>
           <CardContent className="h-[400px]">
