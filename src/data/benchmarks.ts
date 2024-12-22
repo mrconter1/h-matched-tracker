@@ -96,7 +96,14 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "HellaSwag",
     release: "2019-06-19",
     solved: {
-      date: "2023-03-14"
+      date: "2024-03-04",
+      source: {
+        text: "Claude 3 Opus achieved 95.4% accuracy (10-shot), matching human performance of around 95%<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
+        references: [
+          { url: "https://arxiv.org/pdf/1905.07830" },
+          { url: "https://www.anthropic.com/news/claude-3-family" }
+        ]
+      }
     },
     url: "https://rowanzellers.com/hellaswag/",
     paperUrl: "https://arxiv.org/pdf/1905.07830"
