@@ -16,9 +16,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
-import { Calendar, Clock, Database, ArrowUpDown, ExternalLink, FileText } from 'lucide-react';
+import { ArrowUpDown, ExternalLink, FileText } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { benchmarkData, type Benchmark } from '@/data/benchmarks';
+import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -36,12 +37,25 @@ type SortConfig = {
   direction: 'asc' | 'desc';
 } | null;
 
+const getDecimalYear = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.getFullYear() + (date.getMonth() / 12) + (date.getDate() / 365);
+};
+
+const prepareGraphData = (data: typeof benchmarkData) => {
+  return data
+    .sort((a, b) => new Date(a.solved).getTime() - new Date(b.solved).getTime())
+    .map(item => ({
+      name: item.benchmark,
+      solved: Number(getDecimalYear(item.solved).toFixed(2)),
+      timeToSolve: Number(item.timeToSolve.toFixed(2))
+    }));
+};
+
 export default function BrokenBenchmarks() {
   const [mounted, setMounted] = useState(false);
   const [formattedDates, setFormattedDates] = useState<{[key: string]: string}>({});
-  const [latestSolved, setLatestSolved] = useState<string>("");
   const [sortConfig, setSortConfig] = useState<SortConfig>(null);
-  const averageTimeToSolve = (benchmarkData.reduce((acc, curr) => acc + (curr.timeToSolve || 0), 0) / benchmarkData.length).toFixed(1);
   const [currentDate, setCurrentDate] = useState("");
 
   useEffect(() => {
@@ -52,7 +66,6 @@ export default function BrokenBenchmarks() {
       dates[`${item.benchmark}-solved`] = formatDate(item.solved);
     });
     setFormattedDates(dates);
-    setLatestSolved(formatDate(benchmarkData.sort((a, b) => new Date(b.solved).getTime() - new Date(a.solved).getTime())[0].solved));
     setCurrentDate(formatDate(new Date().toISOString()));
   }, []);
 
@@ -106,39 +119,75 @@ export default function BrokenBenchmarks() {
           </p>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-          <Card>
-            <CardHeader className="space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                <Database className="w-4 h-4" /> Benchmarks Tracked
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{benchmarkData.length}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                <Clock className="w-4 h-4" /> Average Time to Solve
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{averageTimeToSolve} years</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                <Calendar className="w-4 h-4" /> Latest Solved
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{latestSolved}</div>
-            </CardContent>
-          </Card>
-        </div>
+        {/* Graph Card */}
+        <Card className="mb-16">
+          <CardHeader>
+            <CardTitle>Time to Solve Trend</CardTitle>
+          </CardHeader>
+          <CardContent className="h-[400px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <ScatterChart
+                margin={{
+                  top: 20,
+                  right: 30,
+                  left: 20,
+                  bottom: 20,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  type="number"
+                  dataKey="solved"
+                  name="Year Solved"
+                  domain={['auto', 'auto']}
+                  tickCount={7}
+                  label={{ 
+                    value: 'Year Solved', 
+                    position: 'bottom',
+                    offset: 0
+                  }}
+                />
+                <YAxis
+                  type="number"
+                  dataKey="timeToSolve"
+                  name="Time to Solve"
+                  label={{ 
+                    value: 'Time to Solve (Years)', 
+                    angle: -90, 
+                    position: 'insideLeft',
+                    offset: 10
+                  }}
+                />
+                <Tooltip
+                  cursor={{ strokeDasharray: '3 3' }}
+                  content={({ active, payload }) => {
+                    if (active && payload && payload.length) {
+                      return (
+                        <div className="rounded-lg border bg-background p-2 shadow-sm">
+                          <p className="font-medium">{payload[0].payload.name}</p>
+                          <p className="text-sm text-muted-foreground">
+                            Solved: {payload[0].payload.solved}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            Time to Solve: {payload[0].payload.timeToSolve} years
+                          </p>
+                        </div>
+                      );
+                    }
+                    return null;
+                  }}
+                />
+                <Scatter
+                  data={prepareGraphData(benchmarkData)}
+                  fill="hsl(var(--primary))"
+                  stroke="hsl(var(--primary))"
+                  strokeWidth={2}
+                  r={6}
+                />
+              </ScatterChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
 
         {/* Main Content */}
         <Card>
