@@ -120,10 +120,10 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "SuperGLUE", 
     release: "2020-02-13", 
     solved: {
-      date: "2020-03-15",
-      model: "BERT",
-      score: "90.0%",
-      source: "https://super.gluebenchmark.com/",
+      date: "2020-01-15",
+      model: "T5",
+      score: "89.3%",
+      source: "https://aiindex.stanford.edu/wp-content/uploads/2024/04/HAI_2024_AI-Index-Report.pdf"
     },
     url: "https://super.gluebenchmark.com/",
     paperUrl: "https://arxiv.org/pdf/1905.00537"

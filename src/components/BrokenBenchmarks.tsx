@@ -359,7 +359,7 @@ export default function BrokenBenchmarks() {
                           <span className="bg-muted/50 px-2 py-1 rounded-md text-sm">
                             {formattedDates[`${item.benchmark}-solved`] || ''}
                           </span>
-                          {item.solved && item.solved.humanPerformance && (
+                          {item.solved && (item.solved.source || item.solved.humanPerformance || item.solved.achievementSource) && (
                             <TooltipProvider>
                               <RadixTooltip>
                                 <TooltipTrigger className="cursor-help inline-flex">
@@ -372,11 +372,11 @@ export default function BrokenBenchmarks() {
                                 >
                                   <div className="space-y-2">
                                     <div>
-                                      <p className="font-semibold">AI Achievement</p>
+                                      <p className="font-semibold">Achievement Details</p>
                                       <p className="text-sm text-muted-foreground">
                                         Score: {item.solved.score}
-                                        {item.solved.achievementSource && (
-                                          <> • <a href={item.solved.achievementSource} target="_blank" rel="noopener noreferrer" className="underline">
+                                        {item.solved.source && (
+                                          <> • <a href={item.solved.source} target="_blank" rel="noopener noreferrer" className="underline">
                                             Source
                                           </a></>
                                         )}
