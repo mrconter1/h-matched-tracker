@@ -418,7 +418,7 @@ export default function BrokenBenchmarks() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-muted-foreground">
-              If you notice any missing benchmarks or would like to suggest improvements, please feel free to:
+              If you notice any missing benchmarks, incorrect data, missing sources, or would like to suggest other improvements, please feel free to:
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4">
