@@ -21,7 +21,13 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "ImageNet Challenge",
     release: "2009-01-01",
     solved: {
-      date: "2015-12-10"
+      date: "2016-03-15",
+      source: {
+        text: "AI systems approximately reached human-level performance (around ~95%) around early 2016<sup class='reference'>[1]</sup>",
+        references: [{
+          url: "https://aiindex.stanford.edu/wp-content/uploads/2021/11/2021-AI-Index-Report_Master.pdf"
+        }]
+      }
     },
     url: "https://www.image-net.org/",
     paperUrl: "https://arxiv.org/pdf/1409.0575"
