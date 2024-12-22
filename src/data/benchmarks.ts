@@ -92,5 +92,12 @@ export const benchmarkData: Benchmark[] = [
     url: "https://github.com/idavidrein/gpqa",
     paperUrl: "https://arxiv.org/pdf/2311.12022"
   },
-  { benchmark: "GSM8K", release: "2021-11-18", solved: "2024-03-04", timeToSolve: 2.29 }
+  { 
+    benchmark: "GSM8K", 
+    release: "2021-11-18", 
+    solved: "2024-03-04", 
+    timeToSolve: 2.29,
+    url: "https://github.com/openai/grade-school-math",
+    paperUrl: "https://arxiv.org/pdf/2110.14168"
+  }
 ]; 
