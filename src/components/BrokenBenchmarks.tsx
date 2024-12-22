@@ -16,7 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
-import { ArrowUpRight, Calendar, Clock, Database, ArrowUpDown } from 'lucide-react';
+import { Calendar, Clock, Database, ArrowUpDown, ExternalLink } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { benchmarkData, type Benchmark } from '@/data/benchmarks';
 
@@ -41,7 +41,7 @@ export default function BrokenBenchmarks() {
   const [formattedDates, setFormattedDates] = useState<{[key: string]: string}>({});
   const [latestSolved, setLatestSolved] = useState<string>("");
   const [sortConfig, setSortConfig] = useState<SortConfig>(null);
-  const averageTimeToSolve = (benchmarkData.reduce((acc, curr) => acc + curr.timeToSolve, 0) / benchmarkData.length).toFixed(1);
+  const averageTimeToSolve = (benchmarkData.reduce((acc, curr) => acc + (curr.timeToSolve || 0), 0) / benchmarkData.length).toFixed(1);
   const [currentDate, setCurrentDate] = useState("");
 
   useEffect(() => {
@@ -74,8 +74,8 @@ export default function BrokenBenchmarks() {
       
       // For timeToSolve
       return sortConfig.direction === 'asc' 
-        ? a[sortConfig.key] - b[sortConfig.key]
-        : b[sortConfig.key] - a[sortConfig.key];
+        ? (a[sortConfig.key] as number) - (b[sortConfig.key] as number)
+        : (b[sortConfig.key] as number) - (a[sortConfig.key] as number);
     });
   };
 
@@ -198,7 +198,17 @@ export default function BrokenBenchmarks() {
                       <TableCell className="font-medium">
                         <div className="flex items-center gap-2">
                           {item.benchmark}
-                          <ArrowUpRight className="w-4 h-4 text-muted-foreground hover:text-primary cursor-pointer transition-colors" />
+                          {item.url && (
+                            <a 
+                              href={item.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center hover:text-primary transition-colors"
+                            >
+                              <ExternalLink className="w-4 h-4 text-muted-foreground hover:text-primary" />
+                              <span className="sr-only">Visit {item.benchmark} website</span>
+                            </a>
+                          )}
                         </div>
                       </TableCell>
                       <TableCell className="font-mono text-muted-foreground">

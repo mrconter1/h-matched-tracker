@@ -3,15 +3,52 @@ export type Benchmark = {
   release: string;
   solved: string;
   timeToSolve: number;
+  url?: string;
 };
 
 export const benchmarkData: Benchmark[] = [
-  { benchmark: "ImageNet Challenge", release: "2009-01-01", solved: "2015-03-01", timeToSolve: 6.16 },
-  { benchmark: "WinoGrande", release: "2012-06-10", solved: "2023-07-11", timeToSolve: 11.08 },
-  { benchmark: "SQuAD 1.1", release: "2016-06-16", solved: "2017-06-15", timeToSolve: 1.00 },
-  { benchmark: "SQuAD 2.0", release: "2018-06-11", solved: "2018-06-15", timeToSolve: 0.01 },
-  { benchmark: "VQA", release: "2019-05-03", solved: "2021-06-15", timeToSolve: 2.12 },
-  { benchmark: "HellaSwag", release: "2019-06-19", solved: "2023-03-14", timeToSolve: 3.73 },
+  {
+    benchmark: "ImageNet Challenge",
+    release: "2009-01-01",
+    solved: "2015-03-01",
+    timeToSolve: 6.16,
+    url: "https://www.image-net.org/"
+  },
+  {
+    benchmark: "WinoGrande",
+    release: "2012-06-10",
+    solved: "2023-07-11",
+    timeToSolve: 11.08,
+    url: "https://winogrande.allenai.org/"
+  },
+  {
+    benchmark: "SQuAD 1.1",
+    release: "2016-06-16",
+    solved: "2017-06-15",
+    timeToSolve: 1.00,
+    url: "https://rajpurkar.github.io/SQuAD-explorer/explore/1.1/dev/"
+  },
+  {
+    benchmark: "SQuAD 2.0",
+    release: "2018-06-11",
+    solved: "2018-06-15",
+    timeToSolve: 0.01,
+    url: "https://rajpurkar.github.io/SQuAD-explorer/explore/v2.0/dev/"
+  },
+  {
+    benchmark: "VQA",
+    release: "2019-05-03",
+    solved: "2021-06-15",
+    timeToSolve: 2.12,
+    url: "https://visualqa.org/"
+  },
+  {
+    benchmark: "HellaSwag",
+    release: "2019-06-19",
+    solved: "2023-03-14",
+    timeToSolve: 3.73,
+    url: "https://rowanzellers.com/hellaswag/"
+  },
   { benchmark: "Adversarial NLI", release: "2019-10-31", solved: "2020-06-15", timeToSolve: 0.62 },
   { benchmark: "ARC-AGI", release: "2019-11-05", solved: "2024-12-21", timeToSolve: 5.13 },
   { benchmark: "SuperGLUE", release: "2020-02-13", solved: "2020-03-15", timeToSolve: 0.08 },
