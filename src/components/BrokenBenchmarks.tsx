@@ -18,7 +18,7 @@ import {
 import { ArrowUpDown, ExternalLink, FileText, Mail, Globe } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { benchmarkData, type Benchmark } from '@/data/benchmarks';
-import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { ComposedChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line } from 'recharts';
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -61,6 +61,22 @@ const prepareGraphData = (data: typeof benchmarkData) => {
       solvedDate: formatDate(item.solved),
       releaseDate: formatDate(item.release)
     }));
+};
+
+const calculateTrendLine = (data: typeof benchmarkData) => {
+  const n = data.length;
+  const sumX = data.reduce((acc, item) => acc + getDecimalYear(item.release), 0);
+  const sumY = data.reduce((acc, item) => acc + calculateTimeToSolve(item.release, item.solved), 0);
+  const sumXY = data.reduce((acc, item) => acc + getDecimalYear(item.release) * calculateTimeToSolve(item.release, item.solved), 0);
+  const sumXX = data.reduce((acc, item) => acc + Math.pow(getDecimalYear(item.release), 2), 0);
+  
+  const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+  const intercept = (sumY - slope * sumX) / n;
+  
+  return data.map(item => ({
+    released: getDecimalYear(item.release),
+    trend: slope * getDecimalYear(item.release) + intercept,
+  }));
 };
 
 export default function BrokenBenchmarks() {
@@ -118,6 +134,7 @@ export default function BrokenBenchmarks() {
   }
 
   const sortedData = sortData(benchmarkData);
+  const trendLineData = calculateTrendLine(benchmarkData);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/50">
@@ -160,7 +177,7 @@ export default function BrokenBenchmarks() {
           </CardHeader>
           <CardContent className="h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
-              <ScatterChart
+              <ComposedChart
                 margin={{
                   top: 20,
                   right: 30,
@@ -226,7 +243,15 @@ export default function BrokenBenchmarks() {
                   strokeWidth={2}
                   r={6}
                 />
-              </ScatterChart>
+                <Line 
+                  type="linear" 
+                  dataKey="trend" 
+                  data={trendLineData} 
+                  stroke="red" 
+                  strokeWidth={2} 
+                  dot={false} 
+                />
+              </ComposedChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
