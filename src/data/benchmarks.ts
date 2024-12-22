@@ -41,7 +41,7 @@ export const benchmarkData: Benchmark[] = [
     solved: {
       date: "2018-09-15",
       source: {
-        text: "Stanford's 2021 AI Index Report reported that AI surpassed human performance on SQuAD 1.1 in September 2018[1]",
+        text: "Stanford's 2021 AI Index Report reported that AI surpassed human performance on SQuAD 1.1 in September 2018<sup class='reference'>[1]</sup>",
         references: [{
           url: "https://aiindex.stanford.edu/wp-content/uploads/2021/11/2021-AI-Index-Report_Master.pdf"
         }]
@@ -119,7 +119,7 @@ export const benchmarkData: Benchmark[] = [
     solved: {
       date: "2024-09-12",
       source: {
-        text: "IMO gold medalists achieved 90% accuracy on sample problems[1], later surpassed by O1 models reaching 94.8% accuracy[2]",
+        text: "IMO gold medalists achieved 90% accuracy on sample problems<sup class='reference'>[1]</sup>, later surpassed by O1 models reaching 94.8% accuracy<sup class='reference'>[2]</sup>",
         references: [
           { url: "https://arxiv.org/pdf/2103.03874" },
           { url: "https://openai.com/index/learning-to-reason-with-llms/" }
@@ -144,7 +144,7 @@ export const benchmarkData: Benchmark[] = [
     solved: {
       date: "2024-09-12",
       source: {
-        text: "OpenAI's O1 models achieved 78.3% accuracy, exceeding human expert performance of 69.7%[1]",
+        text: "OpenAI's O1 models achieved 78.3% accuracy, exceeding human expert performance of 69.7%<sup class='reference'>[1]</sup>",
         references: [{
           url: "https://openai.com/index/learning-to-reason-with-llms/"
         }]

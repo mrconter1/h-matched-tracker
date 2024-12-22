@@ -547,9 +547,9 @@ export default function BrokenBenchmarks() {
                                     <div className="space-y-4">
                                       <p className="font-semibold">Achievement Date</p>
                                       <div>
-                                        <p className="text-sm text-muted-foreground mb-2">
-                                          {item.solved.source.text}
-                                        </p>
+                                        <p className="text-sm text-muted-foreground mb-2" 
+                                           dangerouslySetInnerHTML={{ __html: item.solved.source.text }}
+                                        />
                                         
                                         <div className="border-t border-border/40 pt-2 mt-4 space-y-1.5">
                                           <p className="text-xs text-muted-foreground font-medium">Sources:</p>
