@@ -111,7 +111,13 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "SuperGLUE",
     release: "2020-02-13",
     solved: {
-      date: "2020-01-15"
+      date: "2020-12-15",
+      source: {
+        text: "AI systems surpassed human performance on the SuperGLUE benchmark in December 2020<sup class='reference'>[1]</sup>",
+        references: [{
+          url: "https://aiindex.stanford.edu/wp-content/uploads/2021/11/2021-AI-Index-Report_Master.pdf"
+        }]
+      }
     },
     url: "https://super.gluebenchmark.com/",
     paperUrl: "https://arxiv.org/pdf/1905.00537"
