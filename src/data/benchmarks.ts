@@ -48,7 +48,7 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "SQuAD 1.1",
     release: "2016-06-16",
     solved: {
-      date: "2017-06-15",
+      date: "2018-09-15",
       model: "BERT",
       score: "88.5%",
       source: "https://rajpurkar.github.io/SQuAD-explorer/explore/1.1/dev/",
@@ -60,7 +60,7 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "SQuAD 2.0",
     release: "2018-06-11",
     solved: {
-      date: "2018-06-15",
+      date: "2019-03-15",
       model: "BERT",
       score: "91.0%",
       source: "https://rajpurkar.github.io/SQuAD-explorer/explore/v2.0/dev/",
