@@ -15,10 +15,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowUpDown, ExternalLink, FileText, Mail, Globe } from 'lucide-react';
+import { ArrowUpDown, ExternalLink, FileText, Mail, Globe, HelpCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { benchmarkData, type Benchmark } from '@/data/benchmarks';
-import { ComposedChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line } from 'recharts';
+import { benchmarkData, type Benchmark, type BenchmarkSolved } from '@/data/benchmarks';
+import { ComposedChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Line } from 'recharts';
+import {
+  Tooltip as RadixTooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -43,10 +49,10 @@ const getDecimalYear = (dateString: string) => {
   return date.getFullYear() + (date.getMonth() / 12) + (date.getDate() / 365);
 };
 
-const calculateTimeToSolve = (releaseDate: string, solvedDate: string): number => {
+const calculateTimeToSolve = (releaseDate: string, solved: BenchmarkSolved): number => {
   const release = new Date(releaseDate);
-  const solved = new Date(solvedDate);
-  const diffTime = Math.abs(solved.getTime() - release.getTime());
+  const solvedDate = new Date(solved.date);
+  const diffTime = Math.abs(solvedDate.getTime() - release.getTime());
   const diffYears = diffTime / (1000 * 60 * 60 * 24 * 365.25); // Using 365.25 to account for leap years
   return Number(diffYears.toFixed(2));
 };
@@ -58,7 +64,7 @@ const prepareGraphData = (data: typeof benchmarkData) => {
       name: item.benchmark,
       released: Number(getDecimalYear(item.release).toFixed(2)),
       timeToSolve: calculateTimeToSolve(item.release, item.solved),
-      solvedDate: formatDate(item.solved),
+      solvedDate: formatDate(item.solved.date),
       releaseDate: formatDate(item.release)
     }));
 };
@@ -90,7 +96,7 @@ export default function BrokenBenchmarks() {
     const dates: {[key: string]: string} = {};
     benchmarkData.forEach(item => {
       dates[`${item.benchmark}-release`] = formatDate(item.release);
-      dates[`${item.benchmark}-solved`] = formatDate(item.solved);
+      dates[`${item.benchmark}-solved`] = formatDate(item.solved.date);
     });
     setFormattedDates(dates);
     setCurrentDate(formatDate(new Date().toISOString()));
@@ -106,9 +112,15 @@ export default function BrokenBenchmarks() {
           : b[sortConfig.key].localeCompare(a[sortConfig.key]);
       }
       
-      if (sortConfig.key === 'release' || sortConfig.key === 'solved') {
+      if (sortConfig.key === 'release') {
         const dateA = new Date(a[sortConfig.key]).getTime();
         const dateB = new Date(b[sortConfig.key]).getTime();
+        return sortConfig.direction === 'asc' ? dateA - dateB : dateB - dateA;
+      }
+
+      if (sortConfig.key === 'solved') {
+        const dateA = new Date(a[sortConfig.key].date).getTime();
+        const dateB = new Date(b[sortConfig.key].date).getTime();
         return sortConfig.direction === 'asc' ? dateA - dateB : dateB - dateA;
       }
       
@@ -214,7 +226,7 @@ export default function BrokenBenchmarks() {
                     dy: 'middle'
                   }}
                 />
-                <Tooltip
+                <RechartsTooltip
                   cursor={{ strokeDasharray: '3 3' }}
                   content={({ active, payload }) => {
                     if (active && payload && payload.length) {
@@ -354,9 +366,35 @@ export default function BrokenBenchmarks() {
                         </span>
                       </TableCell>
                       <TableCell className="font-mono text-muted-foreground">
-                        <span className="bg-muted/50 px-2 py-1 rounded-md text-sm">
-                          {formattedDates[`${item.benchmark}-solved`] || ''}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="bg-muted/50 px-2 py-1 rounded-md text-sm">
+                            {formattedDates[`${item.benchmark}-solved`] || ''}
+                          </span>
+                          {item.solved && item.solved.humanPerformance && (
+                            <TooltipProvider>
+                              <RadixTooltip>
+                                <TooltipTrigger className="cursor-help inline-flex">
+                                  <HelpCircle className="h-4 w-4 text-muted-foreground hover:text-primary transition-colors" />
+                                </TooltipTrigger>
+                                <TooltipContent 
+                                  side="top"
+                                  className="bg-background border-border" 
+                                  sideOffset={5}
+                                >
+                                  <div className="space-y-2">
+                                    <p className="font-semibold">Human Performance: {item.solved.humanPerformance.score}</p>
+                                    <p className="text-sm text-muted-foreground">
+                                      Source: <a href={item.solved.humanPerformance.source} target="_blank" rel="noopener noreferrer" className="underline">
+                                        Research Paper
+                                      </a>
+                                      <span className="block text-xs">Published: {item.solved.humanPerformance.date}</span>
+                                    </p>
+                                  </div>
+                                </TooltipContent>
+                              </RadixTooltip>
+                            </TooltipProvider>
+                          )}
+                        </div>
                       </TableCell>
                       <TableCell className="font-mono">
                         <span className="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
