@@ -133,9 +133,12 @@ export default function BrokenBenchmarks() {
         </div>
 
         {/* Graph Card */}
-        <Card className="mb-16">
-          <CardHeader>
+        <Card className="mb-16 shadow-md hover:shadow-lg transition-shadow">
+          <CardHeader className="space-y-1">
             <CardTitle>Time to Solve Trend</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              Visualization of how quickly AI systems solved each benchmark after release
+            </p>
           </CardHeader>
           <CardContent className="h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -203,9 +206,12 @@ export default function BrokenBenchmarks() {
         </Card>
 
         {/* Main Content */}
-        <Card>
-          <CardHeader>
+        <Card className="shadow-md hover:shadow-lg transition-shadow">
+          <CardHeader className="space-y-1">
             <CardTitle>Benchmark Timeline</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              Chronological list of AI benchmarks and their completion dates
+            </p>
           </CardHeader>
           <CardContent>
             <div className="rounded-md border">
@@ -216,10 +222,10 @@ export default function BrokenBenchmarks() {
                       <Button
                         variant="ghost"
                         onClick={() => requestSort('benchmark')}
-                        className="hover:bg-muted/50 -ml-4 h-8 data-[state=open]:bg-accent"
+                        className="hover:bg-primary/10 -ml-4 h-8 data-[state=open]:bg-accent font-medium"
                       >
-                        Benchmark
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                        <span className="text-primary">Benchmark</span>
+                        <ArrowUpDown className="ml-2 h-4 w-4 text-muted-foreground" />
                       </Button>
                     </TableHead>
                     <TableHead>
@@ -258,15 +264,15 @@ export default function BrokenBenchmarks() {
                   {sortedData.map((item) => (
                     <TableRow key={item.benchmark}>
                       <TableCell className="font-medium">
-                        <div className="flex items-center gap-2">
-                          {item.benchmark}
-                          <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-3">
+                          <span className="min-w-[200px]">{item.benchmark}</span>
+                          <div className="flex items-center gap-2">
                             {item.url && (
                               <a 
                                 href={item.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center hover:text-primary transition-colors"
+                                className="inline-flex items-center rounded-full bg-muted p-1.5 hover:bg-primary/10 transition-colors"
                                 title="Visit website"
                               >
                                 <ExternalLink className="w-4 h-4 text-muted-foreground hover:text-primary" />
@@ -278,7 +284,7 @@ export default function BrokenBenchmarks() {
                                 href={item.paperUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center hover:text-primary transition-colors"
+                                className="inline-flex items-center rounded-full bg-muted p-1.5 hover:bg-primary/10 transition-colors"
                                 title="Read paper"
                               >
                                 <FileText className="w-4 h-4 text-muted-foreground hover:text-primary" />
@@ -289,13 +295,17 @@ export default function BrokenBenchmarks() {
                         </div>
                       </TableCell>
                       <TableCell className="font-mono text-muted-foreground">
-                        {formattedDates[`${item.benchmark}-release`] || ''}
+                        <span className="bg-muted/50 px-2 py-1 rounded-md text-sm">
+                          {formattedDates[`${item.benchmark}-release`] || ''}
+                        </span>
                       </TableCell>
                       <TableCell className="font-mono text-muted-foreground">
-                        {formattedDates[`${item.benchmark}-solved`] || ''}
+                        <span className="bg-muted/50 px-2 py-1 rounded-md text-sm">
+                          {formattedDates[`${item.benchmark}-solved`] || ''}
+                        </span>
                       </TableCell>
                       <TableCell className="font-mono">
-                        <span className="px-2 py-1 rounded-md bg-muted">
+                        <span className="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
                           {calculateTimeToSolve(item.release, item.solved)} years
                         </span>
                       </TableCell>

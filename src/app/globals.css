@@ -57,3 +57,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .card-hover {
+    @apply transition-all duration-300 hover:translate-y-[-2px];
+  }
+  
+  .icon-hover {
+    @apply transition-transform duration-200 hover:scale-110;
+  }
+}
