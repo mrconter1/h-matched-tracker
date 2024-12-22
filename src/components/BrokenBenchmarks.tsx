@@ -416,45 +416,59 @@ export default function BrokenBenchmarks() {
 
         {/* Contribution Box */}
         <Card className="mt-6 shadow-md hover:shadow-lg transition-shadow">
-          <CardHeader className="space-y-1">
-            <CardTitle>Contribute</CardTitle>
-            <p className="text-sm text-muted-foreground">
-              Help improve the h-matched Timeline
-            </p>
+          <CardHeader>
+            <CardTitle className="text-2xl">Contribute</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-muted-foreground">
-              If you notice any missing benchmarks, incorrect data, missing sources, or would like to suggest other improvements, please feel free to:
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4">
-              <a
-                href="https://github.com/mrconter1/broken-benchmarks/issues"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
-              >
-                <FileText className="h-4 w-4" />
-                Open an issue on GitHub
-              </a>
+          <CardContent>
+            <div className="space-y-6">
+              <p className="text-muted-foreground text-lg leading-relaxed">
+                Notice something missing or have suggestions for improvement? Get in touch:
+              </p>
               
-              <a
-                href="mailto:rasmus.lindahl1996@gmail.com"
-                className="inline-flex items-center justify-center gap-2 rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
-              >
-                <Mail className="h-4 w-4" />
-                Send me an email
-              </a>
-              
-              <a
-                href="https://lindahl.works"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
-              >
-                <Globe className="h-4 w-4" />
-                Visit my portfolio
-              </a>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button
+                  asChild
+                  className="flex-1"
+                  variant="default"
+                >
+                  <a
+                    href="https://github.com/mrconter1/broken-benchmarks/issues"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <FileText className="mr-2 h-4 w-4" />
+                    Open GitHub Issue
+                  </a>
+                </Button>
+                
+                <Button
+                  asChild
+                  className="flex-1"
+                  variant="outline"
+                >
+                  <a
+                    href="mailto:rasmus.lindahl1996@gmail.com"
+                  >
+                    <Mail className="mr-2 h-4 w-4" />
+                    Send Email
+                  </a>
+                </Button>
+                
+                <Button
+                  asChild
+                  className="flex-1"
+                  variant="outline"
+                >
+                  <a
+                    href="https://lindahl.works"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Globe className="mr-2 h-4 w-4" />
+                    Visit Portfolio
+                  </a>
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
