@@ -16,7 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
-import { Calendar, Clock, Database, ArrowUpDown, ExternalLink } from 'lucide-react';
+import { Calendar, Clock, Database, ArrowUpDown, ExternalLink, FileText } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { benchmarkData, type Benchmark } from '@/data/benchmarks';
 
@@ -198,17 +198,32 @@ export default function BrokenBenchmarks() {
                       <TableCell className="font-medium">
                         <div className="flex items-center gap-2">
                           {item.benchmark}
-                          {item.url && (
-                            <a 
-                              href={item.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center hover:text-primary transition-colors"
-                            >
-                              <ExternalLink className="w-4 h-4 text-muted-foreground hover:text-primary" />
-                              <span className="sr-only">Visit {item.benchmark} website</span>
-                            </a>
-                          )}
+                          <div className="flex items-center gap-1">
+                            {item.url && (
+                              <a 
+                                href={item.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center hover:text-primary transition-colors"
+                                title="Visit website"
+                              >
+                                <ExternalLink className="w-4 h-4 text-muted-foreground hover:text-primary" />
+                                <span className="sr-only">Visit {item.benchmark} website</span>
+                              </a>
+                            )}
+                            {item.paperUrl && (
+                              <a 
+                                href={item.paperUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center hover:text-primary transition-colors"
+                                title="Read paper"
+                              >
+                                <FileText className="w-4 h-4 text-muted-foreground hover:text-primary" />
+                                <span className="sr-only">Read {item.benchmark} paper</span>
+                              </a>
+                            )}
+                          </div>
                         </div>
                       </TableCell>
                       <TableCell className="font-mono text-muted-foreground">

@@ -4,6 +4,7 @@ export type Benchmark = {
   solved: string;
   timeToSolve: number;
   url?: string;
+  paperUrl?: string;
 };
 
 export const benchmarkData: Benchmark[] = [
@@ -49,8 +50,8 @@ export const benchmarkData: Benchmark[] = [
     timeToSolve: 3.73,
     url: "https://rowanzellers.com/hellaswag/"
   },
-  { benchmark: "Adversarial NLI", release: "2019-10-31", solved: "2020-06-15", timeToSolve: 0.62 },
-  { benchmark: "ARC-AGI", release: "2019-11-05", solved: "2024-12-21", timeToSolve: 5.13 },
+  { benchmark: "Adversarial NLI", release: "2019-10-31", solved: "2020-06-15", timeToSolve: 0.62, url: "https://github.com/facebookresearch/anli" },
+  { benchmark: "ARC-AGI", release: "2019-11-05", solved: "2024-12-21", timeToSolve: 5.13, url: "https://arcprize.org/arc", paperUrl: "https://arxiv.org/abs/1911.01547" },
   { benchmark: "SuperGLUE", release: "2020-02-13", solved: "2020-03-15", timeToSolve: 0.08 },
   { benchmark: "MMLU", release: "2020-09-07", solved: "2024-12-05", timeToSolve: 4.24 },
   { benchmark: "MATH", release: "2021-11-08", solved: "2024-06-15", timeToSolve: 2.60 },
