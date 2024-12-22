@@ -382,12 +382,27 @@ export default function BrokenBenchmarks() {
                                   sideOffset={5}
                                 >
                                   <div className="space-y-2">
-                                    <p className="font-semibold">Human Performance: {item.solved.humanPerformance.score}</p>
-                                    <p className="text-sm text-muted-foreground">
-                                      Source: <a href={item.solved.humanPerformance.source} target="_blank" rel="noopener noreferrer" className="underline">
-                                        Research Paper
-                                      </a>
-                                    </p>
+                                    <div>
+                                      <p className="font-semibold">AI Achievement</p>
+                                      <p className="text-sm text-muted-foreground">
+                                        Score: {item.solved.score}
+                                        {item.solved.achievementSource && (
+                                          <> • <a href={item.solved.achievementSource} target="_blank" rel="noopener noreferrer" className="underline">
+                                            Source
+                                          </a></>
+                                        )}
+                                      </p>
+                                    </div>
+                                    {item.solved.humanPerformance && (
+                                      <div>
+                                        <p className="font-semibold">Human Performance</p>
+                                        <p className="text-sm text-muted-foreground">
+                                          Score: {item.solved.humanPerformance.score} • <a href={item.solved.humanPerformance.source} target="_blank" rel="noopener noreferrer" className="underline">
+                                            Source
+                                          </a>
+                                        </p>
+                                      </div>
+                                    )}
                                   </div>
                                 </TooltipContent>
                               </RadixTooltip>

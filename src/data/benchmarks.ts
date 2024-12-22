@@ -3,6 +3,7 @@ export type BenchmarkSolved = {
   model: string;
   score: string;
   source: string;
+  achievementSource?: string;
   humanPerformance?: {
     score: string;
     source: string;
@@ -170,6 +171,12 @@ export const benchmarkData: Benchmark[] = [
       model: "GPT-3",
       score: "95.1%",
       source: "https://github.com/idavidrein/gpqa",
+      achievementSource: "https://openai.com/index/learning-to-reason-with-llms/",
+      humanPerformance: {
+        score: "69.7%",
+        source: "https://openai.com/index/learning-to-reason-with-llms/",
+        date: "2023-11"
+      }
     },
     url: "https://github.com/idavidrein/gpqa",
     paperUrl: "https://arxiv.org/pdf/2311.12022"
