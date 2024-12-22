@@ -129,26 +129,14 @@ const GradientBackground = () => (
   </div>
 );
 
-const formatTimeToSolve = (years: number): string => {
-  const totalDays = years * 365.25; // Using 365.25 to account for leap years
-  
+const formatTimeToSolve = (years: number) => {
+  const totalDays = years * 365.25;
   const wholeYears = Math.floor(years);
   const remainingDays = totalDays - (wholeYears * 365.25);
-  const months = Math.floor(remainingDays / 30.44); // Average days per month
+  const months = Math.floor(remainingDays / 30.44);
   const days = Math.round(remainingDays % 30.44);
   
-  const parts = [];
-  if (wholeYears > 0) {
-    parts.push(`${wholeYears} ${wholeYears === 1 ? 'year' : 'years'}`);
-  }
-  if (months > 0) {
-    parts.push(`${months} ${months === 1 ? 'month' : 'months'}`);
-  }
-  if (days > 0) {
-    parts.push(`${days} ${days === 1 ? 'day' : 'days'}`);
-  }
-  
-  return parts.join(', ');
+  return { wholeYears, months, days };
 };
 
 export default function BrokenBenchmarks() {
@@ -583,9 +571,29 @@ export default function BrokenBenchmarks() {
                           </div>
                         </TableCell>
                         <TableCell className="font-mono">
-                          <span className="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
-                            {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved))}
-                          </span>
+                          <div className="flex items-center gap-1.5">
+                            {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).wholeYears > 0 && (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-primary/10 text-primary">
+                                {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).wholeYears}
+                                {' '}
+                                {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).wholeYears === 1 ? 'year' : 'years'}
+                              </span>
+                            )}
+                            {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).months > 0 && (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-primary/5 text-primary/90">
+                                {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).months}
+                                {' '}
+                                {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).months === 1 ? 'month' : 'months'}
+                              </span>
+                            )}
+                            {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).days > 0 && (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-primary/[0.03] text-primary/80">
+                                {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).days}
+                                {' '}
+                                {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).days === 1 ? 'day' : 'days'}
+                              </span>
+                            )}
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}
