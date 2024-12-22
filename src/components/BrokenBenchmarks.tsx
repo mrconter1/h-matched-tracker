@@ -1,6 +1,20 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+"use client"
+
+import React, { useEffect, useState } from 'react';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
 import { ArrowUpRight, Calendar, Clock, Database } from 'lucide-react';
 
@@ -31,86 +45,100 @@ const formatDate = (dateString: string) => {
 };
 
 export default function BrokenBenchmarks() {
+  const [formattedDates, setFormattedDates] = useState<{[key: string]: string}>({});
+  const [formattedDate, setFormattedDate] = useState<string>("");
+  const [latestSolved, setLatestSolved] = useState<string>("");
   const averageTimeToSolve = (benchmarkData.reduce((acc, curr) => acc + curr.timeToSolve, 0) / benchmarkData.length).toFixed(1);
-  const latestSolved = formatDate(benchmarkData.sort((a, b) => new Date(b.solved).getTime() - new Date(a.solved).getTime())[0].solved);
+
+  useEffect(() => {
+    const dates: {[key: string]: string} = {};
+    benchmarkData.forEach(item => {
+      dates[`${item.benchmark}-release`] = formatDate(item.release);
+      dates[`${item.benchmark}-solved`] = formatDate(item.solved);
+    });
+    setFormattedDates(dates);
+    setLatestSolved(formatDate(benchmarkData.sort((a, b) => new Date(b.solved).getTime() - new Date(a.solved).getTime())[0].solved));
+    setFormattedDate(new Date().toLocaleDateString());
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
         {/* Hero Section */}
         <div className="text-center space-y-8 mb-16">
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white">
-            Broken <span className="text-blue-500">Benchmarks</span>
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
+            Broken <span className="text-primary">Benchmarks</span>
           </h1>
-          <p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
             Tracking the rapid evolution of AI capabilities through benchmark achievements.
           </p>
         </div>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-          <Card className="bg-slate-900/50 border-slate-800">
+          <Card>
             <CardHeader className="space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-400 flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
                 <Database className="w-4 h-4" /> Benchmarks Tracked
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">{benchmarkData.length}</div>
+              <div className="text-2xl font-bold">{benchmarkData.length}</div>
             </CardContent>
           </Card>
-          <Card className="bg-slate-900/50 border-slate-800">
+          <Card>
             <CardHeader className="space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-400 flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
                 <Clock className="w-4 h-4" /> Average Time to Solve
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">{averageTimeToSolve} years</div>
+              <div className="text-2xl font-bold">{averageTimeToSolve} years</div>
             </CardContent>
           </Card>
-          <Card className="bg-slate-900/50 border-slate-800">
+          <Card>
             <CardHeader className="space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-400 flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
                 <Calendar className="w-4 h-4" /> Latest Solved
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">{latestSolved}</div>
+              <div className="text-2xl font-bold">{latestSolved}</div>
             </CardContent>
           </Card>
         </div>
 
         {/* Main Content */}
-        <Card className="bg-slate-900/50 border-slate-800">
+        <Card>
           <CardHeader>
-            <CardTitle className="text-xl text-white">Benchmark Timeline</CardTitle>
+            <CardTitle>Benchmark Timeline</CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
-                <TableRow className="border-slate-800">
-                  <TableHead className="text-slate-400">Benchmark</TableHead>
-                  <TableHead className="text-slate-400">Released</TableHead>
-                  <TableHead className="text-slate-400">Solved</TableHead>
-                  <TableHead className="text-slate-400">Time to Solve</TableHead>
+                <TableRow>
+                  <TableHead>Benchmark</TableHead>
+                  <TableHead>Released</TableHead>
+                  <TableHead>Solved</TableHead>
+                  <TableHead>Time to Solve</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {benchmarkData
                   .sort((a, b) => new Date(b.solved).getTime() - new Date(a.solved).getTime())
                   .map((item) => (
-                    <TableRow 
-                      key={item.benchmark} 
-                      className="border-slate-800 hover:bg-slate-800/50 transition-colors"
-                    >
-                      <TableCell className="font-medium text-white flex items-center gap-2">
+                    <TableRow key={item.benchmark}>
+                      <TableCell className="font-medium flex items-center gap-2">
                         {item.benchmark}
-                        <ArrowUpRight className="w-4 h-4 text-slate-400" />
+                        <ArrowUpRight className="w-4 h-4 text-muted-foreground" />
                       </TableCell>
-                      <TableCell className="font-mono text-slate-400">{formatDate(item.release)}</TableCell>
-                      <TableCell className="font-mono text-slate-400">{formatDate(item.solved)}</TableCell>
-                      <TableCell className="font-mono text-slate-400">
+                      <TableCell className="font-mono">
+                        {formattedDates[`${item.benchmark}-release`] || ''}
+                      </TableCell>
+                      <TableCell className="font-mono">
+                        {formattedDates[`${item.benchmark}-solved`] || ''}
+                      </TableCell>
+                      <TableCell className="font-mono">
                         {item.timeToSolve.toFixed(2)} years
                       </TableCell>
                     </TableRow>
@@ -120,10 +148,10 @@ export default function BrokenBenchmarks() {
           </CardContent>
         </Card>
 
-        <Separator className="my-12 bg-slate-800" />
+        <Separator className="my-12" />
 
-        <footer className="text-center text-sm text-slate-400">
-          <p>Data last updated {new Date().toLocaleDateString()}</p>
+        <footer className="text-center text-sm text-muted-foreground">
+          <p>Data last updated {formattedDate}</p>
         </footer>
       </div>
     </div>
