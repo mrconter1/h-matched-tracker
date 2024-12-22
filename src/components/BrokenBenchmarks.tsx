@@ -16,7 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
-import { ArrowUpDown, ExternalLink, FileText } from 'lucide-react';
+import { ArrowUpDown, ExternalLink, FileText, Mail, Globe } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { benchmarkData, type Benchmark } from '@/data/benchmarks';
 import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
@@ -121,7 +121,7 @@ export default function BrokenBenchmarks() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-16 pb-8">
         {/* Hero Section */}
         <div className="text-center space-y-8 mb-16">
           <div className="space-y-2">
@@ -335,11 +335,57 @@ export default function BrokenBenchmarks() {
           </CardContent>
         </Card>
 
-        <Separator className="my-12" />
+        {/* Contribution Box */}
+        <Card className="mt-6 shadow-md hover:shadow-lg transition-shadow">
+          <CardHeader className="space-y-1">
+            <CardTitle>Contribute</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              Help improve the h-matched Timeline
+            </p>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-muted-foreground">
+              If you notice any missing benchmarks or would like to suggest improvements, please feel free to:
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4">
+              <a
+                href="https://github.com/mrconter1/broken-benchmarks/issues"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+              >
+                <FileText className="h-4 w-4" />
+                Open an issue on GitHub
+              </a>
+              
+              <a
+                href="mailto:rasmus.lindahl1996@gmail.com"
+                className="inline-flex items-center justify-center gap-2 rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
+              >
+                <Mail className="h-4 w-4" />
+                Send me an email
+              </a>
+              
+              <a
+                href="https://lindahl.works"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
+              >
+                <Globe className="h-4 w-4" />
+                Visit my portfolio
+              </a>
+            </div>
+          </CardContent>
+        </Card>
 
-        <footer className="text-center text-sm text-muted-foreground">
-          <p suppressHydrationWarning>Data last updated {currentDate}</p>
-        </footer>
+        <div className="mt-2 flex flex-col items-center space-y-1">
+          <Separator className="w-full" />
+          <footer className="text-center text-sm text-muted-foreground">
+            <p suppressHydrationWarning>Data last updated {currentDate}</p>
+          </footer>
+        </div>
       </div>
     </div>
   );
