@@ -129,6 +129,8 @@ export default function BrokenBenchmarks() {
   const [sortConfig, setSortConfig] = useState<SortConfig>(null);
   const [currentDate, setCurrentDate] = useState("");
 
+  const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
+
   useEffect(() => {
     setMounted(true);
     const dates: {[key: string]: string} = {};
@@ -225,13 +227,17 @@ export default function BrokenBenchmarks() {
               Visualization of duration between benchmark release and becoming Human Level
             </p>
           </CardHeader>
-          <CardContent className="h-[400px]">
-            <ResponsiveContainer width="100%" height="100%">
+          <CardContent className="h-[400px] md:h-[400px] sm:aspect-square sm:max-h-[500px] sm:min-h-[300px] md:aspect-auto">
+            <ResponsiveContainer
+              width="100%"
+              height="100%"
+              aspect={isMobile ? 1 : undefined}
+            >
               <ComposedChart
                 margin={{
                   top: 20,
                   right: 30,
-                  left: 20,
+                  left: isMobile ? 10 : 20,
                   bottom: 20,
                 }}
               >
@@ -245,7 +251,10 @@ export default function BrokenBenchmarks() {
                   label={{ 
                     value: 'Benchmark Release Date',
                     position: 'bottom',
-                    offset: 0
+                    offset: 0,
+                    style: {
+                      fontSize: isMobile ? 10 : 12
+                    }
                   }}
                 />
                 <YAxis
@@ -256,10 +265,11 @@ export default function BrokenBenchmarks() {
                     value: 'Time to Human Level (Years)', 
                     angle: -90, 
                     position: 'insideLeft',
-                    offset: 15,
+                    offset: isMobile ? 0 : 15,
                     style: { 
                       textAnchor: 'middle',
-                      dominantBaseline: 'middle'
+                      dominantBaseline: 'middle',
+                      fontSize: isMobile ? 10 : 12
                     },
                     dy: 'middle'
                   }}
@@ -278,7 +288,7 @@ export default function BrokenBenchmarks() {
                   fill="#000"
                   stroke="#000"
                   strokeWidth={2}
-                  r={6}
+                  r={isMobile ? 4 : 6}
                   dataKey="timeToSolve"
                   cx="released"
                   cy="timeToSolve"
@@ -286,9 +296,9 @@ export default function BrokenBenchmarks() {
                   label={{ 
                     dataKey: "name",
                     position: "top",
-                    offset: 15,
+                    offset: isMobile ? 8 : 15,
                     fill: "currentColor",
-                    fontSize: 11,
+                    fontSize: isMobile ? 8 : 11,
                     fontWeight: 500
                   }}
                   shape={(props: RechartsScatterProps) => {
@@ -297,7 +307,7 @@ export default function BrokenBenchmarks() {
                       <circle 
                         cx={cx} 
                         cy={cy} 
-                        r={6} 
+                        r={isMobile ? 4 : 6} 
                         fill={payload.color} 
                         stroke={payload.color}
                       />
