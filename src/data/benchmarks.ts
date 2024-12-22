@@ -131,7 +131,11 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "GPQA",
     release: "2023-11-29",
     solved: {
-      date: "2024-09-21"
+      date: "2024-09-21",
+      source: {
+        text: "OpenAI's O1 models achieved 78.3% accuracy, exceeding human expert performance of 69.7%",
+        url: "https://openai.com/index/learning-to-reason-with-llms/"
+      }
     },
     url: "https://github.com/idavidrein/gpqa",
     paperUrl: "https://arxiv.org/pdf/2311.12022"
