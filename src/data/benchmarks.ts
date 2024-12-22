@@ -179,5 +179,21 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://github.com/openai/grade-school-math",
     paperUrl: "https://arxiv.org/pdf/2110.14168"
+  },
+  {
+    benchmark: "HumanEval",
+    release: "2021-07-14",
+    solved: {
+      date: "2023-03-14",
+      source: {
+        text: "AI reached human-level performance with GPT-4<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
+        references: [
+          { url: "https://arxiv.org/pdf/2401.05940" },
+          { url: "https://cdn.openai.com/papers/gpt-4-system-card.pdf" }
+        ]
+      }
+    },
+    url: "https://github.com/openai/human-eval",
+    paperUrl: "https://arxiv.org/pdf/2107.03374v2"
   }
 ]; 
