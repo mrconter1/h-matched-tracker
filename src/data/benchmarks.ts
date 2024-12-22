@@ -81,9 +81,9 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "VQA",
     release: "2019-05-03",
     solved: {
-      date: "2022-12-15",
+      date: "2022-06-15",
       source: {
-        text: "AI systems reached human-level performance on Visual Question Answering around December 2022<sup class='reference'>[1]</sup>",
+        text: "AI systems reached human-level performance on Visual Question Answering around mid-2022<sup class='reference'>[1]</sup>",
         references: [{
           url: "https://aiindex.stanford.edu/wp-content/uploads/2024/05/HAI_AI-Index-Report-2024.pdf"
         }]
