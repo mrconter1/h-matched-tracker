@@ -383,7 +383,9 @@ export default function BrokenBenchmarks() {
         <div className="mt-2 flex flex-col items-center space-y-1">
           <Separator className="w-full" />
           <footer className="text-center text-sm text-muted-foreground">
-            <p suppressHydrationWarning>Data last updated {currentDate}</p>
+            <p suppressHydrationWarning>
+              Data last updated {currentDate} • Created by <a href="https://lindahl.works" className="hover:text-primary transition-colors">Rasmus Lindahl</a>
+            </p>
           </footer>
         </div>
       </div>
