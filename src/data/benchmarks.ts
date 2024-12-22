@@ -220,7 +220,14 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "GSM8K",
     release: "2021-11-18",
     solved: {
-      date: "2024-06-21"
+      date: "2023-03-14",
+      source: {
+        text: "GPT-4 achieved 87.1% accuracy, significantly surpassing the human baseline of 60% from 9-12 year old students<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
+        references: [
+          { url: "https://openai.com/index/solving-math-word-problems/" },
+          { url: "https://openai.com/index/gpt-4-research/" }
+        ]
+      }
     },
     url: "https://github.com/openai/grade-school-math",
     paperUrl: "https://arxiv.org/pdf/2110.14168"
