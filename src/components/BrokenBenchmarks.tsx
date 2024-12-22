@@ -387,7 +387,6 @@ export default function BrokenBenchmarks() {
                                       Source: <a href={item.solved.humanPerformance.source} target="_blank" rel="noopener noreferrer" className="underline">
                                         Research Paper
                                       </a>
-                                      <span className="block text-xs">Published: {item.solved.humanPerformance.date}</span>
                                     </p>
                                   </div>
                                 </TooltipContent>
