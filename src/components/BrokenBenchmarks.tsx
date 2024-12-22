@@ -1,4 +1,8 @@
 import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Separator } from "@/components/ui/separator";
+import { ArrowUpRight, Calendar, Clock, Database } from 'lucide-react';
 
 const benchmarkData = [
   { benchmark: "ImageNet Challenge", release: "2009-01-01", solved: "2015-03-01", timeToSolve: 6.16 },
@@ -27,46 +31,101 @@ const formatDate = (dateString: string) => {
 };
 
 export default function BrokenBenchmarks() {
+  const averageTimeToSolve = (benchmarkData.reduce((acc, curr) => acc + curr.timeToSolve, 0) / benchmarkData.length).toFixed(1);
+  const latestSolved = formatDate(benchmarkData.sort((a, b) => new Date(b.solved).getTime() - new Date(a.solved).getTime())[0].solved);
+
   return (
-    <div className="min-h-screen bg-black">
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Broken Benchmarks
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+        {/* Hero Section */}
+        <div className="text-center space-y-8 mb-16">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white">
+            Broken <span className="text-blue-500">Benchmarks</span>
           </h1>
-          <p className="text-gray-400">
-            A timeline of AI benchmarks and how quickly they were solved.
+          <p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto">
+            Tracking the rapid evolution of AI capabilities through benchmark achievements.
           </p>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="border-b border-white/10">
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-300">Benchmark</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-300">Released</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-300">Solved</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-300">Time to Solve</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/10">
-              {benchmarkData.map((item, index) => (
-                <tr 
-                  key={item.benchmark}
-                  className="hover:bg-white/5 transition-colors"
-                >
-                  <td className="py-3 px-4 text-sm text-white">{item.benchmark}{index}</td>
-                  <td className="py-3 px-4 text-sm text-gray-400">{formatDate(item.release)}</td>
-                  <td className="py-3 px-4 text-sm text-gray-400">{formatDate(item.solved)}</td>
-                  <td className="py-3 px-4 text-sm text-gray-400">
-                    {item.timeToSolve.toFixed(2)} years
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+          <Card className="bg-slate-900/50 border-slate-800">
+            <CardHeader className="space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-slate-400 flex items-center gap-2">
+                <Database className="w-4 h-4" /> Benchmarks Tracked
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-white">{benchmarkData.length}</div>
+            </CardContent>
+          </Card>
+          <Card className="bg-slate-900/50 border-slate-800">
+            <CardHeader className="space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-slate-400 flex items-center gap-2">
+                <Clock className="w-4 h-4" /> Average Time to Solve
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-white">{averageTimeToSolve} years</div>
+            </CardContent>
+          </Card>
+          <Card className="bg-slate-900/50 border-slate-800">
+            <CardHeader className="space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-slate-400 flex items-center gap-2">
+                <Calendar className="w-4 h-4" /> Latest Solved
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-white">{latestSolved}</div>
+            </CardContent>
+          </Card>
         </div>
-      </main>
+
+        {/* Main Content */}
+        <Card className="bg-slate-900/50 border-slate-800">
+          <CardHeader>
+            <CardTitle className="text-xl text-white">Benchmark Timeline</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow className="border-slate-800">
+                  <TableHead className="text-slate-400">Benchmark</TableHead>
+                  <TableHead className="text-slate-400">Released</TableHead>
+                  <TableHead className="text-slate-400">Solved</TableHead>
+                  <TableHead className="text-slate-400">Time to Solve</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {benchmarkData
+                  .sort((a, b) => new Date(b.solved).getTime() - new Date(a.solved).getTime())
+                  .map((item) => (
+                    <TableRow 
+                      key={item.benchmark} 
+                      className="border-slate-800 hover:bg-slate-800/50 transition-colors"
+                    >
+                      <TableCell className="font-medium text-white flex items-center gap-2">
+                        {item.benchmark}
+                        <ArrowUpRight className="w-4 h-4 text-slate-400" />
+                      </TableCell>
+                      <TableCell className="font-mono text-slate-400">{formatDate(item.release)}</TableCell>
+                      <TableCell className="font-mono text-slate-400">{formatDate(item.solved)}</TableCell>
+                      <TableCell className="font-mono text-slate-400">
+                        {item.timeToSolve.toFixed(2)} years
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+
+        <Separator className="my-12 bg-slate-800" />
+
+        <footer className="text-center text-sm text-slate-400">
+          <p>Data last updated {new Date().toLocaleDateString()}</p>
+        </footer>
+      </div>
     </div>
   );
 }
