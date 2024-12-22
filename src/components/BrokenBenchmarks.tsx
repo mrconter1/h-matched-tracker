@@ -16,7 +16,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
-import { ArrowUpRight, Calendar, Clock, Database } from 'lucide-react';
+import { ArrowUpRight, Calendar, Clock, Database, ArrowUpDown } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 
 const benchmarkData = [
   { benchmark: "ImageNet Challenge", release: "2009-01-01", solved: "2015-03-01", timeToSolve: 6.16 },
@@ -46,10 +47,16 @@ const formatDate = (dateString: string) => {
   return new Intl.DateTimeFormat('en-US', options).format(date);
 };
 
+type SortConfig = {
+  key: keyof typeof benchmarkData[0];
+  direction: 'asc' | 'desc';
+} | null;
+
 export default function BrokenBenchmarks() {
   const [mounted, setMounted] = useState(false);
   const [formattedDates, setFormattedDates] = useState<{[key: string]: string}>({});
   const [latestSolved, setLatestSolved] = useState<string>("");
+  const [sortConfig, setSortConfig] = useState<SortConfig>(null);
   const averageTimeToSolve = (benchmarkData.reduce((acc, curr) => acc + curr.timeToSolve, 0) / benchmarkData.length).toFixed(1);
   const [currentDate, setCurrentDate] = useState("");
 
@@ -65,9 +72,42 @@ export default function BrokenBenchmarks() {
     setCurrentDate(formatDate(new Date().toISOString()));
   }, []);
 
+  const sortData = (data: typeof benchmarkData) => {
+    if (!sortConfig) return data;
+
+    return [...data].sort((a, b) => {
+      if (sortConfig.key === 'benchmark') {
+        return sortConfig.direction === 'asc' 
+          ? a[sortConfig.key].localeCompare(b[sortConfig.key])
+          : b[sortConfig.key].localeCompare(a[sortConfig.key]);
+      }
+      
+      if (sortConfig.key === 'release' || sortConfig.key === 'solved') {
+        const dateA = new Date(a[sortConfig.key]).getTime();
+        const dateB = new Date(b[sortConfig.key]).getTime();
+        return sortConfig.direction === 'asc' ? dateA - dateB : dateB - dateA;
+      }
+      
+      // For timeToSolve
+      return sortConfig.direction === 'asc' 
+        ? a[sortConfig.key] - b[sortConfig.key]
+        : b[sortConfig.key] - a[sortConfig.key];
+    });
+  };
+
+  const requestSort = (key: keyof typeof benchmarkData[0]) => {
+    let direction: 'asc' | 'desc' = 'asc';
+    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
   if (!mounted) {
     return null;
   }
+
+  const sortedData = sortData(benchmarkData);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted">
@@ -122,37 +162,77 @@ export default function BrokenBenchmarks() {
             <CardTitle>Benchmark Timeline</CardTitle>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Benchmark</TableHead>
-                  <TableHead>Released</TableHead>
-                  <TableHead>Solved</TableHead>
-                  <TableHead>Time to Solve</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {benchmarkData
-                  .sort((a, b) => new Date(b.solved).getTime() - new Date(a.solved).getTime())
-                  .map((item) => (
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>
+                      <Button
+                        variant="ghost"
+                        onClick={() => requestSort('benchmark')}
+                        className="hover:bg-muted/50 -ml-4 h-8 data-[state=open]:bg-accent"
+                      >
+                        Benchmark
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                      </Button>
+                    </TableHead>
+                    <TableHead>
+                      <Button
+                        variant="ghost"
+                        onClick={() => requestSort('release')}
+                        className="hover:bg-muted/50 -ml-4 h-8 data-[state=open]:bg-accent"
+                      >
+                        Released
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                      </Button>
+                    </TableHead>
+                    <TableHead>
+                      <Button
+                        variant="ghost"
+                        onClick={() => requestSort('solved')}
+                        className="hover:bg-muted/50 -ml-4 h-8 data-[state=open]:bg-accent"
+                      >
+                        Solved
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                      </Button>
+                    </TableHead>
+                    <TableHead>
+                      <Button
+                        variant="ghost"
+                        onClick={() => requestSort('timeToSolve')}
+                        className="hover:bg-muted/50 -ml-4 h-8 data-[state=open]:bg-accent"
+                      >
+                        Time to Solve
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                      </Button>
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {sortedData.map((item) => (
                     <TableRow key={item.benchmark}>
-                      <TableCell className="font-medium flex items-center gap-2">
-                        {item.benchmark}
-                        <ArrowUpRight className="w-4 h-4 text-muted-foreground" />
+                      <TableCell className="font-medium">
+                        <div className="flex items-center gap-2">
+                          {item.benchmark}
+                          <ArrowUpRight className="w-4 h-4 text-muted-foreground hover:text-primary cursor-pointer transition-colors" />
+                        </div>
                       </TableCell>
-                      <TableCell className="font-mono">
+                      <TableCell className="font-mono text-muted-foreground">
                         {formattedDates[`${item.benchmark}-release`] || ''}
                       </TableCell>
-                      <TableCell className="font-mono">
+                      <TableCell className="font-mono text-muted-foreground">
                         {formattedDates[`${item.benchmark}-solved`] || ''}
                       </TableCell>
                       <TableCell className="font-mono">
-                        {item.timeToSolve.toFixed(2)} years
+                        <span className="px-2 py-1 rounded-md bg-muted">
+                          {item.timeToSolve.toFixed(2)} years
+                        </span>
                       </TableCell>
                     </TableRow>
                   ))}
-              </TableBody>
-            </Table>
+                </TableBody>
+              </Table>
+            </div>
           </CardContent>
         </Card>
 
