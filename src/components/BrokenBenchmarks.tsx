@@ -122,7 +122,7 @@ export default function BrokenBenchmarks() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+      <div className="mx-auto w-[90%] max-w-[1400px] pt-16 pb-8">
         {/* Hero Section */}
         <div className="text-center space-y-8 mb-16">
           <div className="space-y-2">
