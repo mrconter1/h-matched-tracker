@@ -26,6 +26,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
+const DATE_TAG_CLASS = "inline-block min-w-[110px] text-center bg-muted/50 px-2 py-1 rounded-md text-sm";
+
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   const options: Intl.DateTimeFormatOptions = { 
@@ -350,13 +352,13 @@ export default function BrokenBenchmarks() {
                         </div>
                       </TableCell>
                       <TableCell className="font-mono text-muted-foreground">
-                        <span className="bg-muted/50 px-2 py-1 rounded-md text-sm">
+                        <span className={DATE_TAG_CLASS}>
                           {formattedDates[`${item.benchmark}-release`] || ''}
                         </span>
                       </TableCell>
                       <TableCell className="font-mono text-muted-foreground">
                         <div className="flex items-center gap-2">
-                          <span className="bg-muted/50 px-2 py-1 rounded-md text-sm">
+                          <span className={DATE_TAG_CLASS}>
                             {formattedDates[`${item.benchmark}-solved`] || ''}
                           </span>
                           {item.solved && (item.solved.source || item.solved.humanPerformance || item.solved.achievementSource) && (
