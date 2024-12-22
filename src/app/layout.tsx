@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "h-matched Tracker",
+  title: "h-matched Tracker | Tracking progress towards human level intelligence in AI",
   description: "Track how long it takes for AI benchmarks to become h-matched (reach human-level performance), from release to completion.",
 };
 
