@@ -278,5 +278,20 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://mmmu-benchmark.github.io/",
     paperUrl: "https://arxiv.org/pdf/2311.16502"
+  },
+  {
+    benchmark: "GLUE",
+    release: "2018-11-01",
+    solved: {
+      date: "2019-07-01",
+      source: {
+        text: "Yang et al. achieved a GLUE score of 88.4, surpassing human performance of 87.1 by 1.3 points<sup class='reference'>[1]</sup>",
+        references: [{
+          url: "https://arxiv.org/pdf/1905.00537"
+        }]
+      }
+    },
+    url: "https://gluebenchmark.com/",
+    paperUrl: "https://openreview.net/pdf?id=rJ4km2R5t7"
   }
 ]; 
