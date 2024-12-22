@@ -154,14 +154,14 @@ export default function BrokenBenchmarks() {
             <Card className="text-left p-6 card-hover">
               <CardTitle className="text-lg mb-3">What is this?</CardTitle>
               <p className="text-muted-foreground">
-                A tracker measuring the duration between a benchmark&apos;s release and when it becomes h-matched (reached by AI at human-level performance).
+                A tracker measuring the duration between a benchmark&apos;s release and when it becomes h-matched (reached by AI at human-level performance). As this duration approaches zero, it suggests we&apos;re nearing a point where AI systems match human performance almost immediately.
               </p>
             </Card>
             
             <Card className="text-left p-6 card-hover">
               <CardTitle className="text-lg mb-3">Why track this?</CardTitle>
               <p className="text-muted-foreground">
-                By monitoring how quickly benchmarks become h-matched, we can observe the accelerating pace at which AI systems achieve human-level capabilities across different domains.
+                By monitoring how quickly benchmarks become h-matched, we can observe the accelerating pace of AI capabilities. If this time reaches zero, it would indicate a critical milestone where creating benchmarks that humans can outperform AI systems becomes virtually impossible.
               </p>
             </Card>
           </div>
