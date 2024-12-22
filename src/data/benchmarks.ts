@@ -144,10 +144,16 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "MATH", 
     release: "2021-11-08", 
     solved: {
-      date: "2024-06-15",
-      model: "GPT-3",
-      score: "95.1%",
+      date: "2024-09-12",
+      model: "O1",
+      score: "94.8%",
       source: "https://github.com/hendrycks/math/",
+      achievementSource: "https://openai.com/index/learning-to-reason-with-llms/",
+      humanPerformance: {
+        score: "90%",
+        source: "https://arxiv.org/pdf/2103.03874",
+        date: "2021-11-08"
+      }
     },
     url: "https://github.com/hendrycks/math/",
     paperUrl: "https://arxiv.org/pdf/2103.03874v2"
