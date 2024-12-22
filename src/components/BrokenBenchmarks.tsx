@@ -32,8 +32,10 @@ const formatDate = (dateString: string) => {
   return new Intl.DateTimeFormat('en-US', options).format(date);
 };
 
+type SortableKeys = keyof Benchmark | 'timeToSolve';
+
 type SortConfig = {
-  key: keyof Benchmark;
+  key: SortableKeys;
   direction: 'asc' | 'desc';
 } | null;
 
@@ -42,13 +44,21 @@ const getDecimalYear = (dateString: string) => {
   return date.getFullYear() + (date.getMonth() / 12) + (date.getDate() / 365);
 };
 
+const calculateTimeToSolve = (releaseDate: string, solvedDate: string): number => {
+  const release = new Date(releaseDate);
+  const solved = new Date(solvedDate);
+  const diffTime = Math.abs(solved.getTime() - release.getTime());
+  const diffYears = diffTime / (1000 * 60 * 60 * 24 * 365.25); // Using 365.25 to account for leap years
+  return Number(diffYears.toFixed(2));
+};
+
 const prepareGraphData = (data: typeof benchmarkData) => {
   return data
     .sort((a, b) => new Date(a.solved).getTime() - new Date(b.solved).getTime())
     .map(item => ({
       name: item.benchmark,
       solved: Number(getDecimalYear(item.solved).toFixed(2)),
-      timeToSolve: Number(item.timeToSolve.toFixed(2))
+      timeToSolve: calculateTimeToSolve(item.release, item.solved)
     }));
 };
 
@@ -86,13 +96,15 @@ export default function BrokenBenchmarks() {
       }
       
       // For timeToSolve
+      const timeToSolveA = calculateTimeToSolve(a.release, a.solved);
+      const timeToSolveB = calculateTimeToSolve(b.release, b.solved);
       return sortConfig.direction === 'asc' 
-        ? (a[sortConfig.key] as number) - (b[sortConfig.key] as number)
-        : (b[sortConfig.key] as number) - (a[sortConfig.key] as number);
+        ? timeToSolveA - timeToSolveB
+        : timeToSolveB - timeToSolveA;
     });
   };
 
-  const requestSort = (key: keyof typeof benchmarkData[0]) => {
+  const requestSort = (key: SortableKeys) => {
     let direction: 'asc' | 'desc' = 'asc';
     if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
       direction = 'desc';
@@ -283,7 +295,7 @@ export default function BrokenBenchmarks() {
                       </TableCell>
                       <TableCell className="font-mono">
                         <span className="px-2 py-1 rounded-md bg-muted">
-                          {item.timeToSolve.toFixed(2)} years
+                          {calculateTimeToSolve(item.release, item.solved)} years
                         </span>
                       </TableCell>
                     </TableRow>
