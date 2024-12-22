@@ -76,7 +76,21 @@ export const benchmarkData: Benchmark[] = [
     url: "https://github.com/hendrycks/math/",
     paperUrl: "https://arxiv.org/pdf/2103.03874v2"
   },
-  { benchmark: "BIG-Bench-Hard", release: "2022-10-17", solved: "2024-06-21", timeToSolve: 1.68 },
-  { benchmark: "GPQA", release: "2023-11-29", solved: "2024-09-21", timeToSolve: 0.81 },
+  { 
+    benchmark: "BIG-Bench-Hard", 
+    release: "2022-10-17", 
+    solved: "2024-06-21", 
+    timeToSolve: 1.68,
+    url: "https://github.com/suzgunmirac/BIG-Bench-Hard",
+    paperUrl: "https://arxiv.org/pdf/2210.09261"
+  },
+  { 
+    benchmark: "GPQA", 
+    release: "2023-11-29", 
+    solved: "2024-09-21", 
+    timeToSolve: 0.81,
+    url: "https://github.com/idavidrein/gpqa",
+    paperUrl: "https://arxiv.org/pdf/2311.12022"
+  },
   { benchmark: "GSM8K", release: "2021-11-18", solved: "2024-03-04", timeToSolve: 2.29 }
 ]; 
