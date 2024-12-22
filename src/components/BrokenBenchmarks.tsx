@@ -15,7 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Separator } from "@/components/ui/separator";
 import { ArrowUpDown, ExternalLink, FileText, Mail, Globe } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { benchmarkData, type Benchmark } from '@/data/benchmarks';
@@ -121,7 +120,7 @@ export default function BrokenBenchmarks() {
   const sortedData = sortData(benchmarkData);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted">
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/50">
       <div className="mx-auto w-[90%] max-w-[1400px] pt-16 pb-8">
         {/* Hero Section */}
         <div className="text-center space-y-8 mb-16">
@@ -389,8 +388,7 @@ export default function BrokenBenchmarks() {
           </CardContent>
         </Card>
 
-        <div className="mt-2 flex flex-col items-center space-y-1">
-          <Separator className="w-full" />
+        <div className="mt-2 flex flex-col items-center">
           <footer className="text-center text-sm text-muted-foreground">
             <p suppressHydrationWarning>
               Data last updated {currentDate} • Created by <a href="https://lindahl.works" className="hover:text-primary transition-colors">Rasmus Lindahl</a>
