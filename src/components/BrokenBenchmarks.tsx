@@ -451,10 +451,27 @@ export default function BrokenBenchmarks() {
                         <Button
                           variant="ghost"
                           onClick={() => requestSort('timeToSolve')}
-                          className="hover:bg-muted/50 -ml-4 h-8 data-[state=open]:bg-accent"
+                          className="hover:bg-muted/50 -ml-4 h-8 data-[state=open]:bg-accent flex items-center"
                         >
-                          Time to Human Level
+                          <span>Time to Human Level</span>
                           <ArrowUpDown className="ml-2 h-4 w-4" />
+                          <TooltipProvider>
+                            <RadixTooltip>
+                              <TooltipTrigger asChild>
+                                <Button variant="ghost" className="h-4 w-4 p-0 ml-1">
+                                  <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent 
+                                side="top" 
+                                className="max-w-[400px] p-3 whitespace-normal"
+                              >
+                                <p className="text-sm">
+                                  Time from release until AI surpassed human performance, verified by official reports or benchmark scores
+                                </p>
+                              </TooltipContent>
+                            </RadixTooltip>
+                          </TooltipProvider>
                         </Button>
                       </TableHead>
                     </TableRow>
