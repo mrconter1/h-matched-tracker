@@ -152,7 +152,7 @@ export const benchmarkData: Benchmark[] = [
     solved: {
       date: "2024-03",
       model: "Claude-3-Sonnet",
-      score: "95.1%",
+      score: "93.1%",
       source: "https://www.anthropic.com/news/claude-3-5-sonnet",
       humanPerformance: {
         score: "94.4%",
@@ -169,7 +169,7 @@ export const benchmarkData: Benchmark[] = [
     solved: {
       date: "2024-09",
       model: "GPT-3",
-      score: "95.1%",
+      score: "78.3%",
       source: "https://github.com/idavidrein/gpqa",
       achievementSource: "https://openai.com/index/learning-to-reason-with-llms/",
       humanPerformance: {
