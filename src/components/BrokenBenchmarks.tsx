@@ -153,9 +153,9 @@ export default function BrokenBenchmarks() {
         {/* Graph Card */}
         <Card className="mb-16 shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="space-y-1">
-            <CardTitle>Time to h-matched Trend</CardTitle>
+            <CardTitle>Time to Human Level Trend</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Visualization of duration between benchmark release and becoming h-matched
+              Visualization of duration between benchmark release and becoming Human Level
             </p>
           </CardHeader>
           <CardContent className="h-[400px]">
