@@ -263,5 +263,20 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://nlp.cs.washington.edu/triviaqa/",
     paperUrl: "https://arxiv.org/pdf/1705.03551"
+  },
+  {
+    benchmark: "MMMU",
+    release: "2023-11-27",
+    solved: {
+      date: "2024-09-12",
+      source: {
+        text: "OpenAI's O1 model achieved 78.2% accuracy, becoming the first model competitive with human experts<sup class='reference'>[1]</sup>",
+        references: [{
+          url: "https://openai.com/index/learning-to-reason-with-llms/"
+        }]
+      }
+    },
+    url: "https://mmmu-benchmark.github.io/",
+    paperUrl: "https://arxiv.org/pdf/2311.16502"
   }
 ]; 
