@@ -23,7 +23,7 @@ export const benchmarkData: Benchmark[] = [
     solved: {
       date: "2016-03-15",
       source: {
-        text: "AI systems approximately reached human-level performance (around ~95%) around early 2016<sup class='reference'>[1]</sup>",
+        text: "AI systems approximately reached human-level performance (around 95%) around early 2016<sup class='reference'>[1]</sup>",
         references: [{
           url: "https://aiindex.stanford.edu/wp-content/uploads/2021/11/2021-AI-Index-Report_Master.pdf"
         }]
