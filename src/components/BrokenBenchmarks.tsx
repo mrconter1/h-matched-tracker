@@ -124,9 +124,14 @@ export default function BrokenBenchmarks() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
         {/* Hero Section */}
         <div className="text-center space-y-8 mb-16">
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
-            Human-matched <span className="text-primary">Benchmarks</span>
-          </h1>
+          <div className="space-y-2">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
+              h-matched <span className="text-primary">Benchmarks</span>
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              h = human level performance
+            </p>
+          </div>
           
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             <Card className="text-left p-6 card-hover">
