@@ -18,7 +18,7 @@ import {
 import { ArrowUpDown, ExternalLink, FileText, Mail, Globe, HelpCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { benchmarkData, type Benchmark, type BenchmarkSolved } from '@/data/benchmarks';
-import { ComposedChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Line } from 'recharts';
+import { ComposedChart, Scatter, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Line } from 'recharts';
 import {
   Tooltip as RadixTooltip,
   TooltipContent,
@@ -227,33 +227,6 @@ export default function BrokenBenchmarks() {
                     dy: 'middle'
                   }}
                 />
-                <RechartsTooltip
-                  cursor={{ strokeDasharray: '3 3' }}
-                  content={({ active, payload }) => {
-                    if (active && payload && payload.length) {
-                      console.log('Tooltip payload:', payload);
-                      
-                      const data = payload[0].payload;
-                      return (
-                        <div className="rounded-lg border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85 p-2 shadow-md">
-                          <div className="space-y-1">
-                            <p className="font-medium">{data.name}</p>
-                            <p className="text-sm text-muted-foreground">
-                              Released: {data.releaseDate}
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                              Solved: {data.solvedDate}
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                              Time to Human Level: {data.timeToSolve} years
-                            </p>
-                          </div>
-                        </div>
-                      );
-                    }
-                    return null;
-                  }}
-                />
                 <Scatter
                   data={prepareGraphData(benchmarkData)}
                   fill="hsl(var(--primary))"
@@ -264,6 +237,14 @@ export default function BrokenBenchmarks() {
                   cx="released"
                   cy="timeToSolve"
                   name="Benchmark"
+                  label={{ 
+                    dataKey: "name",
+                    position: "top",
+                    offset: 15,
+                    fill: "currentColor",
+                    fontSize: 11,
+                    fontWeight: 500
+                  }}
                 />
                 <Line 
                   type="linear" 
