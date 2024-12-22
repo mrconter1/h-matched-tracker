@@ -25,6 +25,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { Props as RechartsScatterProps } from 'recharts/types/component/DefaultLegendContent';
 
 const DATE_TAG_CLASS = "inline-block min-w-[110px] text-center bg-muted/50 px-2 py-1 rounded-md text-sm";
 
@@ -59,6 +60,31 @@ const calculateTimeToSolve = (releaseDate: string, solved: BenchmarkSolved): num
   return Number(diffYears.toFixed(2));
 };
 
+const hashString = (str: string) => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return hash;
+};
+
+const generatePastelColor = (seed: string) => {
+  const hash = hashString(seed);
+  
+  // Generate HSL values with more variation
+  const hue = Math.abs(hash % 360); // 0-360
+  const saturation = 55 + (Math.abs((hash >> 8) % 30)); // 55-85%
+  const lightness = 55 + (Math.abs((hash >> 16) % 20)); // 55-75%
+  
+  // Add a slight rotation to hue based on seed length to increase variation
+  const hueRotation = (seed.length * 37) % 360;
+  const finalHue = (hue + hueRotation) % 360;
+  
+  return `hsl(${finalHue}, ${saturation}%, ${lightness}%)`;
+};
+
 const prepareGraphData = (data: typeof benchmarkData) => {
   return data
     .sort((a, b) => new Date(a.release).getTime() - new Date(b.release).getTime())
@@ -69,6 +95,7 @@ const prepareGraphData = (data: typeof benchmarkData) => {
       timeToSolve: calculateTimeToSolve(item.release, item.solved),
       solvedDate: formatDate(item.solved.date),
       releaseDate: formatDate(item.release),
+      color: generatePastelColor(item.benchmark),
     }));
 };
 
@@ -86,6 +113,14 @@ const calculateTrendLine = (data: typeof benchmarkData) => {
     released: getDecimalYear(item.release),
     trend: slope * getDecimalYear(item.release) + intercept,
   }));
+};
+
+type ScatterProps = RechartsScatterProps & {
+  cx?: number;
+  cy?: number;
+  payload: {
+    color: string;
+  };
 };
 
 export default function BrokenBenchmarks() {
@@ -240,8 +275,8 @@ export default function BrokenBenchmarks() {
                 />
                 <Scatter
                   data={prepareGraphData(benchmarkData)}
-                  fill="hsl(var(--primary))"
-                  stroke="hsl(var(--primary))"
+                  fill="#000"
+                  stroke="#000"
                   strokeWidth={2}
                   r={6}
                   dataKey="timeToSolve"
@@ -255,6 +290,18 @@ export default function BrokenBenchmarks() {
                     fill: "currentColor",
                     fontSize: 11,
                     fontWeight: 500
+                  }}
+                  shape={(props: RechartsScatterProps) => {
+                    const { cx, cy, payload } = props as ScatterProps;
+                    return (
+                      <circle 
+                        cx={cx} 
+                        cy={cy} 
+                        r={6} 
+                        fill={payload.color} 
+                        stroke={payload.color}
+                      />
+                    );
                   }}
                 />
               </ComposedChart>
