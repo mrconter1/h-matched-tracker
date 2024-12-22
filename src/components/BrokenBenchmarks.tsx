@@ -127,9 +127,14 @@ export default function BrokenBenchmarks() {
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
             Broken <span className="text-primary">Benchmarks</span>
           </h1>
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
-            Tracking the rapid evolution of AI capabilities through benchmark achievements.
-          </p>
+          <div className="space-y-4">
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
+              Tracking how quickly AI systems achieve human-level performance on benchmarks, revealing an uncomfortable trend: we&apos;re running out of tasks that humans can solve but AI cannot.
+            </p>
+            <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
+              As the time between a benchmark&apos;s release and its solution by AI rapidly shrinks, we approach a pivotal moment: when AI can solve new challenges as quickly as humans can create them—perhaps the clearest signal yet of artificial general intelligence.
+            </p>
+          </div>
         </div>
 
         {/* Graph Card */}
