@@ -63,9 +63,10 @@ const prepareGraphData = (data: typeof benchmarkData) => {
     .map(item => ({
       name: item.benchmark,
       released: Number(getDecimalYear(item.release).toFixed(2)),
+      solved: item.solved,
       timeToSolve: calculateTimeToSolve(item.release, item.solved),
       solvedDate: formatDate(item.solved.date),
-      releaseDate: formatDate(item.release)
+      releaseDate: formatDate(item.release),
     }));
 };
 
@@ -230,18 +231,23 @@ export default function BrokenBenchmarks() {
                   cursor={{ strokeDasharray: '3 3' }}
                   content={({ active, payload }) => {
                     if (active && payload && payload.length) {
+                      console.log('Tooltip payload:', payload);
+                      
+                      const data = payload[0].payload;
                       return (
-                        <div className="rounded-lg border bg-background p-2 shadow-sm">
-                          <p className="font-medium">{payload[0].payload.name}</p>
-                          <p className="text-sm text-muted-foreground">
-                            Released: {payload[0].payload.releaseDate}
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            Solved: {payload[0].payload.solvedDate}
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            Time to Human Level: {payload[0].payload.timeToSolve} years
-                          </p>
+                        <div className="rounded-lg border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85 p-2 shadow-md">
+                          <div className="space-y-1">
+                            <p className="font-medium">{data.name}</p>
+                            <p className="text-sm text-muted-foreground">
+                              Released: {data.releaseDate}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              Solved: {data.solvedDate}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              Time to Human Level: {data.timeToSolve} years
+                            </p>
+                          </div>
                         </div>
                       );
                     }
@@ -254,8 +260,10 @@ export default function BrokenBenchmarks() {
                   stroke="hsl(var(--primary))"
                   strokeWidth={2}
                   r={6}
-                  x="released"
-                  y="timeToSolve"
+                  dataKey="timeToSolve"
+                  cx="released"
+                  cy="timeToSolve"
+                  name="Benchmark"
                 />
                 <Line 
                   type="linear" 
