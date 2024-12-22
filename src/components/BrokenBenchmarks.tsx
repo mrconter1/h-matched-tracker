@@ -205,8 +205,8 @@ export default function BrokenBenchmarks() {
           <div className="text-center space-y-12 mb-24">
             {/* Title Section */}
             <div className="space-y-4">
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight flex items-center justify-center gap-3">
-                <span className="bg-primary/5 border border-primary/10 px-6 py-3 rounded-xl">
+              <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold tracking-tight flex items-center justify-center gap-2 sm:gap-3">
+                <span className="bg-primary/5 border border-primary/10 px-3 sm:px-6 py-2 sm:py-3 rounded-xl">
                   h-matched
                 </span>
                 <span>Tracker</span>
