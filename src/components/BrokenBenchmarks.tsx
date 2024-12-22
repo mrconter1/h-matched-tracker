@@ -135,9 +135,9 @@ export default function BrokenBenchmarks() {
         {/* Graph Card */}
         <Card className="mb-16 shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="space-y-1">
-            <CardTitle>Time to Solve Trend</CardTitle>
+            <CardTitle>Time to Human Level Trend</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Visualization of how quickly AI systems solved each benchmark after release
+              Visualization of how quickly AI systems reached human-level performance on each benchmark
             </p>
           </CardHeader>
           <CardContent className="h-[400px]">
@@ -166,9 +166,9 @@ export default function BrokenBenchmarks() {
                 <YAxis
                   type="number"
                   dataKey="timeToSolve"
-                  name="Time to Solve"
+                  name="Time to Human Level"
                   label={{ 
-                    value: 'Time to Solve (Years)', 
+                    value: 'Time to Human Level (Years)', 
                     angle: -90, 
                     position: 'insideLeft',
                     offset: 10
@@ -185,7 +185,7 @@ export default function BrokenBenchmarks() {
                             Solved: {payload[0].payload.solvedDate}
                           </p>
                           <p className="text-sm text-muted-foreground">
-                            Time to Solve: {payload[0].payload.timeToSolve} years
+                            Time to Human Level: {payload[0].payload.timeToSolve} years
                           </p>
                         </div>
                       );
@@ -254,7 +254,7 @@ export default function BrokenBenchmarks() {
                         onClick={() => requestSort('timeToSolve')}
                         className="hover:bg-muted/50 -ml-4 h-8 data-[state=open]:bg-accent"
                       >
-                        Time to Solve
+                        Time to Human Level
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                       </Button>
                     </TableHead>
