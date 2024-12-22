@@ -24,10 +24,10 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "ImageNet Challenge",
     release: "2009-01-01",
     solved: {
-      date: "2015-03-01",
-      model: "AlexNet",
-      score: "82.7%",
-      source: "https://www.image-net.org/",
+      date: "2015-12-10",
+      model: "ResNet",
+      score: "96.4%",
+      source: "https://www.sciencedirect.com/topics/computer-science/imagenet-challenge#:~:text=The%20performance%20for%20human%20agreement,outperform%20people%20on%20this%20task."
     },
     url: "https://www.image-net.org/",
     paperUrl: "https://arxiv.org/pdf/1409.0575"
