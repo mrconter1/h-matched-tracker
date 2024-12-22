@@ -27,13 +27,19 @@ export const benchmarkData: Benchmark[] = [
     paperUrl: "https://arxiv.org/pdf/1409.0575"
   },
   {
-    benchmark: "WinoGrande",
-    release: "2012-06-10",
+    benchmark: "WinoGrad",
+    release: "2011-01-01",
     solved: {
-      date: "2023-07-11"
+      date: "2019-11-01",
+      source: {
+        text: "Initially performing at chance level in 2016, transformer models rapidly progressed to 90.1% accuracy in late 2019, approaching human performance of 92-96%<sup>[1]</sup>",
+        references: [{
+          url: "https://arxiv.org/pdf/2201.02387"
+        }]
+      }
     },
-    url: "https://winogrande.allenai.org/",
-    paperUrl: "https://arxiv.org/pdf/1907.10641"
+    url: "https://cs.nyu.edu/faculty/davise/papers/WinogradSchemas/WS.html",
+    paperUrl: "https://cs.nyu.edu/faculty/davise/papers/WSKR2012.pdf"
   },
   {
     benchmark: "SQuAD 1.1",
