@@ -182,7 +182,14 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "BIG-Bench-Hard",
     release: "2022-10-17",
     solved: {
-      date: "2024-03-04"
+      date: "2024-06-21",
+      source: {
+        text: "Claude 3.5 Sonnet achieved 93.1% (3-shot CoT), matching human performance of around 94.4%<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
+        references: [
+          { url: "https://arxiv.org/pdf/2210.09261" },
+          { url: "https://www.anthropic.com/news/claude-3-5-sonnet" }
+        ]
+      }
     },
     url: "https://github.com/suzgunmirac/BIG-Bench-Hard",
     paperUrl: "https://arxiv.org/pdf/2210.09261"
