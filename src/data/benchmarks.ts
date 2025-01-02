@@ -309,5 +309,21 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://pubmedqa.github.io/",
     paperUrl: "https://aclanthology.org/D19-1259.pdf"
+  },
+  {
+    benchmark: "MathVista",
+    release: "2024-01-21",
+    solved: {
+      date: "2024-05-13",
+      source: {
+        text: "GPT-4o achieved 63.8% accuracy, surpassing human performance of 60.3%<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
+        references: [
+          { url: "https://arxiv.org/pdf/2310.02255" },
+          { url: "https://openai.com/index/hello-gpt-4o/" }
+        ]
+      }
+    },
+    url: "https://mathvista.github.io/",
+    paperUrl: "https://arxiv.org/pdf/2310.02255"
   }
 ]; 
