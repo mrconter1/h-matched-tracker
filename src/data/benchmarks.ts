@@ -293,5 +293,21 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://gluebenchmark.com/",
     paperUrl: "https://openreview.net/pdf?id=rJ4km2R5t7"
+  },
+  {
+    benchmark: "PubMedQA",
+    release: "2019-11-03",
+    solved: {
+      date: "2024-03-04",
+      source: {
+        text: "Claude 3 Sonnet achieved 79.7% accuracy, surpassing single human performance of 78.0%<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
+        references: [
+          { url: "https://aclanthology.org/D19-1259.pdf" },
+          { url: "https://www-cdn.anthropic.com/de8ba9b01c9ab7cbabf5c33b80b7bbc618857627/Model_Card_Claude_3.pdf" }
+        ]
+      }
+    },
+    url: "https://pubmedqa.github.io/",
+    paperUrl: "https://aclanthology.org/D19-1259.pdf"
   }
 ]; 
