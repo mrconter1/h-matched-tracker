@@ -18,7 +18,7 @@ import {
 import { ArrowUpDown, ExternalLink, FileText, Mail, Globe, HelpCircle, ChevronDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { benchmarkData, type Benchmark, type BenchmarkSolved } from '@/data/benchmarks';
-import { ComposedChart, Scatter, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Line } from 'recharts';
+import { ComposedChart, Scatter, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Line, Tooltip } from 'recharts';
 import {
   Tooltip as RadixTooltip,
   TooltipContent,
@@ -137,6 +137,34 @@ const formatTimeToSolve = (years: number) => {
   const days = Math.round(remainingDays % 30.44);
   
   return { wholeYears, months, days };
+};
+
+const CustomTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    // Only show tooltip for scatter points (which have the 'name' property)
+    const scatterPoint = payload.find((p: any) => p.payload.name);
+    if (scatterPoint) {
+      const data = scatterPoint.payload;
+      const timeToSolve = formatTimeToSolve(data.timeToSolve);
+      
+      return (
+        <div className="bg-background border border-border rounded-lg shadow-lg p-3 space-y-2">
+          <p className="font-medium text-sm">{data.name}</p>
+          <div className="space-y-1 text-sm text-muted-foreground">
+            <p>Released: {data.releaseDate}</p>
+            <p>Solved: {data.solvedDate}</p>
+            <p className="font-medium text-primary">
+              Time to Human Level:{' '}
+              {timeToSolve.wholeYears > 0 && `${timeToSolve.wholeYears} years `}
+              {timeToSolve.months > 0 && `${timeToSolve.months} months `}
+              {timeToSolve.days > 0 && `${timeToSolve.days} days`}
+            </p>
+          </div>
+        </div>
+      );
+    }
+  }
+  return null;
 };
 
 export default function BrokenBenchmarks() {
@@ -369,6 +397,10 @@ export default function BrokenBenchmarks() {
                       dy: 'middle'
                     }}
                   />
+                  <Tooltip 
+                    content={<CustomTooltip />}
+                    cursor={false}
+                  />
                   <Line 
                     type="linear" 
                     dataKey="trend" 
@@ -376,7 +408,9 @@ export default function BrokenBenchmarks() {
                     stroke="red" 
                     strokeWidth={2}
                     strokeDasharray="5 5" 
-                    dot={false} 
+                    dot={false}
+                    activeDot={false}
+                    isAnimationActive={false}
                   />
                   <Scatter
                     data={prepareGraphData(benchmarkData)}
@@ -405,6 +439,7 @@ export default function BrokenBenchmarks() {
                           r={isMobile ? 4 : 6} 
                           fill={payload.color} 
                           stroke={payload.color}
+                          className="cursor-pointer hover:opacity-80 transition-opacity"
                         />
                       );
                     }}
