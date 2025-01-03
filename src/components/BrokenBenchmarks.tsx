@@ -18,7 +18,7 @@ import {
 import { ArrowUpDown, ExternalLink, FileText, Mail, Globe, HelpCircle, ChevronDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { benchmarkData, type Benchmark, type BenchmarkSolved } from '@/data/benchmarks';
-import { ComposedChart, Scatter, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Line, Tooltip } from 'recharts';
+import { ComposedChart, Scatter, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Line, Tooltip, TooltipProps } from 'recharts';
 import {
   Tooltip as RadixTooltip,
   TooltipContent,
@@ -139,10 +139,21 @@ const formatTimeToSolve = (years: number) => {
   return { wholeYears, months, days };
 };
 
-const CustomTooltip = ({ active, payload }: any) => {
+type CustomTooltipPayload = {
+  payload: {
+    name: string;
+    releaseDate: string;
+    solvedDate: string;
+    timeToSolve: number;
+  };
+};
+
+const CustomTooltip = ({ 
+  active, 
+  payload 
+}: TooltipProps<number, string> & { payload?: CustomTooltipPayload[] }) => {
   if (active && payload && payload.length) {
-    // Only show tooltip for scatter points (which have the 'name' property)
-    const scatterPoint = payload.find((p: any) => p.payload.name);
+    const scatterPoint = payload.find((p) => p.payload.name);
     if (scatterPoint) {
       const data = scatterPoint.payload;
       const timeToSolve = formatTimeToSolve(data.timeToSolve);
