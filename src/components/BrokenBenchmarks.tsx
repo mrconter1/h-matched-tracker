@@ -639,30 +639,36 @@ export default function BrokenBenchmarks() {
                         <TableCell className="font-mono">
                           <div className="flex items-center gap-1.5">
                             {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).isNegative && (
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-red-100/10 text-red-500">
-                                -
-                              </span>
-                            )}
-                            {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).wholeYears > 0 && (
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-primary/10 text-primary">
-                                {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).wholeYears}
-                                {' '}
-                                {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).wholeYears === 1 ? 'year' : 'years'}
-                              </span>
-                            )}
-                            {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).months > 0 && (
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-primary/5 text-primary/90">
-                                {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).months}
-                                {' '}
-                                {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).months === 1 ? 'month' : 'months'}
-                              </span>
-                            )}
-                            {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).days > 0 && (
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-primary/[0.03] text-primary/80">
+                              <div className="flex items-center gap-1.5 bg-red-500/10 px-2 py-1 rounded-md">
+                                <span className="text-xs font-medium text-red-500">-</span>
                                 {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).days}
-                                {' '}
-                                {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).days === 1 ? 'day' : 'days'}
-                              </span>
+                                <span className="text-xs font-medium text-red-500">days</span>
+                              </div>
+                            )}
+                            {!formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).isNegative && (
+                              <>
+                                {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).wholeYears > 0 && (
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-primary/10 text-primary">
+                                    {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).wholeYears}
+                                    {' '}
+                                    {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).wholeYears === 1 ? 'year' : 'years'}
+                                  </span>
+                                )}
+                                {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).months > 0 && (
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-primary/5 text-primary/90">
+                                    {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).months}
+                                    {' '}
+                                    {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).months === 1 ? 'month' : 'months'}
+                                  </span>
+                                )}
+                                {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).days > 0 && (
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-primary/[0.03] text-primary/80">
+                                    {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).days}
+                                    {' '}
+                                    {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).days === 1 ? 'day' : 'days'}
+                                  </span>
+                                )}
+                              </>
                             )}
                           </div>
                         </TableCell>
