@@ -18,7 +18,7 @@ import {
 import { ArrowUpDown, ExternalLink, FileText, Mail, Globe, HelpCircle, ChevronDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { benchmarkData, type Benchmark, type BenchmarkSolved } from '@/data/benchmarks';
-import { ComposedChart, Scatter, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Line, Tooltip, TooltipProps } from 'recharts';
+import { ComposedChart, Scatter, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Line, Tooltip, TooltipProps, ReferenceLine } from 'recharts';
 import {
   Tooltip as RadixTooltip,
   TooltipContent,
@@ -55,8 +55,8 @@ const getDecimalYear = (dateString: string) => {
 const calculateTimeToSolve = (releaseDate: string, solved: BenchmarkSolved): number => {
   const release = new Date(releaseDate);
   const solvedDate = new Date(solved.date);
-  const diffTime = Math.abs(solvedDate.getTime() - release.getTime());
-  const diffYears = diffTime / (1000 * 60 * 60 * 24 * 365.25); // Using 365.25 to account for leap years
+  const diffTime = solvedDate.getTime() - release.getTime();
+  const diffYears = diffTime / (1000 * 60 * 60 * 24 * 365.25);
   return Number(diffYears.toFixed(2));
 };
 
@@ -109,10 +109,19 @@ const calculateTrendLine = (data: typeof benchmarkData) => {
   const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
   const intercept = (sumY - slope * sumX) / n;
   
-  return data.map(item => ({
-    released: getDecimalYear(item.release),
-    trend: slope * getDecimalYear(item.release) + intercept,
-  }));
+  // Generate points within fixed x-axis bounds and y-axis domain
+  const points = [];
+  for (let year = 2005; year <= 2035; year += 0.5) {
+    const trendValue = slope * year + intercept;
+    // Only include points within y-axis domain
+    if (trendValue >= -1 && trendValue <= 10) {
+      points.push({
+        released: year,
+        trend: trendValue,
+      });
+    }
+  }
+  return points;
 };
 
 type ScatterProps = RechartsScatterProps & {
@@ -130,13 +139,15 @@ const GradientBackground = () => (
 );
 
 const formatTimeToSolve = (years: number) => {
-  const totalDays = years * 365.25;
-  const wholeYears = Math.floor(years);
+  const isNegative = years < 0;
+  const absYears = Math.abs(years);
+  const totalDays = absYears * 365.25;
+  const wholeYears = Math.floor(absYears);
   const remainingDays = totalDays - (wholeYears * 365.25);
   const months = Math.floor(remainingDays / 30.44);
   const days = Math.round(remainingDays % 30.44);
   
-  return { wholeYears, months, days };
+  return { wholeYears, months, days, isNegative };
 };
 
 type CustomTooltipPayload = {
@@ -166,6 +177,7 @@ const CustomTooltip = ({
             <p>Solved: {data.solvedDate}</p>
             <p className="font-medium text-primary">
               Time to Human Level:{' '}
+              {timeToSolve.isNegative && '-'}
               {timeToSolve.wholeYears > 0 && `${timeToSolve.wholeYears} years `}
               {timeToSolve.months > 0 && `${timeToSolve.months} months `}
               {timeToSolve.days > 0 && `${timeToSolve.days} days`}
@@ -376,11 +388,12 @@ export default function BrokenBenchmarks() {
                   }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
+                  <ReferenceLine y={0} stroke="red" strokeDasharray="3 3" />
                   <XAxis
                     type="number"
                     dataKey="released"
                     name="Release Year"
-                    domain={['auto', 'auto']}
+                    domain={[2005, 2035]}
                     tickCount={7}
                     label={{ 
                       value: 'Benchmark Release Date',
@@ -395,6 +408,7 @@ export default function BrokenBenchmarks() {
                     type="number"
                     dataKey="timeToSolve"
                     name="Time to Human Level"
+                    domain={[-1, 10]}
                     label={{ 
                       value: 'Time to Human Level (Years)', 
                       angle: -90, 
@@ -624,6 +638,11 @@ export default function BrokenBenchmarks() {
                         </TableCell>
                         <TableCell className="font-mono">
                           <div className="flex items-center gap-1.5">
+                            {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).isNegative && (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-red-100/10 text-red-500">
+                                -
+                              </span>
+                            )}
                             {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).wholeYears > 0 && (
                               <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-primary/10 text-primary">
                                 {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).wholeYears}

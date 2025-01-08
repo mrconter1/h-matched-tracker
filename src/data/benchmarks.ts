@@ -325,5 +325,20 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://mathvista.github.io/",
     paperUrl: "https://arxiv.org/pdf/2310.02255"
+  },
+  {
+    benchmark: "LongBench v2",
+    release: "2025-01-03",
+    solved: {
+      date: "2024-12-12",
+      source: {
+        text: "O1-preview model achieved 57.7% accuracy, surpassing the human baseline of 53.7% by 4% under a 15-minute time constraint<sup class='reference'>[1]</sup>",
+        references: [{
+          url: "https://arxiv.org/pdf/2412.15204"
+        }]
+      }
+    },
+    url: "https://longbench2.github.io/",
+    paperUrl: "https://arxiv.org/pdf/2412.15204"
   }
 ]; 
