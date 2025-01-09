@@ -388,13 +388,24 @@ export default function BrokenBenchmarks() {
                   }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <ReferenceLine y={0} stroke="red" strokeDasharray="3 3" />
+                  <ReferenceLine 
+                    y={0} 
+                    stroke="red" 
+                    strokeDasharray="3 3"
+                    label={{
+                      value: "y=0",
+                      position: "right",
+                      fill: "red",
+                      fontSize: 12
+                    }}
+                  />
                   <XAxis
                     type="number"
                     dataKey="released"
                     name="Release Year"
                     domain={[2005, 2035]}
-                    tickCount={7}
+                    tickCount={10}
+                    ticks={[2005, 2010, 2015, 2020, 2025, 2030, 2035]}
                     label={{ 
                       value: 'Benchmark Release Date',
                       position: 'bottom',
@@ -409,6 +420,7 @@ export default function BrokenBenchmarks() {
                     dataKey="timeToSolve"
                     name="Time to Human Level"
                     domain={[-1, 10]}
+                    ticks={[-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
                     label={{ 
                       value: 'Time to Human Level (Years)', 
                       angle: -90, 
