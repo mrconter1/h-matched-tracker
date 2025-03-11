@@ -186,6 +186,37 @@ export const benchmarkData: Benchmark[] = [
     paperUrl: "https://arxiv.org/pdf/2103.03874v2"
   },
   {
+    benchmark: "GSM8K",
+    release: "2021-11-18",
+    solved: {
+      date: "2023-03-14",
+      source: {
+        text: "GPT-4 achieved 87.1% accuracy, significantly surpassing the human baseline of 60% from 9-12 year old students<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
+        references: [
+          { url: "https://openai.com/index/solving-math-word-problems/" },
+          { url: "https://openai.com/index/gpt-4-research/" }
+        ]
+      }
+    },
+    url: "https://github.com/openai/grade-school-math",
+    paperUrl: "https://arxiv.org/pdf/2110.14168"
+  },
+  {
+    benchmark: "ScienceQA",
+    release: "2022-11-01",
+    solved: {
+      date: null,
+      source: {
+        text: "Human performance is 88.40% accuracy, while the best AI model (GPT-4o) achieves 86.36% accuracy. ScienceQA tests multimodal reasoning across diverse science topics requiring multi-hop reasoning and explanations.",
+        references: [{
+          url: "https://lupantech.github.io/papers/neurips22_scienceqa.pdf"
+        }]
+      }
+    },
+    url: "https://scienceqa.github.io/",
+    paperUrl: "https://lupantech.github.io/papers/neurips22_scienceqa.pdf"
+  },
+  {
     benchmark: "BIG-Bench-Hard",
     release: "2022-10-17",
     solved: {
@@ -215,22 +246,6 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://github.com/idavidrein/gpqa",
     paperUrl: "https://arxiv.org/pdf/2311.12022"
-  },
-  {
-    benchmark: "GSM8K",
-    release: "2021-11-18",
-    solved: {
-      date: "2023-03-14",
-      source: {
-        text: "GPT-4 achieved 87.1% accuracy, significantly surpassing the human baseline of 60% from 9-12 year old students<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
-        references: [
-          { url: "https://openai.com/index/solving-math-word-problems/" },
-          { url: "https://openai.com/index/gpt-4-research/" }
-        ]
-      }
-    },
-    url: "https://github.com/openai/grade-school-math",
-    paperUrl: "https://arxiv.org/pdf/2110.14168"
   },
   {
     benchmark: "HumanEval",
