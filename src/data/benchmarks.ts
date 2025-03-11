@@ -1,5 +1,5 @@
 export type BenchmarkSolved = {
-  date: string;
+  date: string | null;
   source?: {
     text: string;
     references: {
@@ -340,5 +340,20 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://longbench2.github.io/",
     paperUrl: "https://arxiv.org/pdf/2412.15204"
+  },
+  {
+    benchmark: "HALLUSIONBENCH",
+    release: "2024-03-25",
+    solved: {
+      date: null,
+      source: {
+        text: "Human performance is 65.28% accuracy. The best model (GPT-4V) achieves only 31.42% question-pair accuracy, highlighting significant challenges in visual reasoning and hallucination detection<sup class='reference'>[1]</sup>",
+        references: [{
+          url: "https://arxiv.org/pdf/2310.14566v5"
+        }]
+      }
+    },
+    url: "https://github.com/tianyi-lab/HallusionBench",
+    paperUrl: "https://arxiv.org/pdf/2310.14566v5"
   }
 ]; 

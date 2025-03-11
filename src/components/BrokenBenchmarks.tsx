@@ -29,7 +29,10 @@ import { Props as RechartsScatterProps } from 'recharts/types/component/DefaultL
 
 const DATE_TAG_CLASS = "inline-block min-w-[110px] text-center bg-muted/50 px-2 py-1 rounded-md text-sm";
 
-const formatDate = (dateString: string) => {
+const formatDate = (dateString: string | null) => {
+  if (dateString === null) {
+    return 'Unsolved';
+  }
   const date = new Date(dateString);
   const options: Intl.DateTimeFormatOptions = { 
     year: 'numeric',
@@ -47,12 +50,21 @@ type SortConfig = {
   direction: 'asc' | 'desc';
 } | null;
 
-const getDecimalYear = (dateString: string) => {
+const getDecimalYear = (dateString: string | null) => {
+  if (dateString === null) {
+    // Return current year + 10 for unsolved benchmarks
+    const now = new Date();
+    return now.getFullYear() + 10 + (now.getMonth() / 12) + (now.getDate() / 365);
+  }
   const date = new Date(dateString);
   return date.getFullYear() + (date.getMonth() / 12) + (date.getDate() / 365);
 };
 
 const calculateTimeToSolve = (releaseDate: string, solved: BenchmarkSolved): number => {
+  if (solved.date === null) {
+    // Return Infinity for unsolved benchmarks
+    return Infinity;
+  }
   const release = new Date(releaseDate);
   const solvedDate = new Date(solved.date);
   const diffTime = solvedDate.getTime() - release.getTime();
@@ -87,41 +99,100 @@ const generatePastelColor = (seed: string) => {
 
 const prepareGraphData = (data: typeof benchmarkData) => {
   return data
+    .filter(item => item.solved.date !== null) // Filter out unsolved benchmarks
     .sort((a, b) => new Date(a.release).getTime() - new Date(b.release).getTime())
-    .map(item => ({
-      name: item.benchmark,
-      released: Number(getDecimalYear(item.release).toFixed(2)),
-      solved: item.solved,
-      timeToSolve: calculateTimeToSolve(item.release, item.solved),
-      solvedDate: formatDate(item.solved.date),
-      releaseDate: formatDate(item.release),
-      color: generatePastelColor(item.benchmark),
-    }));
+    .map(item => {
+      const timeToSolveValue = calculateTimeToSolve(item.release, item.solved);
+      const formattedTimeToSolve = formatTimeToSolve(timeToSolveValue);
+      
+      return {
+        name: item.benchmark,
+        released: Number(getDecimalYear(item.release).toFixed(2)),
+        solved: item.solved,
+        timeToSolve: timeToSolveValue,
+        solvedDate: formatDate(item.solved.date),
+        releaseDate: formatDate(item.release),
+        color: generatePastelColor(item.benchmark),
+        isUnsolved: formattedTimeToSolve.isUnsolved
+      };
+    });
 };
 
 const calculateTrendLine = (data: typeof benchmarkData) => {
-  const n = data.length;
-  const sumX = data.reduce((acc, item) => acc + getDecimalYear(item.release), 0);
-  const sumY = data.reduce((acc, item) => acc + calculateTimeToSolve(item.release, item.solved), 0);
-  const sumXY = data.reduce((acc, item) => acc + getDecimalYear(item.release) * calculateTimeToSolve(item.release, item.solved), 0);
-  const sumXX = data.reduce((acc, item) => acc + Math.pow(getDecimalYear(item.release), 2), 0);
+  // Filter out unsolved benchmarks
+  const solvedData = data.filter(item => item.solved.date !== null);
+  
+  if (solvedData.length < 2) {
+    return [];
+  }
+  
+  const n = solvedData.length;
+  const sumX = solvedData.reduce((acc, item) => acc + getDecimalYear(item.release), 0);
+  const sumY = solvedData.reduce((acc, item) => acc + calculateTimeToSolve(item.release, item.solved), 0);
+  const sumXY = solvedData.reduce((acc, item) => acc + getDecimalYear(item.release) * calculateTimeToSolve(item.release, item.solved), 0);
+  const sumXX = solvedData.reduce((acc, item) => acc + Math.pow(getDecimalYear(item.release), 2), 0);
   
   const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
   const intercept = (sumY - slope * sumX) / n;
   
-  // Generate points within fixed x-axis bounds and y-axis domain
-  const points = [];
-  for (let year = 2005; year <= 2035; year += 0.5) {
-    const trendValue = slope * year + intercept;
-    // Only include points within y-axis domain
-    if (trendValue >= -1 && trendValue <= 10) {
-      points.push({
-        released: year,
-        trend: trendValue,
-      });
+  // Define the visible graph boundaries
+  const minX = 2005;
+  const maxX = 2035;
+  const minY = -1;
+  const maxY = 10;
+  
+  // Calculate where the trend line intersects the graph boundaries
+  // For y = minY (bottom boundary)
+  const xAtMinY = (minY - intercept) / slope;
+  // For y = maxY (top boundary)
+  const xAtMaxY = (maxY - intercept) / slope;
+  // For x = minX (left boundary)
+  const yAtMinX = slope * minX + intercept;
+  // For x = maxX (right boundary)
+  const yAtMaxX = slope * maxX + intercept;
+  
+  // Determine the actual start and end points within the visible area
+  let startX = minX;
+  let startY = yAtMinX;
+  let endX = maxX;
+  let endY = yAtMaxX;
+  
+  // Adjust if the line intersects the top or bottom boundaries
+  if (xAtMinY >= minX && xAtMinY <= maxX) {
+    if (slope < 0) { // Line is decreasing
+      endX = xAtMinY;
+      endY = minY;
+    } else { // Line is increasing
+      startX = xAtMinY;
+      startY = minY;
     }
   }
-  return points;
+  
+  if (xAtMaxY >= minX && xAtMaxY <= maxX) {
+    if (slope < 0) { // Line is decreasing
+      startX = xAtMaxY;
+      startY = maxY;
+    } else { // Line is increasing
+      endX = xAtMaxY;
+      endY = maxY;
+    }
+  }
+  
+  // Generate points for the trend line
+  const trendLinePoints = [];
+  
+  // Add just two points for a straight line
+  trendLinePoints.push({
+    released: startX,
+    trend: startY
+  });
+  
+  trendLinePoints.push({
+    released: endX,
+    trend: endY
+  });
+  
+  return trendLinePoints;
 };
 
 type ScatterProps = RechartsScatterProps & {
@@ -139,6 +210,11 @@ const GradientBackground = () => (
 );
 
 const formatTimeToSolve = (years: number) => {
+  // Handle Infinity (unsolved benchmarks)
+  if (!isFinite(years)) {
+    return { wholeYears: 0, months: 0, days: 0, isNegative: false, isUnsolved: true };
+  }
+  
   const isNegative = years < 0;
   const absYears = Math.abs(years);
   const totalDays = absYears * 365.25;
@@ -147,7 +223,7 @@ const formatTimeToSolve = (years: number) => {
   const months = Math.floor(remainingDays / 30.44);
   const days = Math.round(remainingDays % 30.44);
   
-  return { wholeYears, months, days, isNegative };
+  return { wholeYears, months, days, isNegative, isUnsolved: false };
 };
 
 type CustomTooltipPayload = {
@@ -156,6 +232,7 @@ type CustomTooltipPayload = {
     releaseDate: string;
     solvedDate: string;
     timeToSolve: number;
+    isUnsolved?: boolean;
   };
 };
 
@@ -177,10 +254,16 @@ const CustomTooltip = ({
             <p>Solved: {data.solvedDate}</p>
             <p className="font-medium text-primary">
               Time to Human Level:{' '}
-              {timeToSolve.isNegative && '-'}
-              {timeToSolve.wholeYears > 0 && `${timeToSolve.wholeYears} years `}
-              {timeToSolve.months > 0 && `${timeToSolve.months} months `}
-              {timeToSolve.days > 0 && `${timeToSolve.days} days`}
+              {timeToSolve.isUnsolved ? (
+                '-'
+              ) : (
+                <>
+                  {timeToSolve.isNegative && '-'}
+                  {timeToSolve.wholeYears > 0 && `${timeToSolve.wholeYears} years `}
+                  {timeToSolve.months > 0 && `${timeToSolve.months} months `}
+                  {timeToSolve.days > 0 && `${timeToSolve.days} days`}
+                </>
+              )}
             </p>
           </div>
         </div>
@@ -227,8 +310,19 @@ export default function BrokenBenchmarks() {
       }
 
       if (sortConfig.key === 'solved') {
-        const dateA = new Date(a[sortConfig.key].date).getTime();
-        const dateB = new Date(b[sortConfig.key].date).getTime();
+        // Handle null dates - put unsolved benchmarks at the end
+        if (a[sortConfig.key].date === null && b[sortConfig.key].date === null) {
+          return 0;
+        }
+        if (a[sortConfig.key].date === null) {
+          return sortConfig.direction === 'asc' ? 1 : -1;
+        }
+        if (b[sortConfig.key].date === null) {
+          return sortConfig.direction === 'asc' ? -1 : 1;
+        }
+        
+        const dateA = new Date(a[sortConfig.key].date as string).getTime();
+        const dateB = new Date(b[sortConfig.key].date as string).getTime();
         return sortConfig.direction === 'asc' ? dateA - dateB : dateB - dateA;
       }
       
@@ -253,7 +347,9 @@ export default function BrokenBenchmarks() {
     return null;
   }
 
-  const sortedData = sortData(benchmarkData);
+  // Filter out unsolved benchmarks for the main table
+  const solvedBenchmarks = benchmarkData.filter(item => item.solved.date !== null);
+  const sortedData = sortData(solvedBenchmarks);
   const trendLineData = calculateTrendLine(benchmarkData);
 
   return (
@@ -489,9 +585,9 @@ export default function BrokenBenchmarks() {
           {/* Main Content */}
           <Card className="shadow-md hover:shadow-lg transition-shadow">
             <CardHeader className="space-y-1">
-              <CardTitle>Benchmark Timeline</CardTitle>
+              <CardTitle>Solved Benchmarks</CardTitle>
               <p className="text-sm text-muted-foreground">
-                Chronological list of AI benchmarks and their completion dates
+                Chronological list of AI benchmarks where human-level performance has been achieved
               </p>
             </CardHeader>
             <CardContent>
@@ -608,8 +704,13 @@ export default function BrokenBenchmarks() {
                             {item.solved && item.solved.source && (
                               <TooltipProvider>
                                 <RadixTooltip>
-                                  <TooltipTrigger className="cursor-help inline-flex">
-                                    <HelpCircle className="h-4 w-4 text-muted-foreground hover:text-primary transition-colors" />
+                                  <TooltipTrigger className="cursor-help inline-flex items-center">
+                                    <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-primary/10 text-primary">
+                                      {item.solved.source.text.match(/human performance (?:is |of )(\d+\.?\d*%|(?:\d+\.?\d*))/i)?.[1] || 
+                                       item.solved.source.text.match(/human.*?(\d+\.?\d*%|(?:\d+\.?\d*))/i)?.[1] || 
+                                       "N/A"}
+                                    </span>
+                                    <HelpCircle className="ml-2 h-4 w-4 text-muted-foreground hover:text-primary transition-colors" />
                                   </TooltipTrigger>
                                   <TooltipContent 
                                     side="top"
@@ -617,10 +718,10 @@ export default function BrokenBenchmarks() {
                                     sideOffset={5}
                                   >
                                     <div className="space-y-4">
-                                      <p className="font-semibold">Achievement Date</p>
+                                      <p className="font-semibold">Performance Details</p>
                                       <div>
                                         <p className="text-sm text-muted-foreground mb-2" 
-                                           dangerouslySetInnerHTML={{ __html: item.solved.source.text }}
+                                          dangerouslySetInnerHTML={{ __html: item.solved.source.text }}
                                         />
                                         
                                         <div className="border-t border-border/40 pt-2 mt-4 space-y-1.5">
@@ -650,14 +751,17 @@ export default function BrokenBenchmarks() {
                         </TableCell>
                         <TableCell className="font-mono">
                           <div className="flex items-center gap-1.5">
-                            {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).isNegative && (
+                            {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).isUnsolved ? (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-muted text-muted-foreground">
+                                -
+                              </span>
+                            ) : formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).isNegative ? (
                               <div className="flex items-center gap-1.5 bg-red-500/10 px-2 py-1 rounded-md">
                                 <span className="text-xs font-medium text-red-500">-</span>
                                 {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).days}
                                 <span className="text-xs font-medium text-red-500">days</span>
                               </div>
-                            )}
-                            {!formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).isNegative && (
+                            ) : (
                               <>
                                 {formatTimeToSolve(calculateTimeToSolve(item.release, item.solved)).wholeYears > 0 && (
                                   <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-primary/10 text-primary">
@@ -691,6 +795,123 @@ export default function BrokenBenchmarks() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Unsolved Benchmarks Table */}
+          {benchmarkData.filter(item => item.solved.date === null).length > 0 && (
+            <Card className="mt-6 shadow-md hover:shadow-lg transition-shadow">
+              <CardHeader className="space-y-1">
+                <CardTitle>Unsolved Benchmarks</CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Benchmarks where AI has not yet reached human-level performance
+                </p>
+              </CardHeader>
+              <CardContent>
+                <div className="rounded-md border">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Benchmark</TableHead>
+                        <TableHead>Released</TableHead>
+                        <TableHead>Human Level</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {benchmarkData
+                        .filter(item => item.solved.date === null)
+                        .sort((a, b) => new Date(b.release).getTime() - new Date(a.release).getTime())
+                        .map((item) => (
+                          <TableRow key={item.benchmark}>
+                            <TableCell className="font-medium">
+                              <div className="flex items-center gap-3">
+                                <span className="min-w-[200px]">{item.benchmark}</span>
+                                <div className="flex items-center gap-2">
+                                  {item.url && (
+                                    <a 
+                                      href={item.url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="inline-flex items-center rounded-full bg-muted p-1.5 hover:bg-primary/10 transition-colors"
+                                      title="Visit website"
+                                    >
+                                      <ExternalLink className="w-4 h-4 text-muted-foreground hover:text-primary" />
+                                      <span className="sr-only">Visit {item.benchmark} website</span>
+                                    </a>
+                                  )}
+                                  {item.paperUrl && (
+                                    <a 
+                                      href={item.paperUrl}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="inline-flex items-center rounded-full bg-muted p-1.5 hover:bg-primary/10 transition-colors"
+                                      title="Read paper"
+                                    >
+                                      <FileText className="w-4 h-4 text-muted-foreground hover:text-primary" />
+                                      <span className="sr-only">Read {item.benchmark} paper</span>
+                                    </a>
+                                  )}
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell className="font-mono text-muted-foreground">
+                              <span className={DATE_TAG_CLASS}>
+                                {formattedDates[`${item.benchmark}-release`] || ''}
+                              </span>
+                            </TableCell>
+                            <TableCell>
+                              {item.solved && item.solved.source && (
+                                <TooltipProvider>
+                                  <RadixTooltip>
+                                    <TooltipTrigger className="cursor-help inline-flex items-center">
+                                      <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-primary/10 text-primary">
+                                        {item.solved.source.text.match(/human performance (?:is |of )(\d+\.?\d*%|(?:\d+\.?\d*))/i)?.[1] || 
+                                         item.solved.source.text.match(/human.*?(\d+\.?\d*%|(?:\d+\.?\d*))/i)?.[1] || 
+                                         "N/A"}
+                                      </span>
+                                      <HelpCircle className="ml-2 h-4 w-4 text-muted-foreground hover:text-primary transition-colors" />
+                                    </TooltipTrigger>
+                                    <TooltipContent 
+                                      side="top"
+                                      className="bg-background border-border max-w-[400px]" 
+                                      sideOffset={5}
+                                    >
+                                      <div className="space-y-4">
+                                        <p className="font-semibold">Performance Details</p>
+                                        <div 
+                                          className="text-sm"
+                                          dangerouslySetInnerHTML={{ __html: item.solved.source.text }}
+                                        />
+                                        
+                                        <div className="border-t border-border/40 pt-2 mt-4 space-y-1.5">
+                                          <p className="text-xs text-muted-foreground font-medium">Sources:</p>
+                                          {item.solved.source.references.map((ref, index) => (
+                                            <div key={index} className="flex gap-2">
+                                              <span className="text-xs text-muted-foreground">[{index + 1}]</span>
+                                              <a 
+                                                href={ref.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-xs text-primary hover:underline inline-flex items-center gap-1"
+                                              >
+                                                {new URL(ref.url).hostname.replace('www.', '')}
+                                                <ExternalLink className="h-3 w-3" />
+                                              </a>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    </TooltipContent>
+                                  </RadixTooltip>
+                                </TooltipProvider>
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Contribution Box */}
           <Card className="mt-6 shadow-md hover:shadow-lg transition-shadow">
