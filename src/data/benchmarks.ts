@@ -266,13 +266,13 @@ export const benchmarkData: Benchmark[] = [
   },
   {
     benchmark: "MMMU",
-    release: "2023-11-27",
+    release: "2024-06-13",
     solved: {
-      date: "2024-09-12",
+      date: null,
       source: {
-        text: "OpenAI's O1 model achieved 78.2% accuracy, becoming the first model competitive with human experts<sup class='reference'>[1]</sup>",
+        text: "Human experts achieved 88.6% accuracy, while the best AI model (GPT-4o) reached 69.1% accuracy. MMMU tests expert-level multimodal understanding across 30 subjects in 6 disciplines, requiring college-level knowledge and complex reasoning.",
         references: [{
-          url: "https://openai.com/index/learning-to-reason-with-llms/"
+          url: "https://arxiv.org/abs/2311.16502"
         }]
       }
     },
