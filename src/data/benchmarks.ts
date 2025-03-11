@@ -203,7 +203,7 @@ export const benchmarkData: Benchmark[] = [
   },
   {
     benchmark: "ScienceQA",
-    release: "2022-11-01",
+    release: "2022-09-20",
     solved: {
       date: null,
       source: {
