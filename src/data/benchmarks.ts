@@ -385,5 +385,23 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://egoschema.github.io/",
     paperUrl: "https://arxiv.org/pdf/2308.09126"
+  },
+  {
+    benchmark: "DROP",
+    release: "2019-04-16",
+    solved: {
+      date: null,
+      source: {
+        text: "GPT-4o achieved 83.4% F1 score, which is still below expert human performance of 96.4% F1. DROP requires discrete reasoning over paragraphs, including operations like counting, sorting, and arithmetic.",
+        references: [{
+          url: "https://openai.com/index/gpt-4o-mini-advancing-cost-efficient-intelligence/"
+        },
+        {
+          url: "https://arxiv.org/pdf/1903.00161"
+        }]
+      }
+    },
+    url: "https://allennlp.org/drop",
+    paperUrl: "https://arxiv.org/pdf/1903.00161"
   }
 ]; 
