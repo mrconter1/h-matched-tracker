@@ -309,6 +309,21 @@ export const benchmarkData: Benchmark[] = [
     paperUrl: "https://arxiv.org/pdf/2311.12022"
   },
   {
+    benchmark: "METATOOL",
+    release: "2023-10-05",
+    solved: {
+      date: null,
+      source: {
+        text: "Human performance is 96% accuracy on reliability testing, while the best AI models achieve only 50.35% accuracy. METATOOL evaluates whether LLMs can decide when to use tools and which tools to select from a collection to fulfill user requests.",
+        references: [{
+          url: "https://arxiv.org/pdf/2310.03128"
+        }]
+      }
+    },
+    url: "https://github.com/LAIR-RU/MetaTool",
+    paperUrl: "https://arxiv.org/pdf/2310.03128"
+  },
+  {
     benchmark: "HumanEval",
     release: "2021-07-14",
     solved: {
