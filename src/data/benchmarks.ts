@@ -403,5 +403,20 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://allennlp.org/drop",
     paperUrl: "https://arxiv.org/pdf/1903.00161"
+  },
+  {
+    benchmark: "TruthfulQA",
+    release: "2022-05-08",
+    solved: {
+      date: null,
+      source: {
+        text: "Human performance was 94% truthful, while the best AI models were only 58% truthful. TruthfulQA tests whether models avoid generating false answers that mimic human misconceptions across 38 categories including health, law, finance, and politics.",
+        references: [{
+          url: "https://arxiv.org/abs/2109.07958"
+        }]
+      }
+    },
+    url: "https://github.com/sylinrl/TruthfulQA",
+    paperUrl: "https://arxiv.org/pdf/2109.07958"
   }
 ]; 
