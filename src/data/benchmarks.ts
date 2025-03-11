@@ -355,5 +355,20 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://github.com/tianyi-lab/HallusionBench",
     paperUrl: "https://arxiv.org/pdf/2310.14566v5"
+  },
+  {
+    benchmark: "BioLP-bench",
+    release: "2024-08-31",
+    solved: {
+      date: null,
+      source: {
+        text: "Human experts achieved 38.4% accuracy, while the best AI model (GPT-4o) only reached 17% accuracy. The benchmark measures understanding of biological lab protocols by identifying critical mistakes that would cause experiments to fail.",
+        references: [{
+          url: "https://doi.org/10.1101/2024.08.21.608694"
+        }]
+      }
+    },
+    url: "https://github.com/baceolus/BioLP-bench",
+    paperUrl: "https://www.biorxiv.org/content/10.1101/2024.08.21.608694v2.full.pdf"
   }
 ]; 
