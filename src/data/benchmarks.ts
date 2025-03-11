@@ -309,6 +309,21 @@ export const benchmarkData: Benchmark[] = [
     paperUrl: "https://arxiv.org/pdf/2311.12022"
   },
   {
+    benchmark: "BIRD-SQL",
+    release: "2023-11-15",
+    solved: {
+      date: null,
+      source: {
+        text: "Human performance (data engineers and DB students) is 92.96% accuracy, while the best AI models achieve around 75.63% accuracy. BIRD-SQL evaluates text-to-SQL parsing across 37 professional domains with large-scale database content, testing both correctness and efficiency of generated SQL queries.",
+        references: [{
+          url: "https://arxiv.org/pdf/2305.03111"
+        }]
+      }
+    },
+    url: "https://bird-bench.github.io/",
+    paperUrl: "https://arxiv.org/pdf/2305.03111"
+  },
+  {
     benchmark: "METATOOL",
     release: "2023-10-05",
     solved: {
