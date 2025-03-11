@@ -63,6 +63,22 @@ export const benchmarkData: Benchmark[] = [
     paperUrl: "https://arxiv.org/pdf/1606.05250"
   },
   {
+    benchmark: "TriviaQA",
+    release: "2017-05-13",
+    solved: {
+      date: "2022-08-08",
+      source: {
+        text: "Meta AI's Atlas model achieved 84.7% accuracy, surpassing human performance of around 79.7%<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
+        references: [
+          { url: "https://arxiv.org/pdf/1705.03551" },
+          { url: "https://arxiv.org/pdf/2208.03299" }
+        ]
+      }
+    },
+    url: "https://nlp.cs.washington.edu/triviaqa/",
+    paperUrl: "https://arxiv.org/pdf/1705.03551"
+  },
+  {
     benchmark: "SQuAD 2.0",
     release: "2018-06-11",
     solved: {
@@ -76,6 +92,36 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://rajpurkar.github.io/SQuAD-explorer/explore/v2.0/dev/",
     paperUrl: "https://arxiv.org/pdf/1806.03822"
+  },
+  {
+    benchmark: "CommonsenseQA",
+    release: "2018-11-02",
+    solved: {
+      date: null,
+      source: {
+        text: "Human performance is 89% accuracy, while the best AI models achieve around 56% accuracy. CommonsenseQA tests reasoning that requires background knowledge about spatial relations, causes and effects, scientific facts, and social conventions.",
+        references: [{
+          url: "https://aclanthology.org/N19-1421.pdf"
+        }]
+      }
+    },
+    url: "https://www.tau-nlp.sites.tau.ac.il/commonsenseqa",
+    paperUrl: "https://aclanthology.org/N19-1421.pdf"
+  },
+  {
+    benchmark: "GLUE",
+    release: "2018-11-01",
+    solved: {
+      date: "2019-07-01",
+      source: {
+        text: "Yang et al. achieved a GLUE score of 88.4, surpassing human performance of 87.1 by 1.3 points<sup class='reference'>[1]</sup>",
+        references: [{
+          url: "https://arxiv.org/pdf/1905.00537"
+        }]
+      }
+    },
+    url: "https://gluebenchmark.com/",
+    paperUrl: "https://openreview.net/pdf?id=rJ4km2R5t7"
   },
   {
     benchmark: "VQA",
@@ -264,22 +310,6 @@ export const benchmarkData: Benchmark[] = [
     paperUrl: "https://arxiv.org/pdf/2107.03374v2"
   },
   {
-    benchmark: "TriviaQA",
-    release: "2017-05-13",
-    solved: {
-      date: "2022-08-08",
-      source: {
-        text: "Meta AI's Atlas model achieved 84.7% accuracy, surpassing human performance of around 79.7%<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
-        references: [
-          { url: "https://arxiv.org/pdf/1705.03551" },
-          { url: "https://arxiv.org/pdf/2208.03299" }
-        ]
-      }
-    },
-    url: "https://nlp.cs.washington.edu/triviaqa/",
-    paperUrl: "https://arxiv.org/pdf/1705.03551"
-  },
-  {
     benchmark: "MMMU",
     release: "2024-06-13",
     solved: {
@@ -293,21 +323,6 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://mmmu-benchmark.github.io/",
     paperUrl: "https://arxiv.org/pdf/2311.16502"
-  },
-  {
-    benchmark: "GLUE",
-    release: "2018-11-01",
-    solved: {
-      date: "2019-07-01",
-      source: {
-        text: "Yang et al. achieved a GLUE score of 88.4, surpassing human performance of 87.1 by 1.3 points<sup class='reference'>[1]</sup>",
-        references: [{
-          url: "https://arxiv.org/pdf/1905.00537"
-        }]
-      }
-    },
-    url: "https://gluebenchmark.com/",
-    paperUrl: "https://openreview.net/pdf?id=rJ4km2R5t7"
   },
   {
     benchmark: "PubMedQA",
