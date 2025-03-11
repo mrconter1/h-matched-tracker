@@ -79,6 +79,21 @@ export const benchmarkData: Benchmark[] = [
     paperUrl: "https://arxiv.org/pdf/1705.03551"
   },
   {
+    benchmark: "RACE",
+    release: "2017-04-17",
+    solved: {
+      date: null,
+      source: {
+        text: "Human performance is 95% accuracy. RACE tests reading comprehension with questions from English exams for Chinese students, requiring reasoning over passages covering a variety of topics and styles.",
+        references: [{
+          url: "https://arxiv.org/pdf/1704.04683"
+        }]
+      }
+    },
+    url: "http://www.cs.cmu.edu/~glai1/data/race/",
+    paperUrl: "https://arxiv.org/pdf/1704.04683"
+  },
+  {
     benchmark: "SQuAD 2.0",
     release: "2018-06-11",
     solved: {
