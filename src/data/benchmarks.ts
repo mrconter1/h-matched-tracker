@@ -370,5 +370,20 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://github.com/baceolus/BioLP-bench",
     paperUrl: "https://www.biorxiv.org/content/10.1101/2024.08.21.608694v2.full.pdf"
+  },
+  {
+    benchmark: "EgoSchema",
+    release: "2023-08-17",
+    solved: {
+      date: null,
+      source: {
+        text: "Human evaluators achieved 76% accuracy, while the best AI models achieved less than 33% accuracy (random is 20%). EgoSchema tests very long-form video understanding with 3-minute clips requiring complex temporal reasoning.",
+        references: [{
+          url: "https://arxiv.org/abs/2308.09126"
+        }]
+      }
+    },
+    url: "https://egoschema.github.io/",
+    paperUrl: "https://arxiv.org/pdf/2308.09126"
   }
 ]; 
