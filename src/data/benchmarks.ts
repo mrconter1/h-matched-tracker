@@ -523,5 +523,20 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://github.com/google-research-datasets/boolean-questions",
     paperUrl: "https://arxiv.org/pdf/1905.10044"
+  },
+  {
+    benchmark: "WinoGrande",
+    release: "2019-11-21",
+    solved: {
+      date: null,
+      source: {
+        text: "An Adversarial Winograd Schema Challenge at Scale (WinoGrande) tests commonsense reasoning through pronoun resolution problems. Human performance is 94% accuracy, while the best AI models at the time of release achieved between 59.4-79.1% accuracy depending on training data size<sup class='reference'>[1]</sup>",
+        references: [{
+          url: "https://arxiv.org/pdf/1907.10641"
+        }]
+      }
+    },
+    url: "https://winogrande.allenai.org/",
+    paperUrl: "https://arxiv.org/pdf/1907.10641"
   }
 ]; 
