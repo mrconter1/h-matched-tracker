@@ -493,5 +493,20 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://github.com/sylinrl/TruthfulQA",
     paperUrl: "https://arxiv.org/pdf/2109.07958"
+  },
+  {
+    benchmark: "PIQA",
+    release: "2019-11-26",
+    solved: {
+      date: null,
+      source: {
+        text: "Physical Interaction: Question Answering (PIQA) tests physical commonsense reasoning. Human performance is 95% accuracy, while large pretrained models struggle at around 77% accuracy<sup class='reference'>[1]</sup>",
+        references: [{
+          url: "https://arxiv.org/pdf/1911.11641"
+        }]
+      }
+    },
+    url: "http://yonatanbisk.com/piqa",
+    paperUrl: "https://arxiv.org/pdf/1911.11641"
   }
 ]; 
