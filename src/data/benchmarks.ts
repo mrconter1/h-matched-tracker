@@ -568,5 +568,20 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://www.docvqa.org/datasets/infographicvqa",
     paperUrl: "https://arxiv.org/pdf/2104.12756"
+  },
+  {
+    benchmark: "TextVQA",
+    release: "2019-05-13",
+    solved: {
+      date: null,
+      source: {
+        text: "TextVQA tests visual question answering on images that require reading and reasoning about text in the image. Human performance is 85.01% accuracy, while the best AI models achieved only 27.63% accuracy<sup class='reference'>[1]</sup>",
+        references: [{
+          url: "https://arxiv.org/pdf/1904.08920"
+        }]
+      }
+    },
+    url: "https://textvqa.org/",
+    paperUrl: "https://arxiv.org/pdf/1904.08920"
   }
 ]; 
