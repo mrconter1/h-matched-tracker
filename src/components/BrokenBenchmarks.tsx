@@ -701,52 +701,6 @@ export default function BrokenBenchmarks() {
                             <span className={DATE_TAG_CLASS}>
                               {formattedDates[`${item.benchmark}-solved`] || ''}
                             </span>
-                            {item.solved && item.solved.source && (
-                              <TooltipProvider>
-                                <RadixTooltip>
-                                  <TooltipTrigger className="cursor-help inline-flex items-center">
-                                    <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-primary/10 text-primary">
-                                      {item.solved.source.text.match(/human performance (?:is |of )(\d+\.?\d*%|(?:\d+\.?\d*))/i)?.[1] || 
-                                       item.solved.source.text.match(/human.*?(\d+\.?\d*%|(?:\d+\.?\d*))/i)?.[1] || 
-                                       "N/A"}
-                                    </span>
-                                    <HelpCircle className="ml-2 h-4 w-4 text-muted-foreground hover:text-primary transition-colors" />
-                                  </TooltipTrigger>
-                                  <TooltipContent 
-                                    side="top"
-                                    className="bg-background border-border max-w-[400px]" 
-                                    sideOffset={5}
-                                  >
-                                    <div className="space-y-4">
-                                      <p className="font-semibold">Performance Details</p>
-                                      <div>
-                                        <p className="text-sm text-muted-foreground mb-2" 
-                                          dangerouslySetInnerHTML={{ __html: item.solved.source.text }}
-                                        />
-                                        
-                                        <div className="border-t border-border/40 pt-2 mt-4 space-y-1.5">
-                                          <p className="text-xs text-muted-foreground font-medium">Sources:</p>
-                                          {item.solved.source.references.map((ref, index) => (
-                                            <div key={index} className="flex gap-2">
-                                              <span className="text-xs text-muted-foreground">[{index + 1}]</span>
-                                              <a 
-                                                href={ref.url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-xs text-primary hover:underline inline-flex items-center gap-1"
-                                              >
-                                                {new URL(ref.url).hostname.replace('www.', '')}
-                                                <ExternalLink className="h-3 w-3" />
-                                              </a>
-                                            </div>
-                                          ))}
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </TooltipContent>
-                                </RadixTooltip>
-                              </TooltipProvider>
-                            )}
                           </div>
                         </TableCell>
                         <TableCell className="font-mono">
@@ -812,7 +766,7 @@ export default function BrokenBenchmarks() {
                       <TableRow>
                         <TableHead>Benchmark</TableHead>
                         <TableHead>Released</TableHead>
-                        <TableHead>Human Level</TableHead>
+                        <TableHead>Human Level Performance</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
