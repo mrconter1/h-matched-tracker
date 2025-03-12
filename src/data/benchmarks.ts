@@ -538,5 +538,20 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://winogrande.allenai.org/",
     paperUrl: "https://arxiv.org/pdf/1907.10641"
+  },
+  {
+    benchmark: "BELEBELE",
+    release: "2024-07-25",
+    solved: {
+      date: null,
+      source: {
+        text: "A Parallel Reading Comprehension Dataset in 122 Language Variants (BELEBELE) tests multilingual reading comprehension through multiple-choice questions. Human performance is 97.6% accuracy, while the best AI models achieved only 60.2% accuracy across all languages<sup class='reference'>[1]</sup>",
+        references: [{
+          url: "https://arxiv.org/pdf/2308.16884"
+        }]
+      }
+    },
+    url: "https://github.com/facebookresearch/belebele",
+    paperUrl: "https://arxiv.org/pdf/2308.16884"
   }
 ]; 
