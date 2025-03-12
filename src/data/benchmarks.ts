@@ -583,5 +583,20 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://textvqa.org/",
     paperUrl: "https://arxiv.org/pdf/1904.08920"
+  },
+  {
+    benchmark: "ReMI",
+    release: "2024-06-13",
+    solved: {
+      date: null,
+      source: {
+        text: "Reasoning with Multiple Images (ReMI) tests multi-image reasoning across various domains including math, physics, logic, code, and spatial/temporal reasoning. Human performance is 95.8% accuracy, while the best AI models achieved only 50.5% accuracy<sup class='reference'>[1]</sup>",
+        references: [{
+          url: "https://arxiv.org/pdf/2406.09175"
+        }]
+      }
+    },
+    url: "https://huggingface.co/datasets/mehrankazemi/ReMI",
+    paperUrl: "https://arxiv.org/pdf/2406.09175"
   }
 ]; 
