@@ -613,5 +613,20 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://zeyofu.github.io/blink/",
     paperUrl: "https://arxiv.org/pdf/2404.12390"
+  },
+  {
+    benchmark: "SpatialSense",
+    release: "2019-08-29",
+    solved: {
+      date: null,
+      source: {
+        text: "SpatialSense tests spatial relation recognition in images, requiring deep understanding of objects, their 3D configuration, and interactions. Human performance is 94.6% accuracy, while the best AI model (DRNet) achieved only 71.3% accuracy, highlighting significant room for improvement.<sup class='reference'>[1]</sup>",
+        references: [{
+          url: "https://arxiv.org/pdf/1908.02660"
+        }]
+      }
+    },
+    url: "https://github.com/princeton-vl/SpatialSense",
+    paperUrl: "https://arxiv.org/pdf/1908.02660"
   }
 ]; 
