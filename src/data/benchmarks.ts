@@ -553,5 +553,20 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://github.com/facebookresearch/belebele",
     paperUrl: "https://arxiv.org/pdf/2308.16884"
+  },
+  {
+    benchmark: "InfographicVQA",
+    release: "2021-08-22",
+    solved: {
+      date: null,
+      source: {
+        text: "InfographicVQA tests visual question answering on infographic images that combine textual, graphical, and visual elements. Human performance is 95.7% accuracy, while the best AI models achieved only 19.74% accuracy<sup class='reference'>[1]</sup>",
+        references: [{
+          url: "https://arxiv.org/pdf/2104.12756"
+        }]
+      }
+    },
+    url: "https://www.docvqa.org/datasets/infographicvqa",
+    paperUrl: "https://arxiv.org/pdf/2104.12756"
   }
 ]; 
