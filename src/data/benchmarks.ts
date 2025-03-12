@@ -628,5 +628,20 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://github.com/princeton-vl/SpatialSense",
     paperUrl: "https://arxiv.org/pdf/1908.02660"
+  },
+  {
+    benchmark: "SocialIQA",
+    release: "2019-09-09",
+    solved: {
+      date: null,
+      source: {
+        text: "SocialIQA tests commonsense reasoning about social interactions through multiple-choice questions about motivations, emotional reactions, and likely actions. Human performance is 84.4% accuracy, while the best AI model (BERT-large) achieved only 64.5% accuracy, demonstrating the challenge of social reasoning for AI systems.<sup class='reference'>[1]</sup>",
+        references: [{
+          url: "https://arxiv.org/pdf/1904.09728"
+        }]
+      }
+    },
+    url: "https://huggingface.co/datasets/allenai/social_i_qa",
+    paperUrl: "https://arxiv.org/pdf/1904.09728"
   }
 ]; 
