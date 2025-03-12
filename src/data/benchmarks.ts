@@ -598,5 +598,20 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://huggingface.co/datasets/mehrankazemi/ReMI",
     paperUrl: "https://arxiv.org/pdf/2406.09175"
+  },
+  {
+    benchmark: "BLINK",
+    release: "2024-07-03",
+    solved: {
+      date: null,
+      source: {
+        text: "BLINK tests core visual perception abilities through 14 classic computer vision tasks reformatted into multiple-choice questions. Human performance is 95.70% accuracy, while the best AI models (GPT-4V and Gemini) achieved only 51.26% and 45.72% accuracy, slightly above random guessing.<sup class='reference'>[1]</sup>",
+        references: [{
+          url: "https://arxiv.org/pdf/2404.12390"
+        }]
+      }
+    },
+    url: "https://zeyofu.github.io/blink/",
+    paperUrl: "https://arxiv.org/pdf/2404.12390"
   }
 ]; 
