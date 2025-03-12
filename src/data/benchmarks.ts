@@ -508,5 +508,20 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "http://yonatanbisk.com/piqa",
     paperUrl: "https://arxiv.org/pdf/1911.11641"
+  },
+  {
+    benchmark: "BoolQ",
+    release: "2019-05-24",
+    solved: {
+      date: null,
+      source: {
+        text: "Exploring the Surprising Difficulty of Natural Yes/No Questions (BoolQ) tests complex inferential reasoning. Human performance is 90% accuracy, while the best AI models at the time of release achieved only 80.4% accuracy<sup class='reference'>[1]</sup>",
+        references: [{
+          url: "https://arxiv.org/pdf/1905.10044"
+        }]
+      }
+    },
+    url: "https://github.com/google-research-datasets/boolean-questions",
+    paperUrl: "https://arxiv.org/pdf/1905.10044"
   }
 ]; 
