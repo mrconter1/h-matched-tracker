@@ -200,12 +200,14 @@ type GlobalStats = {
   unsolvedCount: number;
   solvedFraction: number;
   avgTimeToSolveYears: number;
+  avgTimeToSolveLast3Years: number | null;
   medianTimeToSolveYears: number;
   minTimeToSolveYears: number;
   maxTimeToSolveYears: number;
   solvedWithin1yFraction: number;
   solvedWithin2yFraction: number;
   solvedWithin3yFraction: number;
+   longestUnsolvedYears: number | null;
   timeToSolveSlopeYearsPerReleaseYear: number;
   timeToSolveR2: number;
 };
@@ -220,6 +222,7 @@ const calculateGlobalStats = (data: typeof benchmarkData): GlobalStats => {
       solvedCount,
       unsolvedCount,
       solvedFraction: 0,
+      avgTimeToSolveLast3Years: null,
       avgTimeToSolveYears: 0,
       medianTimeToSolveYears: 0,
       minTimeToSolveYears: 0,
@@ -227,6 +230,7 @@ const calculateGlobalStats = (data: typeof benchmarkData): GlobalStats => {
       solvedWithin1yFraction: 0,
       solvedWithin2yFraction: 0,
       solvedWithin3yFraction: 0,
+      longestUnsolvedYears: unsolvedCount > 0 ? 0 : null,
       timeToSolveSlopeYearsPerReleaseYear: 0,
       timeToSolveR2: 0,
     };
@@ -237,6 +241,26 @@ const calculateGlobalStats = (data: typeof benchmarkData): GlobalStats => {
 
   const sumTimes = times.reduce((acc, t) => acc + t, 0);
   const avgTimeToSolveYears = sumTimes / solvedCount;
+
+  const now = new Date();
+  const yearMs = 365.25 * 24 * 60 * 60 * 1000;
+  const threeYearsAgo = new Date(now.getTime() - 3 * yearMs);
+  const recentSolved = solved.filter(item => new Date(item.release) >= threeYearsAgo);
+  const avgTimeToSolveLast3Years =
+    recentSolved.length > 0
+      ? recentSolved.reduce((acc, item) => acc + calculateTimeToSolve(item.release, item.solved), 0) / recentSolved.length
+      : null;
+
+  const longestUnsolvedYears =
+    unsolvedCount > 0
+      ? data
+          .filter(item => item.solved.date === null)
+          .reduce((max, item) => {
+            const rel = new Date(item.release);
+            const diffYears = (now.getTime() - rel.getTime()) / yearMs;
+            return Math.max(max, diffYears);
+          }, 0)
+      : null;
 
   const sortedTimes = [...times].sort((a, b) => a - b);
   const mid = Math.floor(sortedTimes.length / 2);
@@ -280,6 +304,7 @@ const calculateGlobalStats = (data: typeof benchmarkData): GlobalStats => {
     solvedCount,
     unsolvedCount,
     solvedFraction,
+    avgTimeToSolveLast3Years,
     avgTimeToSolveYears,
     medianTimeToSolveYears,
     minTimeToSolveYears,
@@ -287,6 +312,7 @@ const calculateGlobalStats = (data: typeof benchmarkData): GlobalStats => {
     solvedWithin1yFraction,
     solvedWithin2yFraction,
     solvedWithin3yFraction,
+    longestUnsolvedYears,
     timeToSolveSlopeYearsPerReleaseYear: slope,
     timeToSolveR2,
   };
@@ -694,12 +720,11 @@ export default function BrokenBenchmarks() {
             <CardContent>
               <div className="grid gap-4 md:grid-cols-3">
                 <div className="space-y-1">
-                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Solved benchmarks</p>
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Average time to solve (last 3 years)</p>
                   <p className="text-lg font-semibold">
-                    {globalStats.solvedCount} / {benchmarkData.length}{' '}
-                    <span className="text-sm text-muted-foreground">
-                      ({formatPercent(globalStats.solvedFraction)})
-                    </span>
+                    {globalStats.avgTimeToSolveLast3Years !== null
+                      ? formatYears(globalStats.avgTimeToSolveLast3Years)
+                      : 'N/A'}
                   </p>
                 </div>
                 <div className="space-y-1">
@@ -725,6 +750,14 @@ export default function BrokenBenchmarks() {
                   <p className="text-lg font-semibold">
                     {formatPercent(globalStats.solvedWithin3yFraction)}{' '}
                     <span className="text-sm text-muted-foreground">of solved benchmarks</span>
+                  </p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Longest unsolved (since release)</p>
+                  <p className="text-lg font-semibold">
+                    {globalStats.longestUnsolvedYears !== null
+                      ? formatYears(globalStats.longestUnsolvedYears)
+                      : 'N/A'}
                   </p>
                 </div>
               </div>
