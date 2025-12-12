@@ -576,12 +576,13 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "TextVQA",
     release: "2019-05-13",
     solved: {
-      date: null,
+      date: "2024-09-01",
       source: {
-        text: "TextVQA tests visual question answering on images that require reading and reasoning about text in the image. Human performance is 85.01% accuracy, while the best AI models achieved only 27.63% accuracy<sup class='reference'>[1]</sup>",
-        references: [{
-          url: "https://arxiv.org/pdf/1904.08920"
-        }]
+        text: "Human performance on TextVQA is about 85% accuracy, and recent general-purpose multimodal models such as Qwen2-VL-72B-Instruct reach 85.5% accuracy on the TextVQA leaderboard, roughly matching human-level performance on this text-centric visual question answering benchmark.<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
+        references: [
+          { url: "https://arxiv.org/abs/2012.05153" },
+          { url: "https://llm-stats.com/benchmarks/textvqa" }
+        ]
       }
     },
     url: "https://textvqa.org/",
