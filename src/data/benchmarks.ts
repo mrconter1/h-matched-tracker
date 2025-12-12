@@ -112,12 +112,13 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "CommonsenseQA",
     release: "2018-11-02",
     solved: {
-      date: null,
+      date: "2022-07-23",
       source: {
-        text: "Human performance is 89% accuracy, while the best AI models achieve around 56% accuracy. CommonsenseQA tests reasoning that requires background knowledge about spatial relations, causes and effects, scientific facts, and social conventions.",
-        references: [{
-          url: "https://aclanthology.org/N19-1421.pdf"
-        }]
+        text: "Human performance on CommonsenseQA is about 88.9–89% accuracy, while Microsoft's KEAR system (Knowledgeable External Attention for commonsense Reasoning) achieved 89.4% accuracy, slightly surpassing human-level performance on this benchmark.<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
+        references: [
+          { url: "https://aclanthology.org/N19-1421.pdf" },
+          { url: "https://www.microsoft.com/en-us/research/publication/human-parity-on-commonsenseqa-augmenting-self-attention-with-external-attention/" }
+        ]
       }
     },
     url: "https://www.tau-nlp.sites.tau.ac.il/commonsenseqa",
