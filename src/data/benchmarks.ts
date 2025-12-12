@@ -247,6 +247,22 @@ export const benchmarkData: Benchmark[] = [
     paperUrl: "https://arxiv.org/pdf/2103.03874v2"
   },
   {
+    benchmark: "FrontierMath (Tier 1–3)",
+    release: "2024-11-07",
+    solved: {
+      date: "2025-12-11",
+      source: {
+        text: "In a human baseline tournament at MIT, teams of strong undergraduate mathematicians and experts collectively solved about 35% of FrontierMath Tier 1–3 problems across all teams.<sup class='reference'>[1]</sup> OpenAI's GPT-5.2 Thinking model solved 40.3% of Tier 1–3 problems with tool use, surpassing this collective human solve rate on this subset of the benchmark.<sup class='reference'>[2]</sup>",
+        references: [
+          { url: "https://epoch.ai/frontiermath/about" },
+          { url: "https://openai.com/index/introducing-gpt-5-2" }
+        ]
+      }
+    },
+    url: "https://epoch.ai/frontiermath",
+    paperUrl: "https://pi.math.cornell.edu/~levine/frontiermath.pdf"
+  },
+  {
     benchmark: "GSM8K",
     release: "2021-11-18",
     solved: {
