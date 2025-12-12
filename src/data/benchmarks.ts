@@ -266,12 +266,14 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "ScienceQA",
     release: "2022-09-20",
     solved: {
-      date: null,
+      date: "2024-08-01",
       source: {
-        text: "Human performance is 88.40% accuracy, while the best AI model (GPT-4o) achieves 86.36% accuracy. ScienceQA tests multimodal reasoning across diverse science topics requiring multi-hop reasoning and explanations.",
-        references: [{
-          url: "https://lupantech.github.io/papers/neurips22_scienceqa.pdf"
-        }]
+        text: "Human performance is about 88.40% accuracy on ScienceQA, while general-purpose large multimodal models now surpass this level; for example, Microsoft's Phi-3.5-vision-instruct achieves 91.3% accuracy on the ScienceQA leaderboard, indicating the benchmark is effectively solved by mainstream LMMs.<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup><sup class='reference'>[3]</sup>",
+        references: [
+          { url: "https://lupantech.github.io/papers/neurips22_scienceqa.pdf" },
+          { url: "https://aclanthology.org/2024.nlp4science-1.pdf" },
+          { url: "https://llm-stats.com/benchmarks/scienceqa" }
+        ]
       }
     },
     url: "https://scienceqa.github.io/",
