@@ -195,6 +195,103 @@ const calculateTrendLine = (data: typeof benchmarkData) => {
   return trendLinePoints;
 };
 
+type GlobalStats = {
+  solvedCount: number;
+  unsolvedCount: number;
+  solvedFraction: number;
+  avgTimeToSolveYears: number;
+  medianTimeToSolveYears: number;
+  minTimeToSolveYears: number;
+  maxTimeToSolveYears: number;
+  solvedWithin1yFraction: number;
+  solvedWithin2yFraction: number;
+  solvedWithin3yFraction: number;
+  timeToSolveSlopeYearsPerReleaseYear: number;
+  timeToSolveR2: number;
+};
+
+const calculateGlobalStats = (data: typeof benchmarkData): GlobalStats => {
+  const solved = data.filter(item => item.solved.date !== null);
+  const solvedCount = solved.length;
+  const unsolvedCount = data.length - solvedCount;
+
+  if (solvedCount === 0) {
+    return {
+      solvedCount,
+      unsolvedCount,
+      solvedFraction: 0,
+      avgTimeToSolveYears: 0,
+      medianTimeToSolveYears: 0,
+      minTimeToSolveYears: 0,
+      maxTimeToSolveYears: 0,
+      solvedWithin1yFraction: 0,
+      solvedWithin2yFraction: 0,
+      solvedWithin3yFraction: 0,
+      timeToSolveSlopeYearsPerReleaseYear: 0,
+      timeToSolveR2: 0,
+    };
+  }
+
+  const times = solved.map(item => calculateTimeToSolve(item.release, item.solved));
+  const solvedFraction = solvedCount / data.length;
+
+  const sumTimes = times.reduce((acc, t) => acc + t, 0);
+  const avgTimeToSolveYears = sumTimes / solvedCount;
+
+  const sortedTimes = [...times].sort((a, b) => a - b);
+  const mid = Math.floor(sortedTimes.length / 2);
+  const medianTimeToSolveYears =
+    sortedTimes.length % 2 === 0
+      ? (sortedTimes[mid - 1] + sortedTimes[mid]) / 2
+      : sortedTimes[mid];
+
+  const minTimeToSolveYears = Math.min(...times);
+  const maxTimeToSolveYears = Math.max(...times);
+
+  const solvedWithin1yFraction = times.filter(t => t <= 1).length / solvedCount;
+  const solvedWithin2yFraction = times.filter(t => t <= 2).length / solvedCount;
+  const solvedWithin3yFraction = times.filter(t => t <= 3).length / solvedCount;
+
+  // Linear regression of time_to_solve vs release_year
+  const xs = solved.map(item => getDecimalYear(item.release));
+  const ys = times;
+  const n = solvedCount;
+  const sumX = xs.reduce((acc, x) => acc + x, 0);
+  const sumY = ys.reduce((acc, y) => acc + y, 0);
+  const sumXY = xs.reduce((acc, x, i) => acc + x * ys[i], 0);
+  const sumXX = xs.reduce((acc, x) => acc + x * x, 0);
+
+  const denom = n * sumXX - sumX * sumX;
+  const slope = denom === 0 ? 0 : (n * sumXY - sumX * sumY) / denom;
+  const intercept = n === 0 ? 0 : (sumY - slope * sumX) / n;
+
+  const meanY = sumY / n;
+  let ssTot = 0;
+  let ssReg = 0;
+  for (let i = 0; i < n; i++) {
+    const y = ys[i];
+    const yPred = slope * xs[i] + intercept;
+    ssTot += (y - meanY) ** 2;
+    ssReg += (yPred - meanY) ** 2;
+  }
+  const timeToSolveR2 = ssTot === 0 ? 1 : ssReg / ssTot;
+
+  return {
+    solvedCount,
+    unsolvedCount,
+    solvedFraction,
+    avgTimeToSolveYears,
+    medianTimeToSolveYears,
+    minTimeToSolveYears,
+    maxTimeToSolveYears,
+    solvedWithin1yFraction,
+    solvedWithin2yFraction,
+    solvedWithin3yFraction,
+    timeToSolveSlopeYearsPerReleaseYear: slope,
+    timeToSolveR2,
+  };
+};
+
 type ScatterProps = RechartsScatterProps & {
   cx?: number;
   cy?: number;
@@ -351,6 +448,10 @@ export default function BrokenBenchmarks() {
   const solvedBenchmarks = benchmarkData.filter(item => item.solved.date !== null);
   const sortedData = sortData(solvedBenchmarks);
   const trendLineData = calculateTrendLine(benchmarkData);
+  const globalStats = calculateGlobalStats(benchmarkData);
+
+  const formatYears = (years: number) => `${years.toFixed(2)} years`;
+  const formatPercent = (value: number) => `${(value * 100).toFixed(1)}%`;
 
   return (
     <div className="min-h-screen bg-background">
@@ -579,6 +680,60 @@ export default function BrokenBenchmarks() {
                   />
                 </ComposedChart>
               </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          {/* Global Stats Across Benchmarks */}
+          <Card className="mb-16 shadow-md hover:shadow-lg transition-shadow">
+            <CardHeader className="space-y-1">
+              <CardTitle>Across-Benchmark Statistics</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Aggregate metrics computed over all solved benchmarks
+              </p>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4 md:grid-cols-3">
+                <div className="space-y-1">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Solved benchmarks</p>
+                  <p className="text-lg font-semibold">
+                    {globalStats.solvedCount} / {benchmarkData.length}{' '}
+                    <span className="text-sm text-muted-foreground">
+                      ({formatPercent(globalStats.solvedFraction)})
+                    </span>
+                  </p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Average time to solve</p>
+                  <p className="text-lg font-semibold">{formatYears(globalStats.avgTimeToSolveYears)}</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Median time to solve</p>
+                  <p className="text-lg font-semibold">{formatYears(globalStats.medianTimeToSolveYears)}</p>
+                </div>
+              </div>
+              <div className="grid gap-4 md:grid-cols-3 mt-6">
+                <div className="space-y-1">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Shortest time to solve</p>
+                  <p className="text-lg font-semibold">{formatYears(globalStats.minTimeToSolveYears)}</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Longest time to solve</p>
+                  <p className="text-lg font-semibold">{formatYears(globalStats.maxTimeToSolveYears)}</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Solved within 3 years</p>
+                  <p className="text-lg font-semibold">
+                    {formatPercent(globalStats.solvedWithin3yFraction)}{' '}
+                    <span className="text-sm text-muted-foreground">of solved benchmarks</span>
+                  </p>
+                </div>
+              </div>
+              <div className="mt-6 text-xs text-muted-foreground">
+                <p>
+                  Time-to-solve trend slope: {globalStats.timeToSolveSlopeYearsPerReleaseYear.toFixed(3)} years per release year
+                  {' '}· R² = {globalStats.timeToSolveR2.toFixed(2)}
+                </p>
+              </div>
             </CardContent>
           </Card>
 
