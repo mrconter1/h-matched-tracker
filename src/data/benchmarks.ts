@@ -201,6 +201,22 @@ export const benchmarkData: Benchmark[] = [
     paperUrl: "https://arxiv.org/abs/1911.01547"
   },
   {
+    benchmark: "ARC-AGI-1 (Verified)",
+    release: "2019-11-05",
+    solved: {
+      date: "2024-12-20",
+      source: {
+        text: "Human participants achieve around 64% accuracy on ARC-style evaluation tasks according to the H-ARC human study.<sup class='reference'>[1]</sup> OpenAI's O3 model was the first to reach human-level performance on ARC-AGI-1, scoring up to 87.5% on the semi-private evaluation under high-compute settings, marking the first clear superhuman result on this abstract reasoning benchmark.<sup class='reference'>[2]</sup>",
+        references: [
+          { url: "https://arxiv.org/abs/2409.01374" },
+          { url: "https://arcprize.org/blog/oai-o3-pub-breakthrough" }
+        ]
+      }
+    },
+    url: "https://arcprize.org/arc",
+    paperUrl: "https://arxiv.org/abs/1911.01547"
+  },
+  {
     benchmark: "SuperGLUE",
     release: "2020-02-13",
     solved: {
