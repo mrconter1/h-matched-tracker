@@ -436,6 +436,22 @@ export const benchmarkData: Benchmark[] = [
     paperUrl: "https://arxiv.org/pdf/2310.02255"
   },
   {
+    benchmark: "CharXiv-R",
+    release: "2024-06-26",
+    solved: {
+      date: "2025-04-16",
+      source: {
+        text: "Human evaluators achieve about 71.3% accuracy on the reasoning split of CharXiv, with overall human performance around 80.5% on the full benchmark.<sup class='reference'>[1]</sup> OpenAI's O3 model reached roughly 78.6% accuracy on CharXiv-R, the reasoning component of CharXiv, becoming the first model to clearly surpass human-level performance on this chart-reasoning benchmark.<sup class='reference'>[2]</sup>",
+        references: [
+          { url: "https://arxiv.org/abs/2406.18521" },
+          { url: "https://openai.com/index/introducing-o3-and-o4-mini" }
+        ]
+      }
+    },
+    url: "https://princeton-nlp.github.io/CharXiv/",
+    paperUrl: "https://arxiv.org/abs/2406.18521"
+  },
+  {
     benchmark: "LongBench v2",
     release: "2025-01-03",
     solved: {
