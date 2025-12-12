@@ -452,12 +452,13 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "EgoSchema",
     release: "2023-08-17",
     solved: {
-      date: null,
+      date: "2025-01-26",
       source: {
-        text: "Human evaluators achieved 76% accuracy, while the best AI models achieved less than 33% accuracy (random is 20%). EgoSchema tests very long-form video understanding with 3-minute clips requiring complex temporal reasoning.",
-        references: [{
-          url: "https://arxiv.org/abs/2308.09126"
-        }]
+        text: "Human evaluators achieve about 76% accuracy on EgoSchema, while recent general-purpose video-language models such as Qwen2-VL-72B-Instruct reach 77.9% accuracy on the EgoSchema leaderboard, slightly surpassing human performance on this long-form video understanding benchmark.<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
+        references: [
+          { url: "https://arxiv.org/abs/2308.09126" },
+          { url: "https://llm-stats.com/benchmarks/egoschema" }
+        ]
       }
     },
     url: "https://egoschema.github.io/",
