@@ -696,5 +696,21 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://huggingface.co/datasets/allenai/social_i_qa",
     paperUrl: "https://arxiv.org/pdf/1904.09728"
+  },
+  {
+    benchmark: "OSWorld",
+    release: "2024-04-11",
+    solved: {
+      date: "2026-02-06",
+      source: {
+        text: "OSWorld evaluates multimodal agents on 369 real-world computer tasks across Ubuntu, Windows, and macOS. Human performance is 72.36% success rate. Claude Opus 4.6 achieved 72.7% accuracy, surpassing human-level performance.<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
+        references: [
+          { url: "https://arxiv.org/abs/2404.07972" },
+          { url: "https://anthropic.com/news/claude-opus-4-6" }
+        ]
+      }
+    },
+    url: "https://os-world.github.io/",
+    paperUrl: "https://arxiv.org/abs/2404.07972"
   }
 ]; 
