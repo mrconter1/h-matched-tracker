@@ -698,6 +698,22 @@ export const benchmarkData: Benchmark[] = [
     paperUrl: "https://arxiv.org/pdf/1904.09728"
   },
   {
+    benchmark: "LAB-Bench (FigQA)",
+    release: "2024-07-15",
+    solved: {
+      date: "2026-04-16",
+      source: {
+        text: "LAB-Bench evaluates AI on biology research tasks; the FigQA subset tests scientific figure interpretation. Expert human baseline is 77.0%. Claude Opus 4.7 achieved 79.3% (no tools) and 85.4% (with Python tools), surpassing the human expert baseline.<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
+        references: [
+          { url: "https://arxiv.org/abs/2407.10362" },
+          { url: "https://cdn.sanity.io/files/4zrzovbb/website/c886650a2e96fc0925c805a1a7ca77314ccbf4a6.pdf" }
+        ]
+      }
+    },
+    url: "https://futurehouse.org/lab-bench",
+    paperUrl: "https://arxiv.org/abs/2407.10362"
+  },
+  {
     benchmark: "OSWorld",
     release: "2024-04-11",
     solved: {
