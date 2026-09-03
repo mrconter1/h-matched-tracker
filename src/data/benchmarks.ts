@@ -1064,5 +1064,137 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://benchmark.ini.rub.de/gtsrb_news.html",
     paperUrl: "https://www.sciencedirect.com/science/article/pii/S0893608012000524"
+  },
+  {
+    benchmark: "Arcade Learning Environment",
+    release: "2013-06-21",
+    human: { score: 100.0, baselineType: "single" },
+    solved: {
+      date: "2015-09-22",
+      model: "Double DQN",
+      score: 114.7,
+      conditions: "median human-normalized score, 49 games, 5-minute episodes",
+      source: {
+        text: "ALE scores Atari agents against a professional games tester, normalised per game so 0% is random play and 100% is the human expert; the usual summary is the median across the 49 games.<sup class='reference'>[1]</sup> DQN's 2015 Nature paper is widely remembered as reaching human level, but its median human-normalized score was 93.5%, below the bar - the successor paper's own Table 1 reports it. Double DQN was the first agent past it at 114.7%.<sup class='reference'>[2]</sup> Under the stricter human-starts regime the same table puts DQN at 47.5% and Double DQN at 88.4%, so on that measure the benchmark was not h-matched until later still.",
+        references: [
+          { url: "https://arxiv.org/abs/1207.4708" },
+          { url: "https://arxiv.org/abs/1509.06461" }
+        ]
+      }
+    },
+    url: "https://github.com/Farama-Foundation/Arcade-Learning-Environment",
+    paperUrl: "https://arxiv.org/abs/1207.4708"
+  },
+  {
+    benchmark: "HotpotQA",
+    release: "2018-09-25",
+    human: { score: 82.55, unit: "F1", baselineType: "crowd" },
+    solved: {
+      date: null,
+      source: {
+        text: "HotpotQA requires combining facts from two Wikipedia articles and supporting the answer with the sentences used. Crowdworkers reach 82.55 joint F1 on a 1,000-question sample, where the joint metric scores the answer and the supporting evidence together.<sup class='reference'>[1]</sup> The best published systems remain around 77.5 joint F1. Answer-only F1 is far easier and is often quoted instead, which makes the benchmark look closer to solved than it is.",
+        references: [
+          { url: "https://arxiv.org/abs/1809.09600" }
+        ]
+      }
+    },
+    url: "https://hotpotqa.github.io/",
+    paperUrl: "https://arxiv.org/abs/1809.09600"
+  },
+  {
+    benchmark: "ALFRED",
+    release: "2019-12-03",
+    human: { score: 91.0, baselineType: "small-sample", n: 5 },
+    solved: {
+      date: null,
+      source: {
+        text: "ALFRED asks an embodied agent to carry out household instructions in a simulated home, from a natural-language command and egocentric vision. Five participants completed 100 unseen tasks at a 91% success rate, 86% path-weighted.<sup class='reference'>[1]</sup> A 2024 paper reports 98-100% but on a smaller non-standard evaluation, so it does not settle the official metric.",
+        references: [
+          { url: "https://arxiv.org/abs/1912.01734" }
+        ]
+      }
+    },
+    url: "https://askforalfred.com/",
+    paperUrl: "https://arxiv.org/abs/1912.01734"
+  },
+  {
+    benchmark: "Habitat ObjectNav",
+    release: "2020-06-23",
+    human: { score: 88.9, baselineType: "unspecified" },
+    solved: {
+      date: null,
+      source: {
+        text: "ObjectNav drops an agent into an unseen indoor scene and names an object to find. Humans succeed 88.9% of the time on the Matterport3D validation split within a 500-step budget.<sup class='reference'>[1]</sup> The best systems on the same split stay under 70%, and the gap has closed slowly compared with the vision benchmarks of the same era.",
+        references: [
+          { url: "https://arxiv.org/abs/2006.13171" }
+        ]
+      }
+    },
+    url: "https://aihabitat.org/",
+    paperUrl: "https://arxiv.org/abs/2006.13171"
+  },
+  {
+    benchmark: "NExT-QA",
+    release: "2021-05-18",
+    human: { score: 88.38, baselineType: "crowd" },
+    solved: {
+      date: null,
+      source: {
+        text: "NExT-QA asks causal and temporal questions about everyday video: why something happened, what happened before or after. Human accuracy is 88.38% overall - 87.61% causal, 88.56% temporal, 90.40% descriptive.<sup class='reference'>[1]</sup> The best documented system reaches about 72.5%, and the causal split is where models lose most ground.",
+        references: [
+          { url: "https://arxiv.org/abs/2105.08276" }
+        ]
+      }
+    },
+    url: "https://doc-doc.github.io/docs/nextqa.html",
+    paperUrl: "https://arxiv.org/abs/2105.08276"
+  },
+  {
+    benchmark: "Perception Test",
+    release: "2023-05-23",
+    human: { score: 91.4, baselineType: "unspecified" },
+    solved: {
+      date: null,
+      source: {
+        text: "The Perception Test uses purpose-filmed video to probe memory, physics, abstraction and semantics rather than object recognition. Human accuracy is 91.4% against 46.2% for the best model at publication.<sup class='reference'>[1]</sup> The best score since is roughly 73%. A 99.64% human figure circulates from a later challenge report measured on a different subset; it is not comparable and is not used here.",
+        references: [
+          { url: "https://arxiv.org/abs/2305.13786" }
+        ]
+      }
+    },
+    url: "https://github.com/google-deepmind/perception_test",
+    paperUrl: "https://arxiv.org/abs/2305.13786"
+  },
+  {
+    benchmark: "MMVP",
+    release: "2024-01-11",
+    human: { score: 95.7, baselineType: "small-sample", n: 4 },
+    solved: {
+      date: null,
+      source: {
+        text: "MMVP collects image pairs that CLIP embeds almost identically but which differ in a way people see immediately, then asks a question that turns on the difference. Four volunteers scored 95.7% on 300 questions; GPT-4V managed 38.7%, below chance on a two-choice task.<sup class='reference'>[1]</sup> The baseline rests on four people, so treat the exact number loosely; the size of the gap is the finding.",
+        references: [
+          { url: "https://arxiv.org/abs/2401.06209" }
+        ]
+      }
+    },
+    url: "https://tsb0601.github.io/mmvp_blog/",
+    paperUrl: "https://arxiv.org/abs/2401.06209"
+  },
+  {
+    benchmark: "MathVerse",
+    release: "2024-03-21",
+    human: { score: 64.9, baselineType: "small-sample", n: 10 },
+    solved: {
+      date: null,
+      source: {
+        text: "MathVerse rewrites each maths problem into six versions that shift information between the diagram and the text, to test whether a model reads the diagram at all. Ten college students averaged 64.9%, against 54.4% for GPT-4V.<sup class='reference'>[1]</sup> The baseline is a small sample and the human number is itself low, which makes this one of the closer open gaps on the tracker.",
+        references: [
+          { url: "https://arxiv.org/abs/2403.14624" }
+        ]
+      }
+    },
+    url: "https://mathverse-cuhk.github.io/",
+    paperUrl: "https://arxiv.org/abs/2403.14624"
   }
 ];
