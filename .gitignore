@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# eval harness: raw dataset downloads are cached, results are committed
+/eval/data/
+/eval/__pycache__/
