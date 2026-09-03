@@ -38,19 +38,32 @@ is left out.
 
 ```bash
 pip install -r requirements.txt
-# credentials: ANTHROPIC_API_KEY in the environment, or an `ant auth login` profile
-
-python run_eval.py dry-run --benchmark all --limit 2          # prompts + cost estimate, no API
-python run_eval.py sync    --benchmark boolq --limit 20       # quick live smoke test
-python run_eval.py submit  --benchmark all --model claude-opus-5 --effort high
-python run_eval.py status
-python run_eval.py collect results/boolq/claude-opus-5_2026-09-03.json --wait
 ```
 
-`submit` uses the Message Batches API (half price, results within 24 h).
-`collect` fetches a finished batch, scores it and writes the summary into the
-same file. Raw dataset downloads are cached under `data/` (gitignored); results
+Two backends, picked from the model id:
+
+| Model id | Backend | Credentials | Notes |
+|---|---|---|---|
+| `anthropic/claude-sonnet-5` (contains `/`) | OpenRouter | `OPENROUTER_API_KEY` | OpenAI-compatible chat completions with OpenRouter's `reasoning.effort`; a `:batch` suffix buys the half-price, slower tier on the same call |
+| `claude-opus-5` (bare) | Anthropic API | `ANTHROPIC_API_KEY` or an `ant auth login` profile | `submit`/`collect` use the Message Batches API (half price, results within 24 h) |
+
+```bash
+python run_eval.py dry-run --benchmark all --limit 2                                # prompts + live-priced estimate, no API
+python run_eval.py sync    --benchmark winogrande --limit 20 --model anthropic/claude-sonnet-5 --effort low
+python run_eval.py sync    --benchmark winogrande --model anthropic/claude-sonnet-5 --effort low --concurrency 8
+python run_eval.py sync    --resume results/winogrande/anthropic__claude-sonnet-5_2026-09-03.json   # after an interruption
+python run_eval.py submit  --benchmark all --model claude-opus-5 --effort high      # Anthropic batches only
+python run_eval.py collect results/boolq/claude-opus-5_2026-09-03.json --wait
+python run_eval.py status
+```
+
+Progress is saved every 25 items and Ctrl-C keeps what is done, so a run can be
+resumed. Raw dataset downloads are cached under `data/` (gitignored); results
 under `results/` are committed so every number on the tracker is reproducible.
+
+Start small: WinoGrande is the smallest set (1,267 items) and a low-effort
+Sonnet 5 pass over it costs well under a dollar; DROP (9,536 items) is close to
+half of everything.
 
 ## Results file
 
