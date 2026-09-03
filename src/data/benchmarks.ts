@@ -728,5 +728,21 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://os-world.github.io/",
     paperUrl: "https://arxiv.org/abs/2404.07972"
+  },
+  {
+    benchmark: "SimpleBench",
+    release: "2024-10-31",
+    solved: {
+      date: "2026-09-01",
+      source: {
+        text: "SimpleBench is a 200+ question multiple-choice text benchmark covering spatio-temporal reasoning, social intelligence and linguistic adversarial robustness (trick questions), answerable with unspecialized high school knowledge. The human baseline is 83.7% (nine participants). Claude Fable 5.1 scored 86.6% (AVG@5), the first model to exceed the human baseline; the previous best was Claude Fable at 81.9%.<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
+        references: [
+          { url: "https://simple-bench.com/" },
+          { url: "https://drive.google.com/file/d/1mddNFK5UbBFVr3oDftd2Kyc6D8TFctfe/view" }
+        ]
+      }
+    },
+    url: "https://simple-bench.com/",
+    paperUrl: "https://drive.google.com/file/d/1mddNFK5UbBFVr3oDftd2Kyc6D8TFctfe/view"
   }
 ]; 
