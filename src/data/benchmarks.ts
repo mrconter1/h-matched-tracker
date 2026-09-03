@@ -1044,5 +1044,25 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://openai.com/index/paperbench/",
     paperUrl: "https://arxiv.org/abs/2504.01848"
+  },
+  {
+    benchmark: "GTSRB",
+    release: "2011-01-19",
+    human: { score: 98.84, baselineType: "crowd" },
+    solved: {
+      date: "2011-08-01",
+      model: "IDSIA committee of CNNs",
+      score: 99.46,
+      conditions: "final IJCNN competition round, multi-column DNN committee",
+      source: {
+        text: "The German Traffic Sign Recognition Benchmark's final round pitted algorithms against a human reader baseline of 98.84% on the same held-out test images.<sup class='reference'>[1]</sup> IDSIA's committee of CNNs scored 99.46% at the IJCNN 2011 final round (31 Jul - 5 Aug 2011), one of the earliest results described as superhuman on a computer-vision benchmark; both the human and machine numbers were formally written up the following year.<sup class='reference'>[2]</sup>",
+        references: [
+          { url: "https://www.sciencedirect.com/science/article/pii/S0893608012000457" },
+          { url: "https://www.sciencedirect.com/science/article/pii/S0893608012000524" }
+        ]
+      }
+    },
+    url: "https://benchmark.ini.rub.de/gtsrb_news.html",
+    paperUrl: "https://www.sciencedirect.com/science/article/pii/S0893608012000524"
   }
 ];
