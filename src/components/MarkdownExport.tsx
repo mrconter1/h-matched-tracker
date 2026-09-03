@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Button } from "@/components/ui/button";
 import { Check, Copy, Download, X } from 'lucide-react';
 
 type CopyState = 'idle' | 'copied' | 'error';
@@ -35,16 +34,12 @@ export function MarkdownExport({ getMarkdown, fileName = 'h-matched-tracker.md' 
   const resetTimer = useRef<number | null>(null);
 
   useEffect(() => () => {
-    if (resetTimer.current !== null) {
-      window.clearTimeout(resetTimer.current);
-    }
+    if (resetTimer.current !== null) window.clearTimeout(resetTimer.current);
   }, []);
 
   const flash = (state: CopyState) => {
     setCopyState(state);
-    if (resetTimer.current !== null) {
-      window.clearTimeout(resetTimer.current);
-    }
+    if (resetTimer.current !== null) window.clearTimeout(resetTimer.current);
     resetTimer.current = window.setTimeout(() => setCopyState('idle'), 2000);
   };
 
@@ -80,38 +75,41 @@ export function MarkdownExport({ getMarkdown, fileName = 'h-matched-tracker.md' 
   };
 
   return (
-    <div className="flex h-full flex-col justify-between gap-6 p-5 sm:p-6">
-      <div>
-        <h3 className="text-base font-semibold">Export as Markdown</h3>
-        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-          The whole tracker as one structured document: statistics, survival table, both benchmark tables and every
-          source note. Paste it into notes or hand it to a language model.
-        </p>
-      </div>
-      <div className="flex flex-col gap-2 sm:flex-row">
-        <Button className="flex-1" onClick={handleCopy} aria-live="polite">
+    <div className="p-5">
+      <h3 className="heading text-[15px]">Export</h3>
+      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+        The whole table as one Markdown document: the summary statistics, the survival table by cohort, both benchmark
+        lists, and every per-benchmark note with its references.
+      </p>
+      <p className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm">
+        <button
+          type="button"
+          onClick={handleCopy}
+          aria-live="polite"
+          className="inline-flex items-center gap-1.5 text-brand underline underline-offset-4"
+        >
           {copyState === 'copied' ? (
             <>
-              <Check className="h-4 w-4" />
-              Copied
+              <Check className="h-3.5 w-3.5" /> Copied
             </>
           ) : copyState === 'error' ? (
             <>
-              <X className="h-4 w-4" />
-              Copy failed
+              <X className="h-3.5 w-3.5" /> Copy failed
             </>
           ) : (
             <>
-              <Copy className="h-4 w-4" />
-              Copy to clipboard
+              <Copy className="h-3.5 w-3.5" /> Copy to clipboard
             </>
           )}
-        </Button>
-        <Button className="flex-1" variant="outline" onClick={handleDownload}>
-          <Download className="h-4 w-4" />
-          Download .md
-        </Button>
-      </div>
+        </button>
+        <button
+          type="button"
+          onClick={handleDownload}
+          className="inline-flex items-center gap-1.5 text-brand underline underline-offset-4"
+        >
+          <Download className="h-3.5 w-3.5" /> Download .md
+        </button>
+      </p>
     </div>
   );
 }

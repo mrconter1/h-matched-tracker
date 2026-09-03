@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Source_Serif_4 } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 import { DynamicFavicon } from '@/components/DynamicFavicon';
@@ -14,9 +14,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const sourceSerif = Source_Serif_4({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  display: "swap",
+});
+
 export const metadata = {
-  title: "h-matched Tracker | Tracking progress towards human level intelligence in AI",
-  description: "Track how long it takes for AI benchmarks to become h-matched (reach human-level performance), from release to completion.",
+  title: "h-matched Tracker | Time from benchmark release to human-level AI",
+  description:
+    "A record of how long each AI benchmark took to go from release to h-matched: the date a system first reached the benchmark's published human baseline.",
 };
 
 export default function RootLayout({
@@ -29,10 +36,13 @@ export default function RootLayout({
       <head>
         <DynamicFavicon />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${sourceSerif.variable} antialiased`}
+        suppressHydrationWarning
+      >
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >

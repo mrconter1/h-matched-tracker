@@ -1,72 +1,69 @@
 import React from 'react';
 import { formatPercent, formatYears, type GlobalStats } from '@/lib/benchmarkStats';
 
-type Tile = { label: string; value: string; hint?: string; emphasis?: boolean };
+type Row = { label: string; value: string; note?: string; emphasis?: boolean };
 
-function StatTile({ label, value, hint, emphasis }: Tile) {
-  return (
-    <div className="p-4 sm:p-5">
-      <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{label}</p>
-      <p className={`mt-1.5 text-xl font-semibold tabular-nums tracking-tight ${emphasis ? 'text-brand' : ''}`}>{value}</p>
-      {hint && <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>}
-    </div>
-  );
-}
-
+/** The statistics as a two-column table, the way a paper would print them. */
 export function StatsGrid({ stats, total }: { stats: GlobalStats; total: number }) {
-  const tiles: Tile[] = [
+  const rows: Row[] = [
     {
-      label: 'Median time to h-match',
-      value: stats.survivalMedianYears !== null ? formatYears(stats.survivalMedianYears) : 'Not reached',
-      hint: `Survival estimate, all ${total} benchmarks`,
+      label: 'Median interval, survival estimate',
+      value: stats.survivalMedianYears !== null ? formatYears(stats.survivalMedianYears) : 'not reached',
+      note: `Kaplan-Meier over all ${total} benchmarks; open censored today, unreported at last published score`,
       emphasis: true,
     },
     {
-      label: 'Median (solved only)',
+      label: 'Median interval, h-matched only',
       value: formatYears(stats.medianTimeToSolveYears),
-      hint: 'Biased low - ignores censoring',
+      note: 'Biased low: ignores benchmarks not yet h-matched',
     },
     {
-      label: 'Average (solved only)',
+      label: 'Mean interval, h-matched only',
       value: formatYears(stats.avgTimeToSolveYears),
-      hint: 'Biased low - ignores censoring',
+      note: 'Biased low for the same reason',
     },
     {
-      label: 'Average, released last 3 yrs',
-      value: stats.avgTimeToSolveLast3Years !== null ? formatYears(stats.avgTimeToSolveLast3Years) : 'N/A',
-      hint: 'Solved only; the most censored subset',
+      label: 'Mean interval, released in the last 3 years',
+      value: stats.avgTimeToSolveLast3Years !== null ? formatYears(stats.avgTimeToSolveLast3Years) : 'n/a',
+      note: 'The most heavily censored subset, and the most often quoted',
     },
-    { label: 'Shortest gap', value: formatYears(stats.minTimeToSolveYears) },
-    { label: 'Longest gap', value: formatYears(stats.maxTimeToSolveYears) },
+    { label: 'Shortest interval', value: formatYears(stats.minTimeToSolveYears) },
+    { label: 'Longest interval', value: formatYears(stats.maxTimeToSolveYears) },
     {
-      label: 'H-matched within 1 / 2 / 3 yrs',
+      label: 'H-matched within 1 / 2 / 3 years',
       value: `${formatPercent(stats.solvedWithin1yFraction)} / ${formatPercent(stats.solvedWithin2yFraction)} / ${formatPercent(stats.solvedWithin3yFraction)}`,
-      hint: 'Share of h-matched benchmarks',
+      note: 'Share of h-matched benchmarks',
     },
     {
-      label: 'Longest open',
-      value: stats.longestOpenYears !== null ? formatYears(stats.longestOpenYears) : 'N/A',
-      hint: 'Since release; unreported excluded',
+      label: 'Longest still open',
+      value: stats.longestOpenYears !== null ? formatYears(stats.longestOpenYears) : 'n/a',
+      note: 'Since release; unreported benchmarks excluded',
     },
     {
-      label: 'Status split',
-      value: `${stats.solvedCount} · ${stats.openCount} · ${stats.unreportedCount}`,
-      hint: 'h-matched · open · unreported',
+      label: 'H-matched / open / unreported',
+      value: `${stats.solvedCount} / ${stats.openCount} / ${stats.unreportedCount}`,
     },
   ];
 
   return (
     <div>
-      <div className="grid grid-cols-2 divide-x divide-y divide-border/60 md:grid-cols-3 [&>*:nth-child(-n+2)]:border-t-0 md:[&>*:nth-child(-n+3)]:border-t-0 [&>*:nth-child(2n+1)]:border-l-0 md:[&>*:nth-child(2n+1)]:border-l md:[&>*:nth-child(3n+1)]:border-l-0">
-        {tiles.map(tile => (
-          <StatTile key={tile.label} {...tile} />
-        ))}
-      </div>
-      <p className="border-t border-border/60 px-4 py-3 text-xs leading-relaxed text-muted-foreground sm:px-5">
-        &quot;Solved only&quot; figures average the h-matched benchmarks and are biased low: a recent benchmark that will
-        take years to solve cannot be in the solved set yet. The survival estimate is Kaplan-Meier over every benchmark,
-        with open ones censored today and unreported ones at their last published score.
-      </p>
+      <table className="w-full text-sm">
+        <tbody>
+          {rows.map((row, index) => (
+            <tr key={row.label} className={index > 0 ? 'border-t border-border' : ''}>
+              <th scope="row" className="w-1/2 px-5 py-3 text-left align-top font-normal">
+                <span className="block">{row.label}</span>
+                {row.note && <span className="mt-0.5 block text-xs text-muted-foreground">{row.note}</span>}
+              </th>
+              <td
+                className={`px-5 py-3 text-right align-top tabular font-medium ${row.emphasis ? 'text-brand' : ''}`}
+              >
+                {row.value}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

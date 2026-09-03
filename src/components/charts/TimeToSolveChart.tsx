@@ -18,38 +18,38 @@ import type { Benchmark } from '@/data/benchmarks';
 import { calculateTrendLine, formatDurationShort, prepareScatterData, type ScatterPoint } from '@/lib/benchmarkStats';
 import { useIsMobile, useMounted } from '@/lib/useMediaQuery';
 
+const INK = 'hsl(var(--foreground))';
+const MUTED = 'hsl(var(--muted-foreground))';
 const BRAND = 'hsl(var(--brand))';
 
-type ShapeProps = RechartsScatterProps & { cx?: number; cy?: number; payload: ScatterPoint };
+const axisTick = { fontSize: 11, fill: MUTED };
+const axisLabel = { fontSize: 11, fill: MUTED };
 
+type ShapeProps = RechartsScatterProps & { cx?: number; cy?: number; payload: ScatterPoint };
 type TooltipPayload = { payload: ScatterPoint };
 
 function PointTooltip({ active, payload }: TooltipProps<number, string> & { payload?: TooltipPayload[] }) {
   const point = active && payload?.find(p => p.payload?.name)?.payload;
   if (!point) return null;
   return (
-    <div className="rounded-lg border border-border bg-popover/95 p-3 text-sm shadow-lg backdrop-blur">
+    <div className="rounded border border-border bg-popover p-3 text-xs shadow-sm">
       <p className="font-medium">
         {point.name}
-        {point.contested && (
-          <span className="ml-2 rounded bg-amber-500/15 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-amber-600 dark:text-amber-400">
-            contested
-          </span>
-        )}
+        {point.contested && <span className="ml-1.5 text-muted-foreground">(contested)</span>}
       </p>
-      <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-muted-foreground">
+      <dl className="mt-1.5 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-muted-foreground">
         <dt>Released</dt>
-        <dd className="text-foreground">{point.releaseDate}</dd>
+        <dd className="tabular text-foreground">{point.releaseDate}</dd>
         <dt>H-matched</dt>
-        <dd className="text-foreground">{point.solvedDate}</dd>
+        <dd className="tabular text-foreground">{point.solvedDate}</dd>
         {point.model && (
           <>
             <dt>By</dt>
             <dd className="text-foreground">{point.model}</dd>
           </>
         )}
-        <dt>Gap</dt>
-        <dd className="font-medium text-brand">{formatDurationShort(point.timeToSolve)}</dd>
+        <dt>Interval</dt>
+        <dd className="tabular font-medium text-foreground">{formatDurationShort(point.timeToSolve)}</dd>
       </dl>
     </div>
   );
@@ -62,64 +62,53 @@ export function TimeToSolveChart({ data }: { data: Benchmark[] }) {
   const points = useMemo(() => prepareScatterData(data), [data]);
   const bounds = useMemo(() => {
     const thisYear = new Date().getUTCFullYear();
-    const minX = Math.floor(Math.min(...points.map(p => p.released))) - 1;
-    const maxX = thisYear + 1;
-    const maxY = Math.ceil(Math.max(...points.map(p => p.timeToSolve))) + 1;
-    return { minX, maxX, minY: -1, maxY };
+    return {
+      minX: Math.floor(Math.min(...points.map(p => p.released))) - 1,
+      maxX: thisYear + 1,
+      minY: -1,
+      maxY: Math.ceil(Math.max(...points.map(p => p.timeToSolve))) + 1,
+    };
   }, [points]);
   const trend = useMemo(() => calculateTrendLine(points, bounds), [points, bounds]);
 
   const xTicks = useMemo(() => {
     const ticks: number[] = [];
-    const start = Math.ceil(bounds.minX / 5) * 5;
-    for (let x = start; x <= bounds.maxX; x += isMobile ? 5 : 2) ticks.push(x);
+    const step = isMobile ? 5 : 2;
+    for (let x = Math.ceil(bounds.minX / step) * step; x <= bounds.maxX; x += step) ticks.push(x);
     return ticks;
   }, [bounds, isMobile]);
 
-  if (!mounted) return <div className="h-[420px]" aria-hidden />;
+  if (!mounted) return <div className="h-[400px]" aria-hidden />;
 
   return (
-    <div className="h-[420px] w-full">
+    <div className="h-[400px] w-full">
       <ResponsiveContainer width="100%" height="100%">
-        <ComposedChart margin={{ top: 24, right: isMobile ? 12 : 32, left: isMobile ? 0 : 12, bottom: 12 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-          <ReferenceLine y={0} stroke="hsl(var(--muted-foreground))" strokeDasharray="4 4" strokeOpacity={0.6} />
+        <ComposedChart margin={{ top: 20, right: isMobile ? 10 : 24, left: isMobile ? 0 : 8, bottom: 16 }}>
+          <CartesianGrid stroke="hsl(var(--border))" strokeOpacity={0.7} vertical={false} />
+          <ReferenceLine y={0} stroke={MUTED} strokeDasharray="3 3" strokeOpacity={0.7} />
           <XAxis
             type="number"
             dataKey="released"
-            name="Release year"
             domain={[bounds.minX, bounds.maxX]}
             ticks={xTicks}
-            tick={{ fontSize: isMobile ? 10 : 12, fill: 'hsl(var(--muted-foreground))' }}
+            tick={axisTick}
             tickLine={false}
             axisLine={{ stroke: 'hsl(var(--border))' }}
-            label={{
-              value: 'Benchmark release year',
-              position: 'insideBottom',
-              offset: -6,
-              style: { fontSize: 12, fill: 'hsl(var(--muted-foreground))' },
-            }}
+            label={{ value: 'Benchmark release year', position: 'insideBottom', offset: -8, style: axisLabel }}
           />
           <YAxis
             type="number"
             dataKey="timeToSolve"
-            name="Years to h-match"
             domain={[bounds.minY, bounds.maxY]}
             tickCount={bounds.maxY - bounds.minY + 1}
-            tick={{ fontSize: isMobile ? 10 : 12, fill: 'hsl(var(--muted-foreground))' }}
+            tick={axisTick}
             tickLine={false}
             axisLine={false}
-            width={isMobile ? 28 : 44}
+            width={isMobile ? 26 : 40}
             label={
               isMobile
                 ? undefined
-                : {
-                    value: 'Years from release to h-match',
-                    angle: -90,
-                    position: 'insideLeft',
-                    offset: 4,
-                    style: { textAnchor: 'middle', fontSize: 12, fill: 'hsl(var(--muted-foreground))' },
-                  }
+                : { value: 'Years to h-match', angle: -90, position: 'insideLeft', offset: 2, style: { ...axisLabel, textAnchor: 'middle' as const } }
             }
           />
           <Tooltip content={<PointTooltip />} cursor={{ stroke: 'hsl(var(--border))' }} />
@@ -128,49 +117,37 @@ export function TimeToSolveChart({ data }: { data: Benchmark[] }) {
               type="linear"
               dataKey="trend"
               data={trend}
-              stroke="hsl(var(--muted-foreground))"
-              strokeOpacity={0.6}
-              strokeWidth={1.5}
-              strokeDasharray="6 4"
+              stroke={MUTED}
+              strokeWidth={1}
+              strokeDasharray="5 4"
               dot={false}
               activeDot={false}
               isAnimationActive={false}
-              name="Linear fit (solved only)"
             />
           )}
           <Scatter
             data={points}
             dataKey="timeToSolve"
-            name="Benchmark"
             isAnimationActive={false}
             label={
               isMobile
                 ? false
-                : {
-                    dataKey: 'name',
-                    position: 'top',
-                    offset: 10,
-                    fill: 'hsl(var(--muted-foreground))',
-                    fontSize: 10,
-                  }
+                : { dataKey: 'name', position: 'top', offset: 8, fill: MUTED, fontSize: 9 }
             }
             shape={(props: RechartsScatterProps) => {
               const { cx, cy, payload } = props as ShapeProps;
-              const r = isMobile ? 4 : 5;
+              const r = 3.5;
+              // Open circle for a contested h-match, filled for a clean one, brand for the newest.
               return (
-                <g className="cursor-pointer">
-                  {payload.isLatest && (
-                    <circle cx={cx} cy={cy} r={r + 5} fill={BRAND} fillOpacity={0.18} />
-                  )}
-                  <circle
-                    cx={cx}
-                    cy={cy}
-                    r={r}
-                    fill={payload.contested ? 'hsl(var(--card))' : BRAND}
-                    stroke={payload.contested ? 'hsl(38 92% 50%)' : BRAND}
-                    strokeWidth={payload.contested ? 2 : 1}
-                  />
-                </g>
+                <circle
+                  cx={cx}
+                  cy={cy}
+                  r={payload.isLatest ? r + 1 : r}
+                  fill={payload.contested ? 'hsl(var(--card))' : payload.isLatest ? BRAND : INK}
+                  stroke={payload.isLatest ? BRAND : INK}
+                  strokeWidth={1}
+                  className="cursor-pointer"
+                />
               );
             }}
           />
