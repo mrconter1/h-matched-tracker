@@ -201,28 +201,12 @@ export const benchmarkData: Benchmark[] = [
     paperUrl: "https://arxiv.org/pdf/1910.14599"
   },
   {
-    benchmark: "ARC-AGI",
-    release: "2019-11-05",
-    solved: {
-      date: "2024-12-20",
-      source: {
-        text: "OpenAI's O3 system achieved 87.5% accuracy on the Semi-Private Evaluation set, matching human performance of around 85%<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
-        references: [
-          { url: "https://arcprize.org/blog/oai-o3-pub-breakthrough" },
-          { url: "https://www.researchgate.net/profile/Kyrtin-Atreides/publication/386734256_Solving_the_Abstraction_and_Reasoning_Corpus_for_Artificial_General_Intelligence_ARC-AGI_AI_Benchmark_with_ICOM/links/675974468a2601629917709f/Solving-the-Abstraction-and-Reasoning-Corpus-for-Artificial-General-Intelligence-ARC-AGI-AI-Benchmark-with-ICOM.pdf" }
-        ]
-      }
-    },
-    url: "https://arcprize.org/arc",
-    paperUrl: "https://arxiv.org/abs/1911.01547"
-  },
-  {
     benchmark: "ARC-AGI-1 (Verified)",
     release: "2019-11-05",
     solved: {
       date: "2024-12-20",
       source: {
-        text: "Human participants achieve around 64% accuracy on ARC-style evaluation tasks according to the H-ARC human study.<sup class='reference'>[1]</sup> OpenAI's O3 model was the first to reach human-level performance on ARC-AGI-1, scoring up to 87.5% on the semi-private evaluation under high-compute settings, marking the first clear superhuman result on this abstract reasoning benchmark.<sup class='reference'>[2]</sup>",
+        text: "Human participants achieve around 64% accuracy on ARC-style evaluation tasks according to the H-ARC human study, and ARC Prize uses 85% as its human-level threshold.<sup class='reference'>[1]</sup> OpenAI's o3 scored 87.5% on the semi-private evaluation set in December 2024, but only in a high-compute configuration estimated at thousands of dollars per task; the low-compute run scored 75.7%. ARC Prize did not count the result as a solution, so this entry is contested.<sup class='reference'>[2]</sup>",
         references: [
           { url: "https://arxiv.org/abs/2409.01374" },
           { url: "https://arcprize.org/blog/oai-o3-pub-breakthrough" }
