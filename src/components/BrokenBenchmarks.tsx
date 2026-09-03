@@ -17,7 +17,10 @@ import {
 } from "@/components/ui/table";
 import { ArrowUpDown, ExternalLink, FileText, Mail, Globe, HelpCircle, ChevronDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { benchmarkData, type Benchmark, type BenchmarkSolved } from '@/data/benchmarks';
+import { benchmarkData, calculateTimeToSolve, type Benchmark } from '@/data/benchmarks';
+import { ABOUT_SECTIONS, SITE_TAGLINE } from '@/data/siteCopy';
+import { MarkdownExport } from '@/components/MarkdownExport';
+import { buildBenchmarksMarkdown } from '@/lib/markdown';
 import { ComposedChart, Scatter, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Line, Tooltip, TooltipProps, ReferenceLine } from 'recharts';
 import {
   Tooltip as RadixTooltip,
@@ -58,18 +61,6 @@ const getDecimalYear = (dateString: string | null) => {
   }
   const date = new Date(dateString);
   return date.getFullYear() + (date.getMonth() / 12) + (date.getDate() / 365);
-};
-
-const calculateTimeToSolve = (releaseDate: string, solved: BenchmarkSolved): number => {
-  if (solved.date === null) {
-    // Return Infinity for unsolved benchmarks
-    return Infinity;
-  }
-  const release = new Date(releaseDate);
-  const solvedDate = new Date(solved.date);
-  const diffTime = solvedDate.getTime() - release.getTime();
-  const diffYears = diffTime / (1000 * 60 * 60 * 24 * 365.25);
-  return Number(diffYears.toFixed(2));
 };
 
 const hashString = (str: string) => {
@@ -497,7 +488,7 @@ export default function BrokenBenchmarks() {
               </h1>
               
               <p className="text-sm sm:text-base text-muted-foreground max-w-[600px] mx-auto">
-                Measuring the shrinking gap between AI benchmark release and human-level achievement
+                {SITE_TAGLINE}
               </p>
             </div>
 
@@ -561,26 +552,12 @@ export default function BrokenBenchmarks() {
                 <div className="mt-6 space-y-6 text-left animate-in fade-in slide-in-from-top-4 duration-300">
                   <Card className="p-6">
                     <div className="space-y-4">
-                      <div>
-                        <h3 className="text-lg font-semibold mb-2">What is this?</h3>
-                        <p className="text-muted-foreground">
-                          A tracker measuring the duration between a benchmark&apos;s release and when it becomes h-matched (reached by AI at human-level performance). As this duration approaches zero, it suggests we&apos;re nearing a point where AI systems match human performance almost immediately.
-                        </p>
-                      </div>
-                      
-                      <div>
-                        <h3 className="text-lg font-semibold mb-2">Why track this?</h3>
-                        <p className="text-muted-foreground">
-                          By monitoring how quickly benchmarks become h-matched, we can observe the accelerating pace of AI capabilities. If this time reaches zero, it would indicate a critical milestone where creating benchmarks that humans can outperform AI systems becomes virtually impossible.
-                        </p>
-                      </div>
-                      
-                      <div>
-                        <h3 className="text-lg font-semibold mb-2">What does this mean?</h3>
-                        <p className="text-muted-foreground">
-                          The shrinking time-to-solve for new benchmarks suggests an acceleration in AI capabilities. This metric helps visualize how quickly AI systems are catching up to human-level performance across various tasks and domains.
-                        </p>
-                      </div>
+                      {ABOUT_SECTIONS.map((section) => (
+                        <div key={section.heading}>
+                          <h3 className="text-lg font-semibold mb-2">{section.heading}</h3>
+                          <p className="text-muted-foreground">{section.body}</p>
+                        </div>
+                      ))}
                     </div>
                   </Card>
                 </div>
@@ -1113,6 +1090,10 @@ export default function BrokenBenchmarks() {
               </div>
             </CardContent>
           </Card>
+
+          <MarkdownExport
+            getMarkdown={() => buildBenchmarksMarkdown(benchmarkData, globalStats)}
+          />
 
           <div className="mt-2 flex flex-col items-center">
             <footer className="text-center text-sm text-muted-foreground">

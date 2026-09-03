@@ -16,6 +16,21 @@ export type Benchmark = {
   paperUrl?: string;
 };
 
+/**
+ * Years between a benchmark's release and the date it became h-matched.
+ * Returns Infinity while a benchmark is still unsolved.
+ */
+export const calculateTimeToSolve = (releaseDate: string, solved: BenchmarkSolved): number => {
+  if (solved.date === null) {
+    return Infinity;
+  }
+  const release = new Date(releaseDate);
+  const solvedDate = new Date(solved.date);
+  const diffTime = solvedDate.getTime() - release.getTime();
+  const diffYears = diffTime / (1000 * 60 * 60 * 24 * 365.25);
+  return Number(diffYears.toFixed(2));
+};
+
 export const benchmarkData: Benchmark[] = [
   {
     benchmark: "ImageNet Challenge",
