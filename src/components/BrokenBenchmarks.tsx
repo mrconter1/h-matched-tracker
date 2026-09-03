@@ -21,7 +21,8 @@ import { benchmarkData, calculateTimeToSolve, getStatus, type Benchmark } from '
 import { ABOUT_SECTIONS, SITE_TAGLINE } from '@/data/siteCopy';
 import { MarkdownExport } from '@/components/MarkdownExport';
 import { buildBenchmarksMarkdown } from '@/lib/markdown';
-import { ComposedChart, Scatter, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Line, Tooltip, TooltipProps, ReferenceLine } from 'recharts';
+import { kaplanMeier, survivalByCohort, survivalGrid } from '@/lib/survival';
+import { ComposedChart, Scatter, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Line, Tooltip, TooltipProps, ReferenceLine, Legend } from 'recharts';
 import {
   Tooltip as RadixTooltip,
   TooltipContent,
@@ -199,9 +200,9 @@ type GlobalStats = {
   solvedWithin1yFraction: number;
   solvedWithin2yFraction: number;
   solvedWithin3yFraction: number;
-   longestUnsolvedYears: number | null;
-  timeToSolveSlopeYearsPerReleaseYear: number;
-  timeToSolveR2: number;
+  longestUnsolvedYears: number | null;
+  /** Kaplan-Meier median: open/unreported benchmarks count as censored instead of being dropped. */
+  survivalMedianYears: number | null;
 };
 
 const calculateGlobalStats = (data: typeof benchmarkData): GlobalStats => {
@@ -225,8 +226,7 @@ const calculateGlobalStats = (data: typeof benchmarkData): GlobalStats => {
       solvedWithin2yFraction: 0,
       solvedWithin3yFraction: 0,
       longestUnsolvedYears: unsolvedCount > 0 ? 0 : null,
-      timeToSolveSlopeYearsPerReleaseYear: 0,
-      timeToSolveR2: 0,
+      survivalMedianYears: null,
     };
   }
 
@@ -270,29 +270,7 @@ const calculateGlobalStats = (data: typeof benchmarkData): GlobalStats => {
   const solvedWithin2yFraction = times.filter(t => t <= 2).length / solvedCount;
   const solvedWithin3yFraction = times.filter(t => t <= 3).length / solvedCount;
 
-  // Linear regression of time_to_solve vs release_year
-  const xs = solved.map(item => getDecimalYear(item.release));
-  const ys = times;
-  const n = solvedCount;
-  const sumX = xs.reduce((acc, x) => acc + x, 0);
-  const sumY = ys.reduce((acc, y) => acc + y, 0);
-  const sumXY = xs.reduce((acc, x, i) => acc + x * ys[i], 0);
-  const sumXX = xs.reduce((acc, x) => acc + x * x, 0);
-
-  const denom = n * sumXX - sumX * sumX;
-  const slope = denom === 0 ? 0 : (n * sumXY - sumX * sumY) / denom;
-  const intercept = n === 0 ? 0 : (sumY - slope * sumX) / n;
-
-  const meanY = sumY / n;
-  let ssTot = 0;
-  let ssReg = 0;
-  for (let i = 0; i < n; i++) {
-    const y = ys[i];
-    const yPred = slope * xs[i] + intercept;
-    ssTot += (y - meanY) ** 2;
-    ssReg += (yPred - meanY) ** 2;
-  }
-  const timeToSolveR2 = ssTot === 0 ? 1 : ssReg / ssTot;
+  const survivalMedianYears = kaplanMeier(data, now).median;
 
   return {
     solvedCount,
@@ -308,8 +286,7 @@ const calculateGlobalStats = (data: typeof benchmarkData): GlobalStats => {
     solvedWithin2yFraction,
     solvedWithin3yFraction,
     longestUnsolvedYears,
-    timeToSolveSlopeYearsPerReleaseYear: slope,
-    timeToSolveR2,
+    survivalMedianYears,
   };
 };
 
@@ -470,6 +447,9 @@ export default function BrokenBenchmarks() {
   const sortedData = sortData(solvedBenchmarks);
   const trendLineData = calculateTrendLine(benchmarkData);
   const globalStats = calculateGlobalStats(benchmarkData);
+  const cohortSurvival = survivalByCohort(benchmarkData);
+  const survivalRows = survivalGrid(cohortSurvival);
+  const cohortColors = ['hsl(210, 70%, 55%)', 'hsl(150, 60%, 45%)', 'hsl(35, 85%, 55%)', 'hsl(340, 70%, 60%)'];
 
   const newestFirst = (a: Benchmark, b: Benchmark) =>
     new Date(b.release).getTime() - new Date(a.release).getTime();
@@ -707,6 +687,75 @@ export default function BrokenBenchmarks() {
             </CardContent>
           </Card>
 
+          {/* Survival Curves */}
+          <Card className="mb-16 shadow-md hover:shadow-lg transition-shadow">
+            <CardHeader className="space-y-1">
+              <CardTitle>Share Still Unsolved, by Release Cohort</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Kaplan-Meier survival curves. Each line is the share of a cohort&apos;s benchmarks not yet h-matched at a
+                given age. Open benchmarks are censored today and unreported ones at their last published score, so a
+                line stops where the evidence stops instead of pretending the recent cohorts are finished.
+              </p>
+            </CardHeader>
+            <CardContent className="h-[400px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <ComposedChart
+                  data={survivalRows}
+                  margin={{ top: 20, right: 30, left: isMobile ? 10 : 20, bottom: 20 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis
+                    type="number"
+                    dataKey="t"
+                    domain={[0, 'dataMax']}
+                    tickCount={11}
+                    tickFormatter={(value: number) => value.toFixed(0)}
+                    label={{
+                      value: 'Years since benchmark release',
+                      position: 'bottom',
+                      offset: 0,
+                      style: { fontSize: isMobile ? 10 : 12 }
+                    }}
+                  />
+                  <YAxis
+                    type="number"
+                    domain={[0, 1]}
+                    ticks={[0, 0.25, 0.5, 0.75, 1]}
+                    tickFormatter={(value: number) => `${Math.round(value * 100)}%`}
+                    label={{
+                      value: 'Still not h-matched',
+                      angle: -90,
+                      position: 'insideLeft',
+                      offset: isMobile ? 0 : 15,
+                      style: { textAnchor: 'middle', fontSize: isMobile ? 10 : 12 }
+                    }}
+                  />
+                  <ReferenceLine y={0.5} stroke="currentColor" strokeOpacity={0.3} strokeDasharray="3 3" />
+                  <Tooltip
+                    formatter={(value: number) => `${Math.round(value * 100)}%`}
+                    labelFormatter={(value: number) => `${value.toFixed(1)} years after release`}
+                    contentStyle={{ backgroundColor: 'hsl(var(--background))', borderColor: 'hsl(var(--border))' }}
+                  />
+                  <Legend verticalAlign="top" height={36} />
+                  {cohortSurvival.map((cohort, index) => (
+                    <Line
+                      key={cohort.key}
+                      type="stepAfter"
+                      dataKey={cohort.key}
+                      name={`${cohort.label} (n=${cohort.curve.n}, ${cohort.curve.events} solved)`}
+                      stroke={cohortColors[index % cohortColors.length]}
+                      strokeWidth={2}
+                      dot={false}
+                      activeDot={{ r: 4 }}
+                      connectNulls={false}
+                      isAnimationActive={false}
+                    />
+                  ))}
+                </ComposedChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
           {/* Global Stats Across Benchmarks */}
           <Card className="mb-16 shadow-md hover:shadow-lg transition-shadow">
             <CardHeader className="space-y-1">
@@ -718,7 +767,7 @@ export default function BrokenBenchmarks() {
             <CardContent>
               <div className="grid gap-4 md:grid-cols-3">
                 <div className="space-y-1">
-                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Average time to solve (last 3 years)</p>
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Average time to solve (released last 3 years, solved only)</p>
                   <p className="text-lg font-semibold">
                     {globalStats.avgTimeToSolveLast3Years !== null
                       ? formatYears(globalStats.avgTimeToSolveLast3Years)
@@ -726,12 +775,16 @@ export default function BrokenBenchmarks() {
                   </p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Average time to solve</p>
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Average time to solve (solved only)</p>
                   <p className="text-lg font-semibold">{formatYears(globalStats.avgTimeToSolveYears)}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Median time to solve</p>
-                  <p className="text-lg font-semibold">{formatYears(globalStats.medianTimeToSolveYears)}</p>
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Median time to solve (survival estimate)</p>
+                  <p className="text-lg font-semibold">
+                    {globalStats.survivalMedianYears !== null
+                      ? formatYears(globalStats.survivalMedianYears)
+                      : 'Not reached'}
+                  </p>
                 </div>
               </div>
               <div className="grid gap-4 md:grid-cols-3 mt-6">
@@ -761,8 +814,9 @@ export default function BrokenBenchmarks() {
               </div>
               <div className="mt-6 text-xs text-muted-foreground">
                 <p>
-                  Time-to-solve trend slope: {globalStats.timeToSolveSlopeYearsPerReleaseYear.toFixed(3)} years per release year
-                  {' '}· R² = {globalStats.timeToSolveR2.toFixed(2)}
+                  &quot;Solved only&quot; averages are biased low: a recent benchmark that will take years to solve
+                  cannot be in the solved set yet. The median is a Kaplan-Meier estimate over all {benchmarkData.length} benchmarks,
+                  with open ones censored today and unreported ones at their last published score.
                 </p>
               </div>
             </CardContent>

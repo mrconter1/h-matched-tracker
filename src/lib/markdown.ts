@@ -1,5 +1,6 @@
 import { calculateTimeToSolve, getStatus, type Benchmark } from '@/data/benchmarks';
 import { ABOUT_SECTIONS, SITE_TAGLINE, SITE_TITLE, SITE_URL } from '@/data/siteCopy';
+import { survivalByCohort, type SurvivalPoint } from '@/lib/survival';
 
 /**
  * The subset of the across-benchmark statistics the export needs. Structurally
@@ -18,8 +19,7 @@ export type ExportStats = {
   solvedWithin2yFraction: number;
   solvedWithin3yFraction: number;
   longestUnsolvedYears: number | null;
-  timeToSolveSlopeYearsPerReleaseYear: number;
-  timeToSolveR2: number;
+  survivalMedianYears: number | null;
 };
 
 const HTML_ENTITIES: Record<string, string> = {
@@ -57,6 +57,34 @@ const links = (item: Benchmark) => {
   if (item.paperUrl) parts.push(`[paper](${item.paperUrl})`);
   return parts.length > 0 ? parts.join(' · ') : '-';
 };
+
+const SURVIVAL_AGES = [0.5, 1, 2, 3, 5];
+
+const survivalAt = (points: SurvivalPoint[], t: number): number | null => {
+  const last = points[points.length - 1];
+  if (t > last.t) return null;
+  let s = 1;
+  for (const point of points) {
+    if (point.t <= t) s = point.s;
+    else break;
+  }
+  return s;
+};
+
+const survivalTable = (data: Benchmark[], now: Date) =>
+  table(
+    ['Cohort', 'n', 'Solved', ...SURVIVAL_AGES.map(age => `Unsolved at ${age}y`), 'Median'],
+    survivalByCohort(data, now).map(cohort => [
+      cohort.label,
+      String(cohort.curve.n),
+      String(cohort.curve.events),
+      ...SURVIVAL_AGES.map(age => {
+        const s = survivalAt(cohort.curve.points, age);
+        return s === null ? 'no data yet' : formatPercent(s);
+      }),
+      cohort.curve.median !== null ? formatYears(cohort.curve.median) : 'not reached',
+    ])
+  );
 
 const statusLine = (item: Benchmark) => {
   switch (getStatus(item)) {
@@ -129,32 +157,41 @@ export const buildBenchmarksMarkdown = (
     [
       '## Across-benchmark statistics',
       '',
-      'Aggregate metrics computed over all h-matched benchmarks.',
+      '"Solved only" figures average the h-matched benchmarks and are biased low, because a',
+      'recent benchmark that will take years to solve cannot be in the solved set yet. The',
+      'survival estimate is Kaplan-Meier over every benchmark: open ones are censored today,',
+      'unreported ones at their last published score.',
       '',
       table(
         ['Metric', 'Value'],
         [
           [
-            'Average time to h-matched (benchmarks released in the last 3 years)',
+            'Median time to h-matched (survival estimate, all benchmarks)',
+            stats.survivalMedianYears !== null ? formatYears(stats.survivalMedianYears) : 'not reached',
+          ],
+          ['Median time to h-matched (solved only)', formatYears(stats.medianTimeToSolveYears)],
+          ['Average time to h-matched (solved only)', formatYears(stats.avgTimeToSolveYears)],
+          [
+            'Average time to h-matched (released in the last 3 years, solved only)',
             stats.avgTimeToSolveLast3Years !== null ? formatYears(stats.avgTimeToSolveLast3Years) : 'N/A',
           ],
-          ['Average time to h-matched', formatYears(stats.avgTimeToSolveYears)],
-          ['Median time to h-matched', formatYears(stats.medianTimeToSolveYears)],
           ['Shortest time to h-matched', formatYears(stats.minTimeToSolveYears)],
           ['Longest time to h-matched', formatYears(stats.maxTimeToSolveYears)],
           ['H-matched within 1 year', `${formatPercent(stats.solvedWithin1yFraction)} of h-matched benchmarks`],
           ['H-matched within 2 years', `${formatPercent(stats.solvedWithin2yFraction)} of h-matched benchmarks`],
           ['H-matched within 3 years', `${formatPercent(stats.solvedWithin3yFraction)} of h-matched benchmarks`],
           [
-            'Longest unsolved (since release)',
+            'Longest open (since release, unreported excluded)',
             stats.longestUnsolvedYears !== null ? formatYears(stats.longestUnsolvedYears) : 'N/A',
-          ],
-          [
-            'Trend slope',
-            `${stats.timeToSolveSlopeYearsPerReleaseYear.toFixed(3)} years per release year (R² = ${stats.timeToSolveR2.toFixed(2)})`,
           ],
         ]
       ),
+      '',
+      '### Survival by release cohort',
+      '',
+      'Share of each cohort still not h-matched at a given age (Kaplan-Meier).',
+      '',
+      survivalTable(data, now),
     ].join('\n')
   );
 
