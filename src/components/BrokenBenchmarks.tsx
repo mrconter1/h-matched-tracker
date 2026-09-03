@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/table";
 import { ArrowUpDown, ExternalLink, FileText, Mail, Globe, HelpCircle, ChevronDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { benchmarkData, calculateTimeToSolve, type Benchmark } from '@/data/benchmarks';
+import { benchmarkData, calculateTimeToSolve, getStatus, type Benchmark } from '@/data/benchmarks';
 import { ABOUT_SECTIONS, SITE_TAGLINE } from '@/data/siteCopy';
 import { MarkdownExport } from '@/components/MarkdownExport';
 import { buildBenchmarksMarkdown } from '@/lib/markdown';
@@ -189,6 +189,7 @@ const calculateTrendLine = (data: typeof benchmarkData) => {
 type GlobalStats = {
   solvedCount: number;
   unsolvedCount: number;
+  unreportedCount: number;
   solvedFraction: number;
   avgTimeToSolveYears: number;
   avgTimeToSolveLast3Years: number | null;
@@ -207,11 +208,13 @@ const calculateGlobalStats = (data: typeof benchmarkData): GlobalStats => {
   const solved = data.filter(item => item.solved.date !== null);
   const solvedCount = solved.length;
   const unsolvedCount = data.length - solvedCount;
+  const unreportedCount = data.filter(item => getStatus(item) === 'unreported').length;
 
   if (solvedCount === 0) {
     return {
       solvedCount,
       unsolvedCount,
+      unreportedCount,
       solvedFraction: 0,
       avgTimeToSolveLast3Years: null,
       avgTimeToSolveYears: 0,
@@ -245,7 +248,7 @@ const calculateGlobalStats = (data: typeof benchmarkData): GlobalStats => {
   const longestUnsolvedYears =
     unsolvedCount > 0
       ? data
-          .filter(item => item.solved.date === null)
+          .filter(item => getStatus(item) === 'open')
           .reduce((max, item) => {
             const rel = new Date(item.release);
             const diffYears = (now.getTime() - rel.getTime()) / yearMs;
@@ -294,6 +297,7 @@ const calculateGlobalStats = (data: typeof benchmarkData): GlobalStats => {
   return {
     solvedCount,
     unsolvedCount,
+    unreportedCount,
     solvedFraction,
     avgTimeToSolveLast3Years,
     avgTimeToSolveYears,
@@ -466,6 +470,23 @@ export default function BrokenBenchmarks() {
   const sortedData = sortData(solvedBenchmarks);
   const trendLineData = calculateTrendLine(benchmarkData);
   const globalStats = calculateGlobalStats(benchmarkData);
+
+  const newestFirst = (a: Benchmark, b: Benchmark) =>
+    new Date(b.release).getTime() - new Date(a.release).getTime();
+  const unsolvedGroups = [
+    {
+      status: 'open' as const,
+      title: 'Unsolved Benchmarks',
+      blurb: 'Benchmarks where AI has not yet reached human-level performance',
+      items: benchmarkData.filter(item => getStatus(item) === 'open').sort(newestFirst),
+    },
+    {
+      status: 'unreported' as const,
+      title: 'Unreported Benchmarks',
+      blurb: 'No lab has published a frontier-model score on these for about two years. Their true status is unknown: this is a reporting gap, not evidence that they are hard.',
+      items: benchmarkData.filter(item => getStatus(item) === 'unreported').sort(newestFirst),
+    },
+  ].filter(group => group.items.length > 0);
 
   const formatYears = (years: number) => `${years.toFixed(2)} years`;
   const formatPercent = (value: number) => `${(value * 100).toFixed(1)}%`;
@@ -730,7 +751,7 @@ export default function BrokenBenchmarks() {
                   </p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Longest unsolved (since release)</p>
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Longest open (since release)</p>
                   <p className="text-lg font-semibold">
                     {globalStats.longestUnsolvedYears !== null
                       ? formatYears(globalStats.longestUnsolvedYears)
@@ -915,14 +936,12 @@ export default function BrokenBenchmarks() {
             </CardContent>
           </Card>
 
-          {/* Unsolved Benchmarks Table */}
-          {benchmarkData.filter(item => item.solved.date === null).length > 0 && (
-            <Card className="mt-6 shadow-md hover:shadow-lg transition-shadow">
+          {/* Unsolved Benchmarks Tables - one card per status */}
+          {unsolvedGroups.map((group) => (
+            <Card key={group.status} className="mt-6 shadow-md hover:shadow-lg transition-shadow">
               <CardHeader className="space-y-1">
-                <CardTitle>Unsolved Benchmarks</CardTitle>
-                <p className="text-sm text-muted-foreground">
-                  Benchmarks where AI has not yet reached human-level performance
-                </p>
+                <CardTitle>{group.title}</CardTitle>
+                <p className="text-sm text-muted-foreground">{group.blurb}</p>
               </CardHeader>
               <CardContent>
                 <div className="rounded-md border">
@@ -931,13 +950,12 @@ export default function BrokenBenchmarks() {
                       <TableRow>
                         <TableHead>Benchmark</TableHead>
                         <TableHead>Released</TableHead>
+                        {group.status === 'unreported' && <TableHead>Last reported</TableHead>}
                         <TableHead>Human Level Performance</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {benchmarkData
-                        .filter(item => item.solved.date === null)
-                        .sort((a, b) => new Date(b.release).getTime() - new Date(a.release).getTime())
+                      {group.items
                         .map((item) => (
                           <TableRow key={item.benchmark}>
                             <TableCell className="font-medium">
@@ -976,6 +994,13 @@ export default function BrokenBenchmarks() {
                                 {formattedDates[`${item.benchmark}-release`] || ''}
                               </span>
                             </TableCell>
+                            {group.status === 'unreported' && (
+                              <TableCell className="font-mono text-muted-foreground">
+                                <span className={DATE_TAG_CLASS}>
+                                  {item.lastReported ? formatDate(item.lastReported) : 'unknown'}
+                                </span>
+                              </TableCell>
+                            )}
                             <TableCell>
                               {item.solved && item.solved.source && (
                                 <TooltipProvider>
@@ -1030,7 +1055,7 @@ export default function BrokenBenchmarks() {
                 </div>
               </CardContent>
             </Card>
-          )}
+          ))}
 
           {/* Contribution Box */}
           <Card className="mt-6 shadow-md hover:shadow-lg transition-shadow">

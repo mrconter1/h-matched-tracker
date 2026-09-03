@@ -8,12 +8,30 @@ export type BenchmarkSolved = {
   };
 };
 
+/**
+ * solved:     AI has reached the human baseline.
+ * open:       still below the human baseline and labs still report scores on it.
+ * unreported: no lab has published a frontier-model score for roughly two
+ *             years. Its true status is unknown - it is not evidence that the
+ *             benchmark is hard, only that nobody has measured it lately.
+ */
+export type BenchmarkStatus = 'solved' | 'open' | 'unreported';
+
 export type Benchmark = {
   benchmark: string;
   release: string;
   solved: BenchmarkSolved;
   url?: string;
   paperUrl?: string;
+  /** Only needed for 'unreported'; solved/open are derived from solved.date. */
+  status?: BenchmarkStatus;
+  /** ISO date of the newest published frontier-model score, when known. */
+  lastReported?: string;
+};
+
+export const getStatus = (item: Benchmark): BenchmarkStatus => {
+  if (item.solved.date !== null) return 'solved';
+  return item.status ?? 'open';
 };
 
 /**
@@ -95,6 +113,7 @@ export const benchmarkData: Benchmark[] = [
   },
   {
     benchmark: "RACE",
+    status: "unreported",
     release: "2017-04-17",
     solved: {
       date: null,
@@ -514,6 +533,8 @@ export const benchmarkData: Benchmark[] = [
   },
   {
     benchmark: "DROP",
+    status: "unreported",
+    lastReported: "2024-07-23",
     release: "2019-04-16",
     solved: {
       date: null,
@@ -547,6 +568,8 @@ export const benchmarkData: Benchmark[] = [
   },
   {
     benchmark: "PIQA",
+    status: "unreported",
+    lastReported: "2023-07-18",
     release: "2019-11-26",
     solved: {
       date: null,
@@ -562,6 +585,8 @@ export const benchmarkData: Benchmark[] = [
   },
   {
     benchmark: "BoolQ",
+    status: "unreported",
+    lastReported: "2024-07-23",
     release: "2019-05-24",
     solved: {
       date: null,
@@ -577,6 +602,8 @@ export const benchmarkData: Benchmark[] = [
   },
   {
     benchmark: "WinoGrande",
+    status: "unreported",
+    lastReported: "2024-07-23",
     release: "2019-11-21",
     solved: {
       date: null,
@@ -668,6 +695,7 @@ export const benchmarkData: Benchmark[] = [
   },
   {
     benchmark: "SpatialSense",
+    status: "unreported",
     release: "2019-08-29",
     solved: {
       date: null,
@@ -683,6 +711,8 @@ export const benchmarkData: Benchmark[] = [
   },
   {
     benchmark: "SocialIQA",
+    status: "unreported",
+    lastReported: "2023-07-18",
     release: "2019-09-09",
     solved: {
       date: null,

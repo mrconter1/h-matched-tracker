@@ -1,4 +1,4 @@
-import { calculateTimeToSolve, type Benchmark } from '@/data/benchmarks';
+import { calculateTimeToSolve, getStatus, type Benchmark } from '@/data/benchmarks';
 import { ABOUT_SECTIONS, SITE_TAGLINE, SITE_TITLE, SITE_URL } from '@/data/siteCopy';
 
 /**
@@ -8,6 +8,7 @@ import { ABOUT_SECTIONS, SITE_TAGLINE, SITE_TITLE, SITE_URL } from '@/data/siteC
 export type ExportStats = {
   solvedCount: number;
   unsolvedCount: number;
+  unreportedCount: number;
   avgTimeToSolveYears: number;
   avgTimeToSolveLast3Years: number | null;
   medianTimeToSolveYears: number;
@@ -57,6 +58,19 @@ const links = (item: Benchmark) => {
   return parts.length > 0 ? parts.join(' · ') : '-';
 };
 
+const statusLine = (item: Benchmark) => {
+  switch (getStatus(item)) {
+    case 'solved':
+      return `h-matched ${item.solved.date}`;
+    case 'unreported':
+      return item.lastReported
+        ? `unreported since ${item.lastReported} (status unknown)`
+        : 'unreported (status unknown)';
+    default:
+      return 'open';
+  }
+};
+
 const table = (headers: string[], rows: string[][]) =>
   [
     `| ${headers.join(' | ')} |`,
@@ -79,9 +93,10 @@ export const buildBenchmarksMarkdown = (
     .filter(item => item.solved.date !== null)
     .sort((a, b) => new Date(a.release).getTime() - new Date(b.release).getTime());
 
-  const unsolved = data
-    .filter(item => item.solved.date === null)
-    .sort((a, b) => new Date(b.release).getTime() - new Date(a.release).getTime());
+  const newestFirst = (a: Benchmark, b: Benchmark) =>
+    new Date(b.release).getTime() - new Date(a.release).getTime();
+  const open = data.filter(item => getStatus(item) === 'open').sort(newestFirst);
+  const unreported = data.filter(item => getStatus(item) === 'unreported').sort(newestFirst);
 
   const sections: string[] = [];
 
@@ -93,11 +108,16 @@ export const buildBenchmarksMarkdown = (
       '',
       `- Source: ${SITE_URL}`,
       `- Exported: ${exportedOn}`,
-      `- Benchmarks tracked: ${data.length} (${stats.solvedCount} h-matched, ${stats.unsolvedCount} unsolved)`,
+      `- Benchmarks tracked: ${data.length} (${stats.solvedCount} h-matched, ${
+        stats.unsolvedCount - stats.unreportedCount
+      } open, ${stats.unreportedCount} unreported)`,
       '',
       'All dates are ISO 8601 (UTC). "Time to h-matched" is the gap between a',
       "benchmark's release and the date AI reached human-level performance on it;",
       'a negative value means the benchmark was already h-matched when it shipped.',
+      '"Unreported" benchmarks have had no published frontier-model score for about',
+      'two years: their true status is unknown, which is a reporting gap rather than',
+      'evidence that they are hard.',
     ].join('\n')
   );
 
@@ -157,16 +177,16 @@ export const buildBenchmarksMarkdown = (
     ].join('\n')
   );
 
-  if (unsolved.length > 0) {
+  if (open.length > 0) {
     sections.push(
       [
-        '## Unsolved benchmarks',
+        '## Open benchmarks',
         '',
-        'Benchmarks where AI has not yet reached human-level performance.',
+        'Benchmarks where AI has not yet reached human-level performance and labs still report scores.',
         '',
         table(
-          ['Benchmark', 'Released', 'Unsolved for', 'Links'],
-          unsolved.map(item => [
+          ['Benchmark', 'Released', 'Open for', 'Links'],
+          open.map(item => [
             escapeCell(item.benchmark),
             item.release,
             formatYears(yearsSince(item.release, now)),
@@ -177,7 +197,27 @@ export const buildBenchmarksMarkdown = (
     );
   }
 
-  const notes = [...solved, ...unsolved].filter(item => item.solved.source);
+  if (unreported.length > 0) {
+    sections.push(
+      [
+        '## Unreported benchmarks',
+        '',
+        'No published frontier-model score for about two years. Status unknown.',
+        '',
+        table(
+          ['Benchmark', 'Released', 'Last reported', 'Links'],
+          unreported.map(item => [
+            escapeCell(item.benchmark),
+            item.release,
+            item.lastReported ?? 'unknown',
+            links(item),
+          ])
+        ),
+      ].join('\n')
+    );
+  }
+
+  const notes = [...solved, ...open, ...unreported].filter(item => item.solved.source);
   if (notes.length > 0) {
     sections.push(
       [
@@ -189,9 +229,7 @@ export const buildBenchmarksMarkdown = (
           return [
             `### ${item.benchmark}`,
             '',
-            `Released ${item.release} · ${
-              item.solved.date ? `h-matched ${item.solved.date}` : 'not yet h-matched'
-            }`,
+            `Released ${item.release} · ${statusLine(item)}`,
             '',
             toPlainText(source.text),
             '',
