@@ -1,4 +1,4 @@
-import { calculateTimeToSolve, getStatus, type Benchmark } from '@/data/benchmarks';
+import { BASELINE_LABELS, calculateTimeToSolve, formatScore, getStatus, type Benchmark } from '@/data/benchmarks';
 import { ABOUT_SECTIONS, SITE_TAGLINE, SITE_TITLE, SITE_URL } from '@/data/siteCopy';
 import { survivalByCohort, type SurvivalPoint } from '@/lib/survival';
 
@@ -49,6 +49,15 @@ const formatPercent = (fraction: number) => `${(fraction * 100).toFixed(1)}%`;
 const yearsSince = (releaseDate: string, now: Date) => {
   const diffTime = now.getTime() - new Date(releaseDate).getTime();
   return diffTime / (1000 * 60 * 60 * 24 * 365.25);
+};
+
+/** e.g. "83.7% (small sample, n=9)" - the number alone hides how strict the bar was. */
+const humanCell = (item: Benchmark) => {
+  if (!item.human) return '-';
+  const who = [BASELINE_LABELS[item.human.baselineType], item.human.n ? `n=${item.human.n}` : '']
+    .filter(Boolean)
+    .join(', ');
+  return `${formatScore(item.human.score, item.human.unit)} (${who})`;
 };
 
 const links = (item: Benchmark) => {
@@ -202,12 +211,19 @@ export const buildBenchmarksMarkdown = (
       'Chronological list of AI benchmarks where human-level performance has been achieved.',
       '',
       table(
-        ['Benchmark', 'Released', 'H-matched', 'Time to h-matched', 'Links'],
+        ['Benchmark', 'Released', 'H-matched', 'Time to h-matched', 'H-matched by', 'Score', 'Human baseline', 'Links'],
         solved.map(item => [
           escapeCell(item.benchmark),
           item.release,
           item.solved.date as string,
           formatYears(calculateTimeToSolve(item.release, item.solved)),
+          escapeCell(
+            [item.solved.model ?? 'unattributed', item.solved.contested ? '(contested)' : '', item.solved.conditions ? `- ${item.solved.conditions}` : '']
+              .filter(Boolean)
+              .join(' ')
+          ),
+          item.solved.score !== undefined ? formatScore(item.solved.score, item.human?.unit) : '-',
+          humanCell(item),
           links(item),
         ])
       ),
@@ -222,11 +238,12 @@ export const buildBenchmarksMarkdown = (
         'Benchmarks where AI has not yet reached human-level performance and labs still report scores.',
         '',
         table(
-          ['Benchmark', 'Released', 'Open for', 'Links'],
+          ['Benchmark', 'Released', 'Open for', 'Human baseline', 'Links'],
           open.map(item => [
             escapeCell(item.benchmark),
             item.release,
             formatYears(yearsSince(item.release, now)),
+            humanCell(item),
             links(item),
           ])
         ),
@@ -242,11 +259,12 @@ export const buildBenchmarksMarkdown = (
         'No published frontier-model score for about two years. Status unknown.',
         '',
         table(
-          ['Benchmark', 'Released', 'Last reported', 'Links'],
+          ['Benchmark', 'Released', 'Last reported', 'Human baseline', 'Links'],
           unreported.map(item => [
             escapeCell(item.benchmark),
             item.release,
             item.lastReported ?? 'unknown',
+            humanCell(item),
             links(item),
           ])
         ),

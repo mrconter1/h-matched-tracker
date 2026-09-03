@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/table";
 import { ArrowUpDown, ExternalLink, FileText, Mail, Globe, HelpCircle, ChevronDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { benchmarkData, calculateTimeToSolve, getStatus, type Benchmark } from '@/data/benchmarks';
+import { benchmarkData, calculateTimeToSolve, getStatus, formatScore, BASELINE_LABELS, type Benchmark } from '@/data/benchmarks';
 import { ABOUT_SECTIONS, SITE_TAGLINE } from '@/data/siteCopy';
 import { MarkdownExport } from '@/components/MarkdownExport';
 import { buildBenchmarksMarkdown } from '@/lib/markdown';
@@ -865,6 +865,7 @@ export default function BrokenBenchmarks() {
                           <ArrowUpDown className="ml-2 h-4 w-4" />
                         </Button>
                       </TableHead>
+                      <TableHead>H-matched by</TableHead>
                       <TableHead>
                         <div className="flex items-center">
                           <Button
@@ -941,6 +942,36 @@ export default function BrokenBenchmarks() {
                             <span className={DATE_TAG_CLASS}>
                               {formattedDates[`${item.benchmark}-solved`] || ''}
                             </span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex flex-col gap-1 min-w-[180px]">
+                            <span className="text-sm font-medium">
+                              {item.solved.model ?? <span className="text-muted-foreground">Unattributed</span>}
+                              {item.solved.contested && (
+                                <span
+                                  className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded-md text-[10px] font-medium uppercase tracking-wide bg-amber-500/15 text-amber-600 dark:text-amber-400"
+                                  title="The h-match is disputed or the bar was unusually lenient - see the note"
+                                >
+                                  contested
+                                </span>
+                              )}
+                            </span>
+                            <span className="text-xs text-muted-foreground font-mono">
+                              {item.solved.score !== undefined && item.human
+                                ? `${formatScore(item.solved.score, item.human.unit)} vs human ${formatScore(item.human.score, item.human.unit)}`
+                                : item.human
+                                  ? `human ${formatScore(item.human.score, item.human.unit)}`
+                                  : ''}
+                              {item.human && (
+                                <span className="ml-1.5 text-[10px] uppercase tracking-wide opacity-70">
+                                  {BASELINE_LABELS[item.human.baselineType]}{item.human.n ? ` n=${item.human.n}` : ''}
+                                </span>
+                              )}
+                            </span>
+                            {item.solved.conditions && (
+                              <span className="text-[11px] text-muted-foreground">{item.solved.conditions}</span>
+                            )}
                           </div>
                         </TableCell>
                         <TableCell className="font-mono">
@@ -1061,10 +1092,13 @@ export default function BrokenBenchmarks() {
                                   <RadixTooltip>
                                     <TooltipTrigger className="cursor-help inline-flex items-center">
                                       <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-primary/10 text-primary">
-                                        {item.solved.source.text.match(/human performance (?:is |of )(\d+\.?\d*%|(?:\d+\.?\d*))/i)?.[1] || 
-                                         item.solved.source.text.match(/human.*?(\d+\.?\d*%|(?:\d+\.?\d*))/i)?.[1] || 
-                                         "N/A"}
+                                        {item.human ? formatScore(item.human.score, item.human.unit) : 'N/A'}
                                       </span>
+                                      {item.human && (
+                                        <span className="ml-2 text-[10px] uppercase tracking-wide text-muted-foreground">
+                                          {BASELINE_LABELS[item.human.baselineType]}{item.human.n ? ` n=${item.human.n}` : ''}
+                                        </span>
+                                      )}
                                       <HelpCircle className="ml-2 h-4 w-4 text-muted-foreground hover:text-primary transition-colors" />
                                     </TooltipTrigger>
                                     <TooltipContent 

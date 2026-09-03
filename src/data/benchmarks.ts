@@ -1,5 +1,35 @@
+/**
+ * Who the humans in the baseline were. "Human-level" means very different
+ * things across benchmarks, so keep it explicit:
+ *   crowd         - crowdworkers / annotators without domain expertise
+ *   expert        - domain experts (PhDs, engineers, IMO medalists)
+ *   collective    - union of what several people or teams solved, no single
+ *                   human reached the number
+ *   small-sample  - fewer than ~10 participants
+ *   single        - one person
+ *   unspecified   - the paper or note does not say
+ */
+export type BaselineType = 'crowd' | 'expert' | 'collective' | 'small-sample' | 'single' | 'unspecified';
+
+export type HumanBaseline = {
+  /** Same unit as the model score: percent unless `unit` says otherwise. */
+  score: number;
+  unit?: 'F1' | 'points';
+  baselineType: BaselineType;
+  /** Participants, when the source says. */
+  n?: number;
+};
+
 export type BenchmarkSolved = {
   date: string | null;
+  /** The system credited with the h-match, when the source names one. */
+  model?: string;
+  /** Its score, in the same unit as human.score. */
+  score?: number;
+  /** Anything that qualifies the score: shot count, tools, compute setting. */
+  conditions?: string;
+  /** True when the h-match is disputed or the bar was unusually lenient. */
+  contested?: boolean;
   source?: {
     text: string;
     references: {
@@ -23,6 +53,7 @@ export type Benchmark = {
   solved: BenchmarkSolved;
   url?: string;
   paperUrl?: string;
+  human?: HumanBaseline;
   /** Only needed for 'unreported'; solved/open are derived from solved.date. */
   status?: BenchmarkStatus;
   /** ISO date of the newest published frontier-model score, when known. */
@@ -32,6 +63,22 @@ export type Benchmark = {
 export const getStatus = (item: Benchmark): BenchmarkStatus => {
   if (item.solved.date !== null) return 'solved';
   return item.status ?? 'open';
+};
+
+export const BASELINE_LABELS: Record<BaselineType, string> = {
+  crowd: 'crowd',
+  expert: 'expert',
+  collective: 'collective',
+  'small-sample': 'small sample',
+  single: 'single person',
+  unspecified: 'unspecified',
+};
+
+/** Scores are percentages unless the baseline says F1 or points. */
+export const formatScore = (score: number, unit?: HumanBaseline['unit']) => {
+  if (unit === 'F1') return `${score} F1`;
+  if (unit === 'points') return `${score} pts`;
+  return `${score}%`;
 };
 
 /**
@@ -53,8 +100,12 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "ImageNet Challenge",
     release: "2009-01-01",
+    human: { score: 95.0, baselineType: "single" },
     solved: {
       date: "2016-03-15",
+      model: "ResNet ensemble (He et al.)",
+      score: 96.4,
+      conditions: "top-5 accuracy",
       source: {
         text: "AI systems approximately reached human-level performance (around 95%) around early 2016<sup class='reference'>[1]</sup>",
         references: [{
@@ -68,8 +119,12 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "WinoGrad",
     release: "2011-01-01",
+    human: { score: 92.0, baselineType: "unspecified" },
     solved: {
       date: "2019-11-01",
+      model: "RoBERTa fine-tuned on WinoGrande",
+      score: 90.1,
+      contested: true,
       source: {
         text: "Initially performing at chance level in 2016, transformer models rapidly progressed to 90.1% accuracy in late 2019, approaching human performance of 92-96%<sup>[1]</sup>",
         references: [{
@@ -83,6 +138,7 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "SQuAD 1.1",
     release: "2016-06-16",
+    human: { score: 91.22, unit: "F1", baselineType: "crowd" },
     solved: {
       date: "2018-09-15",
       source: {
@@ -98,8 +154,11 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "TriviaQA",
     release: "2017-05-13",
+    human: { score: 79.7, baselineType: "crowd" },
     solved: {
       date: "2022-08-08",
+      model: "Atlas (Meta AI)",
+      score: 84.7,
       source: {
         text: "Meta AI's Atlas model achieved 84.7% accuracy, surpassing human performance of around 79.7%<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
         references: [
@@ -115,6 +174,7 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "RACE",
     status: "unreported",
     release: "2017-04-17",
+    human: { score: 94.5, baselineType: "expert" },
     solved: {
       date: null,
       source: {
@@ -130,8 +190,10 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "SQuAD 2.0",
     release: "2018-06-11",
+    human: { score: 89.45, unit: "F1", baselineType: "crowd" },
     solved: {
       date: "2019-03-15",
+      score: 89.47,
       source: {
         text: "Took just 10 months to surpass human performance, improving from 66.3% in May 2018 to 89.47% in March 2019<sup class='reference'>[1]</sup>",
         references: [{
@@ -145,8 +207,11 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "CommonsenseQA",
     release: "2018-11-02",
+    human: { score: 88.9, baselineType: "crowd" },
     solved: {
       date: "2022-07-23",
+      model: "KEAR (Microsoft)",
+      score: 89.4,
       source: {
         text: "Human performance on CommonsenseQA is about 88.9–89% accuracy, while Microsoft's KEAR system (Knowledgeable External Attention for commonsense Reasoning) achieved 89.4% accuracy, slightly surpassing human-level performance on this benchmark.<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
         references: [
@@ -161,8 +226,11 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "GLUE",
     release: "2018-11-01",
+    human: { score: 87.1, unit: "points", baselineType: "crowd" },
     solved: {
       date: "2019-07-01",
+      model: "XLNet (Yang et al.)",
+      score: 88.4,
       source: {
         text: "Yang et al. achieved a GLUE score of 88.4, surpassing human performance of 87.1 by 1.3 points<sup class='reference'>[1]</sup>",
         references: [{
@@ -191,8 +259,12 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "HellaSwag",
     release: "2019-06-19",
+    human: { score: 95.6, baselineType: "crowd" },
     solved: {
       date: "2024-03-04",
+      model: "Claude 3 Opus",
+      score: 95.4,
+      conditions: "10-shot",
       source: {
         text: "Claude 3 Opus achieved 95.4% accuracy (10-shot), matching human performance of around 95%<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
         references: [
@@ -222,8 +294,13 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "ARC-AGI-1 (Verified)",
     release: "2019-11-05",
+    human: { score: 85.0, baselineType: "crowd" },
     solved: {
       date: "2024-12-20",
+      model: "o3 (OpenAI)",
+      score: 87.5,
+      conditions: "semi-private eval, high-compute configuration",
+      contested: true,
       source: {
         text: "Human participants achieve around 64% accuracy on ARC-style evaluation tasks according to the H-ARC human study, and ARC Prize uses 85% as its human-level threshold.<sup class='reference'>[1]</sup> OpenAI's o3 scored 87.5% on the semi-private evaluation set in December 2024, but only in a high-compute configuration estimated at thousands of dollars per task; the low-compute run scored 75.7%. ARC Prize did not count the result as a solution, so this entry is contested.<sup class='reference'>[2]</sup>",
         references: [
@@ -238,6 +315,7 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "SuperGLUE",
     release: "2020-02-13",
+    human: { score: 89.8, unit: "points", baselineType: "crowd" },
     solved: {
       date: "2020-12-15",
       source: {
@@ -253,6 +331,7 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "MMLU",
     release: "2020-09-07",
+    human: { score: 89.8, baselineType: "expert" },
     solved: {
       date: "2022-12-15",
       source: {
@@ -268,8 +347,11 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "MATH",
     release: "2021-11-08",
+    human: { score: 90.0, baselineType: "single", n: 1 },
     solved: {
       date: "2024-09-12",
+      model: "o1 (OpenAI)",
+      score: 94.8,
       source: {
         text: "IMO gold medalists achieved 90% accuracy on sample problems<sup class='reference'>[1]</sup>, later surpassed by O1 models reaching 94.8% accuracy<sup class='reference'>[2]</sup>",
         references: [
@@ -284,8 +366,13 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "FrontierMath (Tier 1–3)",
     release: "2024-11-07",
+    human: { score: 35.0, baselineType: "collective" },
     solved: {
       date: "2025-12-11",
+      model: "GPT-5.2 Thinking (OpenAI)",
+      score: 40.3,
+      conditions: "with tool use",
+      contested: true,
       source: {
         text: "In a human baseline tournament at MIT, teams of strong undergraduate mathematicians and experts collectively solved about 35% of FrontierMath Tier 1–3 problems across all teams.<sup class='reference'>[1]</sup> OpenAI's GPT-5.2 Thinking model solved 40.3% of Tier 1–3 problems with tool use, surpassing this collective human solve rate on this subset of the benchmark.<sup class='reference'>[2]</sup>",
         references: [
@@ -300,8 +387,11 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "GSM8K",
     release: "2021-11-18",
+    human: { score: 60.0, baselineType: "unspecified" },
     solved: {
       date: "2023-03-14",
+      model: "GPT-4",
+      score: 87.1,
       source: {
         text: "GPT-4 achieved 87.1% accuracy, significantly surpassing the human baseline of 60% from 9-12 year old students<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
         references: [
@@ -316,8 +406,11 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "ScienceQA",
     release: "2022-09-20",
+    human: { score: 88.4, baselineType: "crowd" },
     solved: {
       date: "2024-08-01",
+      model: "Phi-3.5-vision-instruct (Microsoft)",
+      score: 91.3,
       source: {
         text: "Human performance is about 88.40% accuracy on ScienceQA, while general-purpose large multimodal models now surpass this level; for example, Microsoft's Phi-3.5-vision-instruct achieves 91.3% accuracy on the ScienceQA leaderboard, indicating the benchmark is effectively solved by mainstream LMMs.<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup><sup class='reference'>[3]</sup>",
         references: [
@@ -333,8 +426,12 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "BIG-Bench-Hard",
     release: "2022-10-17",
+    human: { score: 94.4, baselineType: "single" },
     solved: {
       date: "2024-06-21",
+      model: "Claude 3.5 Sonnet",
+      score: 93.1,
+      conditions: "3-shot CoT",
       source: {
         text: "Claude 3.5 Sonnet achieved 93.1% (3-shot CoT), matching human performance of around 94.4%<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
         references: [
@@ -349,8 +446,11 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "GPQA",
     release: "2023-11-29",
+    human: { score: 69.7, baselineType: "expert" },
     solved: {
       date: "2024-09-12",
+      model: "o1 (OpenAI)",
+      score: 78.3,
       source: {
         text: "OpenAI's O1 models achieved 78.3% accuracy, exceeding human expert performance of 69.7%<sup class='reference'>[1]</sup>",
         references: [{
@@ -364,6 +464,7 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "BIRD-SQL",
     release: "2023-11-15",
+    human: { score: 92.96, baselineType: "expert" },
     solved: {
       date: null,
       source: {
@@ -379,6 +480,7 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "METATOOL",
     release: "2023-10-05",
+    human: { score: 96.0, baselineType: "unspecified" },
     solved: {
       date: null,
       source: {
@@ -410,6 +512,7 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "MMMU",
     release: "2024-06-13",
+    human: { score: 88.6, baselineType: "expert" },
     solved: {
       date: null,
       source: {
@@ -425,8 +528,11 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "PubMedQA",
     release: "2019-11-03",
+    human: { score: 78.0, baselineType: "single", n: 1 },
     solved: {
       date: "2024-03-04",
+      model: "Claude 3 Sonnet",
+      score: 79.7,
       source: {
         text: "Claude 3 Sonnet achieved 79.7% accuracy, surpassing single human performance of 78.0%<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
         references: [
@@ -441,8 +547,11 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "MathVista",
     release: "2024-01-21",
+    human: { score: 60.3, baselineType: "crowd" },
     solved: {
       date: "2024-05-13",
+      model: "GPT-4o",
+      score: 63.8,
       source: {
         text: "GPT-4o achieved 63.8% accuracy, surpassing human performance of 60.3%<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
         references: [
@@ -457,8 +566,11 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "CharXiv-R",
     release: "2024-06-26",
+    human: { score: 71.3, baselineType: "unspecified" },
     solved: {
       date: "2025-04-16",
+      model: "o3 (OpenAI)",
+      score: 78.6,
       source: {
         text: "Human evaluators achieve about 71.3% accuracy on the reasoning split of CharXiv, with overall human performance around 80.5% on the full benchmark.<sup class='reference'>[1]</sup> OpenAI's O3 model reached roughly 78.6% accuracy on CharXiv-R, the reasoning component of CharXiv, becoming the first model to clearly surpass human-level performance on this chart-reasoning benchmark.<sup class='reference'>[2]</sup>",
         references: [
@@ -473,8 +585,11 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "LongBench v2",
     release: "2025-01-03",
+    human: { score: 53.7, baselineType: "expert" },
     solved: {
       date: "2024-12-12",
+      model: "o1-preview (OpenAI)",
+      score: 57.7,
       source: {
         text: "O1-preview model achieved 57.7% accuracy, surpassing the human baseline of 53.7% by 4% under a 15-minute time constraint<sup class='reference'>[1]</sup>",
         references: [{
@@ -488,6 +603,7 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "HALLUSIONBENCH",
     release: "2024-03-25",
+    human: { score: 65.28, baselineType: "unspecified" },
     solved: {
       date: null,
       source: {
@@ -503,6 +619,7 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "BioLP-bench",
     release: "2024-08-31",
+    human: { score: 38.4, baselineType: "expert" },
     solved: {
       date: null,
       source: {
@@ -518,8 +635,11 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "EgoSchema",
     release: "2023-08-17",
+    human: { score: 76.0, baselineType: "crowd" },
     solved: {
       date: "2025-01-26",
+      model: "Qwen2-VL-72B-Instruct",
+      score: 77.9,
       source: {
         text: "Human evaluators achieve about 76% accuracy on EgoSchema, while recent general-purpose video-language models such as Qwen2-VL-72B-Instruct reach 77.9% accuracy on the EgoSchema leaderboard, slightly surpassing human performance on this long-form video understanding benchmark.<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
         references: [
@@ -536,6 +656,7 @@ export const benchmarkData: Benchmark[] = [
     status: "unreported",
     lastReported: "2024-07-23",
     release: "2019-04-16",
+    human: { score: 96.4, unit: "F1", baselineType: "expert" },
     solved: {
       date: null,
       source: {
@@ -554,6 +675,7 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "TruthfulQA",
     release: "2022-05-08",
+    human: { score: 94.0, baselineType: "unspecified" },
     solved: {
       date: null,
       source: {
@@ -571,6 +693,7 @@ export const benchmarkData: Benchmark[] = [
     status: "unreported",
     lastReported: "2023-07-18",
     release: "2019-11-26",
+    human: { score: 94.9, baselineType: "crowd" },
     solved: {
       date: null,
       source: {
@@ -588,6 +711,7 @@ export const benchmarkData: Benchmark[] = [
     status: "unreported",
     lastReported: "2024-07-23",
     release: "2019-05-24",
+    human: { score: 90.0, baselineType: "unspecified" },
     solved: {
       date: null,
       source: {
@@ -605,6 +729,7 @@ export const benchmarkData: Benchmark[] = [
     status: "unreported",
     lastReported: "2024-07-23",
     release: "2019-11-21",
+    human: { score: 94.0, baselineType: "crowd" },
     solved: {
       date: null,
       source: {
@@ -620,6 +745,7 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "BELEBELE",
     release: "2024-07-25",
+    human: { score: 97.6, baselineType: "unspecified" },
     solved: {
       date: null,
       source: {
@@ -635,6 +761,7 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "InfographicVQA",
     release: "2021-08-22",
+    human: { score: 95.7, baselineType: "unspecified" },
     solved: {
       date: null,
       source: {
@@ -650,8 +777,11 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "TextVQA",
     release: "2019-05-13",
+    human: { score: 85.0, baselineType: "crowd" },
     solved: {
       date: "2024-09-01",
+      model: "Qwen2-VL-72B-Instruct",
+      score: 85.5,
       source: {
         text: "Human performance on TextVQA is about 85% accuracy, and recent general-purpose multimodal models such as Qwen2-VL-72B-Instruct reach 85.5% accuracy on the TextVQA leaderboard, roughly matching human-level performance on this text-centric visual question answering benchmark.<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
         references: [
@@ -666,6 +796,7 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "ReMI",
     release: "2024-06-13",
+    human: { score: 95.8, baselineType: "unspecified" },
     solved: {
       date: null,
       source: {
@@ -681,6 +812,7 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "BLINK",
     release: "2024-07-03",
+    human: { score: 95.7, baselineType: "unspecified" },
     solved: {
       date: null,
       source: {
@@ -697,6 +829,7 @@ export const benchmarkData: Benchmark[] = [
     benchmark: "SpatialSense",
     status: "unreported",
     release: "2019-08-29",
+    human: { score: 94.6, baselineType: "unspecified" },
     solved: {
       date: null,
       source: {
@@ -714,6 +847,7 @@ export const benchmarkData: Benchmark[] = [
     status: "unreported",
     lastReported: "2023-07-18",
     release: "2019-09-09",
+    human: { score: 84.4, baselineType: "crowd" },
     solved: {
       date: null,
       source: {
@@ -729,8 +863,12 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "LAB-Bench (FigQA)",
     release: "2024-07-15",
+    human: { score: 77.0, baselineType: "expert" },
     solved: {
       date: "2026-04-16",
+      model: "Claude Opus 4.7",
+      score: 79.3,
+      conditions: "no tools (85.4% with Python tools)",
       source: {
         text: "LAB-Bench evaluates AI on biology research tasks; the FigQA subset tests scientific figure interpretation. Expert human baseline is 77.0%. Claude Opus 4.7 achieved 79.3% (no tools) and 85.4% (with Python tools), surpassing the human expert baseline.<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
         references: [
@@ -745,8 +883,11 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "OSWorld",
     release: "2024-04-11",
+    human: { score: 72.36, baselineType: "unspecified" },
     solved: {
       date: "2026-02-06",
+      model: "Claude Opus 4.6",
+      score: 72.7,
       source: {
         text: "OSWorld evaluates multimodal agents on 369 real-world computer tasks across Ubuntu, Windows, and macOS. Human performance is 72.36% success rate. Claude Opus 4.6 achieved 72.7% accuracy, surpassing human-level performance.<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
         references: [
@@ -761,8 +902,12 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "SimpleBench",
     release: "2024-10-31",
+    human: { score: 83.7, baselineType: "small-sample", n: 9 },
     solved: {
       date: "2026-09-01",
+      model: "Claude Fable 5.1",
+      score: 86.6,
+      conditions: "AVG@5",
       source: {
         text: "SimpleBench is a 200+ question multiple-choice text benchmark covering spatio-temporal reasoning, social intelligence and linguistic adversarial robustness (trick questions), answerable with unspecialized high school knowledge. The human baseline is 83.7% (nine participants). Claude Fable 5.1 scored 86.6% (AVG@5), the first model to exceed the human baseline; the previous best was Claude Fable at 81.9%.<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup>",
         references: [
