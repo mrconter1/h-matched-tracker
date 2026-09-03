@@ -8,7 +8,7 @@ import { survivalByCohort, type SurvivalPoint } from '@/lib/survival';
  */
 export type ExportStats = {
   solvedCount: number;
-  unsolvedCount: number;
+  openCount: number;
   unreportedCount: number;
   avgTimeToSolveYears: number;
   avgTimeToSolveLast3Years: number | null;
@@ -18,7 +18,7 @@ export type ExportStats = {
   solvedWithin1yFraction: number;
   solvedWithin2yFraction: number;
   solvedWithin3yFraction: number;
-  longestUnsolvedYears: number | null;
+  longestOpenYears: number | null;
   survivalMedianYears: number | null;
 };
 
@@ -145,9 +145,7 @@ export const buildBenchmarksMarkdown = (
       '',
       `- Source: ${SITE_URL}`,
       `- Exported: ${exportedOn}`,
-      `- Benchmarks tracked: ${data.length} (${stats.solvedCount} h-matched, ${
-        stats.unsolvedCount - stats.unreportedCount
-      } open, ${stats.unreportedCount} unreported)`,
+      `- Benchmarks tracked: ${data.length} (${stats.solvedCount} h-matched, ${stats.openCount} open, ${stats.unreportedCount} unreported)`,
       '',
       'All dates are ISO 8601 (UTC). "Time to h-matched" is the gap between a',
       "benchmark's release and the date AI reached human-level performance on it;",
@@ -191,7 +189,7 @@ export const buildBenchmarksMarkdown = (
           ['H-matched within 3 years', `${formatPercent(stats.solvedWithin3yFraction)} of h-matched benchmarks`],
           [
             'Longest open (since release, unreported excluded)',
-            stats.longestUnsolvedYears !== null ? formatYears(stats.longestUnsolvedYears) : 'N/A',
+            stats.longestOpenYears !== null ? formatYears(stats.longestOpenYears) : 'N/A',
           ],
         ]
       ),

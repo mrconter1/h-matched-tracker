@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Check, Copy, Download, X } from 'lucide-react';
 
@@ -81,54 +80,38 @@ export function MarkdownExport({ getMarkdown, fileName = 'h-matched-tracker.md' 
   };
 
   return (
-    <Card className="mt-6 shadow-md hover:shadow-lg transition-shadow">
-      <CardHeader>
-        <CardTitle className="text-2xl">Export</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-6">
-          <p className="text-muted-foreground text-lg leading-relaxed">
-            Take the whole tracker with you as structured Markdown - statistics, both
-            benchmark tables and every source note. Handy for pasting into notes or
-            feeding to a language model.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button
-              className="flex-1"
-              variant="default"
-              onClick={handleCopy}
-              aria-live="polite"
-            >
-              {copyState === 'copied' ? (
-                <>
-                  <Check className="mr-2 h-4 w-4" />
-                  Copied to clipboard
-                </>
-              ) : copyState === 'error' ? (
-                <>
-                  <X className="mr-2 h-4 w-4" />
-                  Copy failed
-                </>
-              ) : (
-                <>
-                  <Copy className="mr-2 h-4 w-4" />
-                  Copy as Markdown
-                </>
-              )}
-            </Button>
-
-            <Button
-              className="flex-1"
-              variant="outline"
-              onClick={handleDownload}
-            >
-              <Download className="mr-2 h-4 w-4" />
-              Download .md
-            </Button>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+    <div className="flex h-full flex-col justify-between gap-6 p-5 sm:p-6">
+      <div>
+        <h3 className="text-base font-semibold">Export as Markdown</h3>
+        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+          The whole tracker as one structured document: statistics, survival table, both benchmark tables and every
+          source note. Paste it into notes or hand it to a language model.
+        </p>
+      </div>
+      <div className="flex flex-col gap-2 sm:flex-row">
+        <Button className="flex-1" onClick={handleCopy} aria-live="polite">
+          {copyState === 'copied' ? (
+            <>
+              <Check className="h-4 w-4" />
+              Copied
+            </>
+          ) : copyState === 'error' ? (
+            <>
+              <X className="h-4 w-4" />
+              Copy failed
+            </>
+          ) : (
+            <>
+              <Copy className="h-4 w-4" />
+              Copy to clipboard
+            </>
+          )}
+        </Button>
+        <Button className="flex-1" variant="outline" onClick={handleDownload}>
+          <Download className="h-4 w-4" />
+          Download .md
+        </Button>
+      </div>
+    </div>
   );
 }
