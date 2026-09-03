@@ -173,15 +173,20 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "RACE",
     status: "unreported",
+    lastReported: "2024-12-27",
     release: "2017-04-17",
     human: { score: 94.5, baselineType: "expert" },
     solved: {
       date: null,
       source: {
-        text: "Human performance is 95% accuracy. RACE tests reading comprehension with questions from English exams for Chinese students, requiring reasoning over passages covering a variety of topics and styles.",
-        references: [{
-          url: "https://arxiv.org/pdf/1704.04683"
-        }]
+        text: "RACE tests reading comprehension using questions from English exams for Chinese students. The ceiling performance reported in the paper is 94.5%.<sup class='reference'>[1]</sup> The most recent published scores are 74.2% on RACE-Middle and 56.8% on RACE-High (Llama 3.1 405B base, 5-shot), leaving the widest absolute gap on the tracker.<sup class='reference'>[2]</sup>",
+        references: [
+
+          { url: "https://arxiv.org/pdf/1704.04683" },
+
+          { url: "https://arxiv.org/abs/2412.19437" }
+
+        ]
       }
     },
     url: "http://www.cs.cmu.edu/~glai1/data/race/",
@@ -468,10 +473,14 @@ export const benchmarkData: Benchmark[] = [
     solved: {
       date: null,
       source: {
-        text: "Human performance (data engineers and DB students) is 92.96% accuracy, while the best AI models achieve around 75.63% accuracy. BIRD-SQL evaluates text-to-SQL parsing across 37 professional domains with large-scale database content, testing both correctness and efficiency of generated SQL queries.",
-        references: [{
-          url: "https://arxiv.org/pdf/2305.03111"
-        }]
+        text: "BIRD-SQL evaluates text-to-SQL across 37 professional domains against large databases, scoring correctness and query efficiency. Human performance (data engineers and DB students) is 92.96% execution accuracy.<sup class='reference'>[1]</sup> The official leaderboard's best entry is 82.28% (SiriusAI-SQL, September 2026), from an agentic system rather than a single zero-shot call.<sup class='reference'>[2]</sup>",
+        references: [
+
+          { url: "https://arxiv.org/pdf/2305.03111" },
+
+          { url: "https://bird-bench.github.io/" }
+
+        ]
       }
     },
     url: "https://bird-bench.github.io/",
@@ -516,7 +525,7 @@ export const benchmarkData: Benchmark[] = [
     solved: {
       date: null,
       source: {
-        text: "Human experts achieved 88.6% accuracy, while the best AI model (GPT-4o) reached 69.1% accuracy. MMMU tests expert-level multimodal understanding across 30 subjects in 6 disciplines, requiring college-level knowledge and complex reasoning.",
+        text: "MMMU tests expert-level multimodal understanding across 30 subjects in 6 disciplines. The 88.6% baseline is the BEST of three expert annotators, who spanned 76.2-88.6%; the median expert is well below the headline number. GPT-4o reached 69.1% at the time of writing, and the best current scores are around 86%, so the gap depends on which end of the expert range you compare against.",
         references: [{
           url: "https://arxiv.org/abs/2311.16502"
         }]
@@ -601,22 +610,6 @@ export const benchmarkData: Benchmark[] = [
     paperUrl: "https://arxiv.org/pdf/2412.15204"
   },
   {
-    benchmark: "HALLUSIONBENCH",
-    release: "2024-03-25",
-    human: { score: 65.28, baselineType: "unspecified" },
-    solved: {
-      date: null,
-      source: {
-        text: "Human performance is 65.28% accuracy. The best model (GPT-4V) achieves only 31.42% question-pair accuracy, highlighting significant challenges in visual reasoning and hallucination detection<sup class='reference'>[1]</sup>",
-        references: [{
-          url: "https://arxiv.org/pdf/2310.14566v5"
-        }]
-      }
-    },
-    url: "https://github.com/tianyi-lab/HallusionBench",
-    paperUrl: "https://arxiv.org/pdf/2310.14566v5"
-  },
-  {
     benchmark: "BioLP-bench",
     release: "2024-08-31",
     human: { score: 38.4, baselineType: "expert" },
@@ -654,19 +647,20 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "DROP",
     status: "unreported",
-    lastReported: "2024-07-23",
+    lastReported: "2024-12-27",
     release: "2019-04-16",
     human: { score: 96.4, unit: "F1", baselineType: "expert" },
     solved: {
       date: null,
       source: {
-        text: "GPT-4o achieved 83.4% F1 score, which is still below expert human performance of 96.4% F1. DROP requires discrete reasoning over paragraphs, including operations like counting, sorting, and arithmetic.",
-        references: [{
-          url: "https://openai.com/index/gpt-4o-mini-advancing-cost-efficient-intelligence/"
-        },
-        {
-          url: "https://arxiv.org/pdf/1903.00161"
-        }]
+        text: "DROP requires discrete reasoning over paragraphs: counting, sorting and arithmetic. Expert human performance is 96.4 F1.<sup class='reference'>[1]</sup> The most recent published score is 89.0 F1 (DeepSeek-V3 base, 3-shot), 7.4 points short; GPT-4o was reported at 83.4 F1.<sup class='reference'>[2]</sup>",
+        references: [
+
+          { url: "https://arxiv.org/pdf/1903.00161" },
+
+          { url: "https://arxiv.org/abs/2412.19437" }
+
+        ]
       }
     },
     url: "https://allennlp.org/drop",
@@ -679,7 +673,7 @@ export const benchmarkData: Benchmark[] = [
     solved: {
       date: null,
       source: {
-        text: "Human performance was 94% truthful, while the best AI models were only 58% truthful. TruthfulQA tests whether models avoid generating false answers that mimic human misconceptions across 38 categories including health, law, finance, and politics.",
+        text: "TruthfulQA tests whether models avoid false answers that mimic human misconceptions, across 38 categories. Humans were 94% truthful against 58% for the best model.<sup class='reference'>[1]</sup> Both figures come from HUMAN-GRADED free-text generation. Modern leaderboards report the automated MC1/MC2 multiple-choice metrics instead, which are a different measurement - so widely quoted claims that this benchmark is saturated do not settle whether the 94% generation baseline has been matched.",
         references: [{
           url: "https://arxiv.org/abs/2109.07958"
         }]
@@ -691,16 +685,20 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "PIQA",
     status: "unreported",
-    lastReported: "2023-07-18",
+    lastReported: "2024-12-27",
     release: "2019-11-26",
     human: { score: 94.9, baselineType: "crowd" },
     solved: {
       date: null,
       source: {
-        text: "Physical Interaction: Question Answering (PIQA) tests physical commonsense reasoning. Human performance is 95% accuracy, while large pretrained models struggle at around 77% accuracy<sup class='reference'>[1]</sup>",
-        references: [{
-          url: "https://arxiv.org/pdf/1911.11641"
-        }]
+        text: "Physical Interaction: Question Answering (PIQA) tests physical commonsense reasoning. Human performance is 94.9% accuracy; models scored around 77% at release.<sup class='reference'>[1]</sup> The most recent published score is 85.9% (Llama 3.1 405B base, zero-shot, as re-evaluated in the DeepSeek-V3 report), still 9 points short.<sup class='reference'>[2]</sup>",
+        references: [
+
+          { url: "https://arxiv.org/pdf/1911.11641" },
+
+          { url: "https://arxiv.org/abs/2412.19437" }
+
+        ]
       }
     },
     url: "http://yonatanbisk.com/piqa",
@@ -709,16 +707,20 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "BoolQ",
     status: "unreported",
-    lastReported: "2024-07-23",
+    lastReported: "2025-03-25",
     release: "2019-05-24",
     human: { score: 90.0, baselineType: "unspecified" },
     solved: {
       date: null,
       source: {
-        text: "Exploring the Surprising Difficulty of Natural Yes/No Questions (BoolQ) tests complex inferential reasoning. Human performance is 90% accuracy, while the best AI models at the time of release achieved only 80.4% accuracy<sup class='reference'>[1]</sup>",
-        references: [{
-          url: "https://arxiv.org/pdf/1905.10044"
-        }]
+        text: "BoolQ tests complex inferential reasoning through naturally occurring yes/no questions. Human performance is 90% accuracy; models scored 80.4% at release.<sup class='reference'>[1]</sup> The most recent published score is 82.4% (Gemma 3 27B, zero-shot, pretrained), still 7.6 points short.<sup class='reference'>[2]</sup> No frontier chat model has been reported on it.",
+        references: [
+
+          { url: "https://arxiv.org/pdf/1905.10044" },
+
+          { url: "https://arxiv.org/abs/2503.19786" }
+
+        ]
       }
     },
     url: "https://github.com/google-research-datasets/boolean-questions",
@@ -727,16 +729,20 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "WinoGrande",
     status: "unreported",
-    lastReported: "2024-07-23",
+    lastReported: "2024-12-27",
     release: "2019-11-21",
     human: { score: 94.0, baselineType: "crowd" },
     solved: {
       date: null,
       source: {
-        text: "An Adversarial Winograd Schema Challenge at Scale (WinoGrande) tests commonsense reasoning through pronoun resolution problems. Human performance is 94% accuracy, while the best AI models at the time of release achieved between 59.4-79.1% accuracy depending on training data size<sup class='reference'>[1]</sup>",
-        references: [{
-          url: "https://arxiv.org/pdf/1907.10641"
-        }]
+        text: "WinoGrande tests commonsense reasoning through adversarially filtered pronoun resolution. Human performance is 94% accuracy; models scored 59.4-79.1% at release.<sup class='reference'>[1]</sup> The closest published score is 89.5% (Nemotron-4-340B base, 5-shot), 4.5 points short - the narrowest gap of the unreported set.<sup class='reference'>[2]</sup>",
+        references: [
+
+          { url: "https://arxiv.org/pdf/1907.10641" },
+
+          { url: "https://arxiv.org/abs/2406.11704" }
+
+        ]
       }
     },
     url: "https://winogrande.allenai.org/",
@@ -749,7 +755,7 @@ export const benchmarkData: Benchmark[] = [
     solved: {
       date: null,
       source: {
-        text: "A Parallel Reading Comprehension Dataset in 122 Language Variants (BELEBELE) tests multilingual reading comprehension through multiple-choice questions. Human performance is 97.6% accuracy, while the best AI models achieved only 60.2% accuracy across all languages<sup class='reference'>[1]</sup>",
+        text: "BELEBELE tests multilingual reading comprehension across 122 language variants. The 97.6% human figure was measured on ENGLISH ONLY - four of the authors answering about 120 questions each - while the 60.2% model figure is an average across all 122 languages, so the two are not like-for-like.<sup class='reference'>[1]</sup> A fair comparison would need either a multilingual human baseline or an English-only model score.",
         references: [{
           url: "https://arxiv.org/pdf/2308.16884"
         }]
@@ -765,7 +771,7 @@ export const benchmarkData: Benchmark[] = [
     solved: {
       date: null,
       source: {
-        text: "InfographicVQA tests visual question answering on infographic images that combine textual, graphical, and visual elements. Human performance is 95.7% accuracy, while the best AI models achieved only 19.74% accuracy<sup class='reference'>[1]</sup>",
+        text: "InfographicVQA tests visual question answering on infographics that combine text, graphics and layout. Human performance is 95.7% ANLS, against 19.74% for the best models at the time of release.<sup class='reference'>[1]</sup> That 19.74% is a launch-era figure: current multimodal systems are reported in the 83-93% range, though no frontier lab publishes on this benchmark and the leaderboard is the only source.",
         references: [{
           url: "https://arxiv.org/pdf/2104.12756"
         }]
@@ -816,7 +822,7 @@ export const benchmarkData: Benchmark[] = [
     solved: {
       date: null,
       source: {
-        text: "BLINK tests core visual perception abilities through 14 classic computer vision tasks reformatted into multiple-choice questions. Human performance is 95.70% accuracy, while the best AI models (GPT-4V and Gemini) achieved only 51.26% and 45.72% accuracy, slightly above random guessing.<sup class='reference'>[1]</sup>",
+        text: "BLINK reformats 14 classic computer vision tasks as multiple-choice questions. Human performance is 95.70% accuracy; at release GPT-4V and Gemini managed 51.26% and 45.72%, barely above chance.<sup class='reference'>[1]</sup> Those are launch-era figures - the best reported score has since roughly reached 81%, still 15 points short.",
         references: [{
           url: "https://arxiv.org/pdf/2404.12390"
         }]
@@ -845,16 +851,20 @@ export const benchmarkData: Benchmark[] = [
   {
     benchmark: "SocialIQA",
     status: "unreported",
-    lastReported: "2023-07-18",
+    lastReported: "2025-03-25",
     release: "2019-09-09",
     human: { score: 84.4, baselineType: "crowd" },
     solved: {
       date: null,
       source: {
-        text: "SocialIQA tests commonsense reasoning about social interactions through multiple-choice questions about motivations, emotional reactions, and likely actions. Human performance is 84.4% accuracy, while the best AI model (BERT-large) achieved only 64.5% accuracy, demonstrating the challenge of social reasoning for AI systems.<sup class='reference'>[1]</sup>",
-        references: [{
-          url: "https://arxiv.org/pdf/1904.09728"
-        }]
+        text: "SocialIQA tests commonsense reasoning about social interactions: motivations, emotional reactions and likely next actions. Human performance is 84.4% accuracy; BERT-large scored 64.5% at release.<sup class='reference'>[1]</sup> The most recent published score is 54.9% (Gemma 3 27B, zero-shot, pretrained) - a 29.5 point gap, the widest of the unreported set, and the thinnest evidence base.<sup class='reference'>[2]</sup>",
+        references: [
+
+          { url: "https://arxiv.org/pdf/1904.09728" },
+
+          { url: "https://arxiv.org/abs/2503.19786" }
+
+        ]
       }
     },
     url: "https://huggingface.co/datasets/allenai/social_i_qa",
@@ -918,5 +928,121 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://simple-bench.com/",
     paperUrl: "https://drive.google.com/file/d/1mddNFK5UbBFVr3oDftd2Kyc6D8TFctfe/view"
+  },
+  {
+    benchmark: "CoQA",
+    release: "2018-08-21",
+    human: { score: 88.8, unit: "F1", baselineType: "crowd" },
+    solved: {
+      date: "2019-03-29",
+      model: "Microsoft Research Asia ensemble",
+      score: 89.4,
+      conditions: "overall test-set F1",
+      source: {
+        text: "CoQA measures conversational question answering, where each question depends on the dialogue so far. Crowdworkers score 88.8 F1 overall on the test set (89.4 in-domain, 87.4 out-of-domain).<sup class='reference'>[1]</sup> Microsoft's ensemble reached 89.4 overall F1 in March 2019, seven months after release. The often-quoted 89.9 is its in-domain score, which is measured against a higher 89.4 human bar.<sup class='reference'>[2]</sup>",
+        references: [
+          { url: "https://arxiv.org/abs/1808.07042" },
+          { url: "https://www.microsoft.com/en-us/research/blog/machine-reading-systems-are-becoming-more-conversational/" }
+        ]
+      }
+    },
+    url: "https://stanfordnlp.github.io/coqa/",
+    paperUrl: "https://arxiv.org/abs/1808.07042"
+  },
+  {
+    benchmark: "WebArena",
+    release: "2023-07-25",
+    human: { score: 78.24, baselineType: "small-sample", n: 5 },
+    solved: {
+      date: null,
+      source: {
+        text: "WebArena runs agents against self-hosted clones of real websites - shopping, forums, code hosting, a CMS - and scores end-to-end task success. Five computer science graduate students reached 78.24%.<sup class='reference'>[1]</sup> The best credibly published agent score is 38.1% (pass@5, February 2026), less than half the human rate.",
+        references: [
+          { url: "https://arxiv.org/abs/2307.13854" }
+        ]
+      }
+    },
+    url: "https://webarena.dev/",
+    paperUrl: "https://arxiv.org/abs/2307.13854"
+  },
+  {
+    benchmark: "GAIA",
+    release: "2023-11-21",
+    human: { score: 92.0, baselineType: "crowd" },
+    solved: {
+      date: null,
+      source: {
+        text: "GAIA asks general-assistant questions that need web browsing, tool use and multi-step reasoning, and are easy for people but hard to automate. Compensated annotators score 92% overall (94% level 1, 92% level 2, 87% level 3); GPT-4 with plugins managed 15% at release.<sup class='reference'>[1]</sup> The best verifiable public score is around 71%, though the leaderboard is self-reported and one unconfirmed 92% claim exists.",
+        references: [
+          { url: "https://arxiv.org/abs/2311.12983" }
+        ]
+      }
+    },
+    url: "https://huggingface.co/gaia-benchmark",
+    paperUrl: "https://arxiv.org/abs/2311.12983"
+  },
+  {
+    benchmark: "TempCompass",
+    release: "2024-03-01",
+    human: { score: 97.3, baselineType: "small-sample", n: 3 },
+    solved: {
+      date: null,
+      source: {
+        text: "TempCompass tests whether video models actually perceive time - speed, direction, event order - rather than answering from a single frame. Three annotators scored 97.3% over 200 sampled instructions judged three times each.<sup class='reference'>[1]</sup> The best reported model is around 74.8%.",
+        references: [
+          { url: "https://arxiv.org/abs/2403.00476" }
+        ]
+      }
+    },
+    url: "https://llyx97.github.io/tempcompass/",
+    paperUrl: "https://arxiv.org/abs/2403.00476"
+  },
+  {
+    benchmark: "VSI-Bench",
+    release: "2024-12-18",
+    human: { score: 79.0, baselineType: "small-sample" },
+    solved: {
+      date: null,
+      source: {
+        text: "VSI-Bench tests visual-spatial reasoning from video: distances, sizes, routes and object counts in a filmed space. Human evaluators average 79% on a 400-question subset, with unlimited time and free rewatching, outperforming the best model by 33 points.<sup class='reference'>[1]</sup> The best score found since is 56.8%.",
+        references: [
+          { url: "https://arxiv.org/abs/2412.14171" }
+        ]
+      }
+    },
+    url: "https://vision-x-nyu.github.io/thinking-in-space.github.io/",
+    paperUrl: "https://arxiv.org/abs/2412.14171"
+  },
+  {
+    benchmark: "ZeroBench",
+    release: "2025-02-13",
+    human: { score: 29.5, baselineType: "small-sample", n: 15 },
+    solved: {
+      date: null,
+      source: {
+        text: "ZeroBench was built so that every frontier model scores zero: at release all of them got 0% pass@1. Fifteen undergraduate and postgraduate evaluators averaged 29.5%, but with a 27.1 point standard deviation, so the baseline is unusually noisy and 'reaching human level' here is a fuzzy target.<sup class='reference'>[1]</sup> The best score since is about 19% pass@5.",
+        references: [
+          { url: "https://arxiv.org/abs/2502.09696" }
+        ]
+      }
+    },
+    url: "https://huggingface.co/datasets/jonathan-roberts1/zerobench",
+    paperUrl: "https://arxiv.org/abs/2502.09696"
+  },
+  {
+    benchmark: "PaperBench",
+    release: "2025-04-02",
+    human: { score: 41.4, baselineType: "expert", n: 8 },
+    solved: {
+      date: null,
+      source: {
+        text: "PaperBench asks an agent to replicate an ICML paper from scratch, judged against a rubric written by the paper's own authors. Eight current or former ML PhD students scored 41.4% best-of-3 after 48 tracked hours on a three-paper subset, against 26.6% for o1 on the same subset.<sup class='reference'>[1]</sup> The best model in the paper reaches 21.0% over the full 20 papers.",
+        references: [
+          { url: "https://arxiv.org/abs/2504.01848" }
+        ]
+      }
+    },
+    url: "https://openai.com/index/paperbench/",
+    paperUrl: "https://arxiv.org/abs/2504.01848"
   }
-]; 
+];
