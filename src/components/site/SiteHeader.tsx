@@ -11,6 +11,7 @@ export const SECTIONS = [
   { id: 'stats', label: 'Statistics' },
   { id: 'solved', label: 'H-matched' },
   { id: 'unsolved', label: 'Unsolved' },
+  { id: 'excluded', label: 'Excluded' },
   { id: 'export', label: 'Data' },
 ] as const;
 

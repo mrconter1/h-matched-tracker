@@ -14,6 +14,7 @@ import { SurvivalChart } from '@/components/charts/SurvivalChart';
 import { StatsGrid } from '@/components/StatsGrid';
 import { SolvedTable } from '@/components/tables/SolvedTable';
 import { UnsolvedTables } from '@/components/tables/UnsolvedTables';
+import { RejectedTable } from '@/components/tables/RejectedTable';
 import { MarkdownExport } from '@/components/MarkdownExport';
 
 /**
@@ -110,7 +111,19 @@ export default function BrokenBenchmarks() {
           </div>
         </Section>
 
-        <Section id="export" index={6} title="Data and corrections" flush>
+        <Section
+          id="excluded"
+          index={6}
+          title="Excluded benchmarks"
+          description="Benchmarks considered and left out, with the reason. Checking whether a published human baseline is really a human baseline is most of the work behind this page, so the results are recorded rather than discarded."
+          flush
+        >
+          <div className="rounded border border-border bg-card">
+            <RejectedTable />
+          </div>
+        </Section>
+
+        <Section id="export" index={7} title="Data and corrections" flush>
           <div className="grid rounded border border-border bg-card md:grid-cols-2 md:divide-x md:divide-border">
             <MarkdownExport getMarkdown={() => buildBenchmarksMarkdown(benchmarkData, stats, new Date())} />
             <div className="border-t border-border md:border-t-0">

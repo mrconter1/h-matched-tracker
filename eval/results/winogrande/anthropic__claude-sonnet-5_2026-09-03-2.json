@@ -1,0 +1,396 @@
+{
+  "benchmark": "winogrande",
+  "display_name": "WinoGrande",
+  "split": "validation, xl (1,267)",
+  "model": "anthropic/claude-sonnet-5",
+  "backend": "openrouter",
+  "effort": "high",
+  "max_tokens": 16000,
+  "mode": "sync",
+  "system_prompt": "You are being evaluated on a published benchmark. Read the item carefully and reply with only the final answer in exactly the format the item asks for. No explanation, no restating the question, no markdown.",
+  "prompt_fingerprint": "91a875191e95",
+  "created": "2026-09-03T19:57:56+00:00",
+  "n_requested": 20,
+  "status": "done",
+  "batch_id": null,
+  "summary": {
+    "accuracy": 85.0,
+    "n": 20,
+    "unparsed": 0,
+    "refused": 0,
+    "human_score": 94.0,
+    "human_unit": "%",
+    "human_baseline": "crowdworkers",
+    "h_matched": false,
+    "margin": -9.0
+  },
+  "items": [
+    {
+      "id": "winogrande-0",
+      "prompt": "Sentence: Sarah was a much better surgeon than Maria so _ always got the easier cases.\n\nWhich option correctly fills in the blank (_)?\nA. Sarah\nB. Maria\n\nAnswer with only the letter (A, B).",
+      "gold": "B",
+      "response": "B",
+      "parsed": "B",
+      "scores": {
+        "correct": 1.0
+      },
+      "stop_reason": "stop",
+      "usage": {
+        "input": 142,
+        "output": 3,
+        "cache_read": 0,
+        "reasoning": 0
+      },
+      "error": null
+    },
+    {
+      "id": "winogrande-1",
+      "prompt": "Sentence: Sarah was a much better surgeon than Maria so _ always got the harder cases.\n\nWhich option correctly fills in the blank (_)?\nA. Sarah\nB. Maria\n\nAnswer with only the letter (A, B).",
+      "gold": "A",
+      "response": "A",
+      "parsed": "A",
+      "scores": {
+        "correct": 1.0
+      },
+      "stop_reason": "stop",
+      "usage": {
+        "input": 142,
+        "output": 3,
+        "cache_read": 0,
+        "reasoning": 0
+      },
+      "error": null
+    },
+    {
+      "id": "winogrande-2",
+      "prompt": "Sentence: They were worried the wine would ruin the bed and the blanket, but the _ was't ruined.\n\nWhich option correctly fills in the blank (_)?\nA. blanket\nB. bed\n\nAnswer with only the letter (A, B).",
+      "gold": "B",
+      "response": "B",
+      "parsed": "B",
+      "scores": {
+        "correct": 1.0
+      },
+      "stop_reason": "stop",
+      "usage": {
+        "input": 143,
+        "output": 3,
+        "cache_read": 0,
+        "reasoning": 0
+      },
+      "error": null
+    },
+    {
+      "id": "winogrande-3",
+      "prompt": "Sentence: Terry tried to bake the eggplant in the toaster oven but the _ was too big.\n\nWhich option correctly fills in the blank (_)?\nA. eggplant\nB. toaster\n\nAnswer with only the letter (A, B).",
+      "gold": "A",
+      "response": "A",
+      "parsed": "A",
+      "scores": {
+        "correct": 1.0
+      },
+      "stop_reason": "stop",
+      "usage": {
+        "input": 143,
+        "output": 3,
+        "cache_read": 0,
+        "reasoning": 0
+      },
+      "error": null
+    },
+    {
+      "id": "winogrande-4",
+      "prompt": "Sentence: At night, Jeffrey always stays up later than Hunter to watch TV because _ wakes up late.\n\nWhich option correctly fills in the blank (_)?\nA. Jeffrey\nB. Hunter\n\nAnswer with only the letter (A, B).",
+      "gold": "A",
+      "response": "A",
+      "parsed": "A",
+      "scores": {
+        "correct": 1.0
+      },
+      "stop_reason": "stop",
+      "usage": {
+        "input": 151,
+        "output": 3,
+        "cache_read": 0,
+        "reasoning": 0
+      },
+      "error": null
+    },
+    {
+      "id": "winogrande-5",
+      "prompt": "Sentence: The cat of Sarah has some mouth problems, so she takes it to see Maria. _ is a responsible cat owner.\n\nWhich option correctly fills in the blank (_)?\nA. Sarah\nB. Maria\n\nAnswer with only the letter (A, B).",
+      "gold": "A",
+      "response": "A",
+      "parsed": "A",
+      "scores": {
+        "correct": 1.0
+      },
+      "stop_reason": "stop",
+      "usage": {
+        "input": 154,
+        "output": 3,
+        "cache_read": 0,
+        "reasoning": 0
+      },
+      "error": null
+    },
+    {
+      "id": "winogrande-6",
+      "prompt": "Sentence: The home that my parents had when I was in school was a lot nicer than my house now because the _ was sophisticated.\n\nWhich option correctly fills in the blank (_)?\nA. home\nB. house\n\nAnswer with only the letter (A, B).",
+      "gold": "A",
+      "response": "A",
+      "parsed": "A",
+      "scores": {
+        "correct": 1.0
+      },
+      "stop_reason": "stop",
+      "usage": {
+        "input": 144,
+        "output": 3,
+        "cache_read": 0,
+        "reasoning": 0
+      },
+      "error": null
+    },
+    {
+      "id": "winogrande-7",
+      "prompt": "Sentence: The home that my parents had when I was in school was a lot nicer than my house now because the _ is trashy.\n\nWhich option correctly fills in the blank (_)?\nA. home\nB. house\n\nAnswer with only the letter (A, B).",
+      "gold": "B",
+      "response": "B",
+      "parsed": "B",
+      "scores": {
+        "correct": 1.0
+      },
+      "stop_reason": "stop",
+      "usage": {
+        "input": 142,
+        "output": 3,
+        "cache_read": 0,
+        "reasoning": 0
+      },
+      "error": null
+    },
+    {
+      "id": "winogrande-8",
+      "prompt": "Sentence: Natalie has a rich husband and lots of money, Jennifer is poor _ needs to make her clothes.\n\nWhich option correctly fills in the blank (_)?\nA. Natalie\nB. Jennifer\n\nAnswer with only the letter (A, B).",
+      "gold": "B",
+      "response": "B",
+      "parsed": "B",
+      "scores": {
+        "correct": 1.0
+      },
+      "stop_reason": "stop",
+      "usage": {
+        "input": 152,
+        "output": 3,
+        "cache_read": 0,
+        "reasoning": 0
+      },
+      "error": null
+    },
+    {
+      "id": "winogrande-9",
+      "prompt": "Sentence: Joe immediately went to bakery before the bank because the _ had a limited supply of what he wanted.\n\nWhich option correctly fills in the blank (_)?\nA. bakery\nB. bank\n\nAnswer with only the letter (A, B).",
+      "gold": "A",
+      "response": "A",
+      "parsed": "A",
+      "scores": {
+        "correct": 1.0
+      },
+      "stop_reason": "stop",
+      "usage": {
+        "input": 145,
+        "output": 3,
+        "cache_read": 0,
+        "reasoning": 0
+      },
+      "error": null
+    },
+    {
+      "id": "winogrande-10",
+      "prompt": "Sentence: Joe immediately went to bakery before the bank because the _ had a substantial supply of what he wanted.\n\nWhich option correctly fills in the blank (_)?\nA. bakery\nB. bank\n\nAnswer with only the letter (A, B).",
+      "gold": "B",
+      "response": "A",
+      "parsed": "A",
+      "scores": {
+        "correct": 0.0
+      },
+      "stop_reason": "stop",
+      "usage": {
+        "input": 146,
+        "output": 3,
+        "cache_read": 0,
+        "reasoning": 0
+      },
+      "error": null
+    },
+    {
+      "id": "winogrande-11",
+      "prompt": "Sentence: I had to read an entire story for class tomorrow. Luckily, the _ was canceled.\n\nWhich option correctly fills in the blank (_)?\nA. story\nB. class\n\nAnswer with only the letter (A, B).",
+      "gold": "B",
+      "response": "B",
+      "parsed": "B",
+      "scores": {
+        "correct": 1.0
+      },
+      "stop_reason": "stop",
+      "usage": {
+        "input": 139,
+        "output": 3,
+        "cache_read": 0,
+        "reasoning": 0
+      },
+      "error": null
+    },
+    {
+      "id": "winogrande-12",
+      "prompt": "Sentence: I had to read an entire story for class tomorrow. Luckily, the _ was short.\n\nWhich option correctly fills in the blank (_)?\nA. story\nB. class\n\nAnswer with only the letter (A, B).",
+      "gold": "A",
+      "response": "A",
+      "parsed": "A",
+      "scores": {
+        "correct": 1.0
+      },
+      "stop_reason": "stop",
+      "usage": {
+        "input": 137,
+        "output": 3,
+        "cache_read": 0,
+        "reasoning": 0
+      },
+      "error": null
+    },
+    {
+      "id": "winogrande-13",
+      "prompt": "Sentence: He had enough time between classes to go to a cafe or to the library. He went to the _ because his paper could wait.\n\nWhich option correctly fills in the blank (_)?\nA. cafe\nB. library\n\nAnswer with only the letter (A, B).",
+      "gold": "A",
+      "response": "A",
+      "parsed": "A",
+      "scores": {
+        "correct": 1.0
+      },
+      "stop_reason": "stop",
+      "usage": {
+        "input": 146,
+        "output": 3,
+        "cache_read": 0,
+        "reasoning": 0
+      },
+      "error": null
+    },
+    {
+      "id": "winogrande-14",
+      "prompt": "Sentence: He had enough time between classes to go to a cafe or to the library. He went to the _ because his paper was due soon.\n\nWhich option correctly fills in the blank (_)?\nA. cafe\nB. library\n\nAnswer with only the letter (A, B).",
+      "gold": "B",
+      "response": "B",
+      "parsed": "B",
+      "scores": {
+        "correct": 1.0
+      },
+      "stop_reason": "stop",
+      "usage": {
+        "input": 147,
+        "output": 3,
+        "cache_read": 0,
+        "reasoning": 0
+      },
+      "error": null
+    },
+    {
+      "id": "winogrande-15",
+      "prompt": "Sentence: Lindsey like to read graphic novels but Natalie liked classic literature to read. _ bought the new Frank Miller comic at the book store.\n\nWhich option correctly fills in the blank (_)?\nA. Lindsey\nB. Natalie\n\nAnswer with only the letter (A, B).",
+      "gold": "A",
+      "response": "A",
+      "parsed": "A",
+      "scores": {
+        "correct": 1.0
+      },
+      "stop_reason": "stop",
+      "usage": {
+        "input": 163,
+        "output": 3,
+        "cache_read": 0,
+        "reasoning": 0
+      },
+      "error": null
+    },
+    {
+      "id": "winogrande-16",
+      "prompt": "Sentence: Michael just bought brand new wheels for his truck unlike Leslie because _ wheels were new and perfect.\n\nWhich option correctly fills in the blank (_)?\nA. Michael\nB. Leslie\n\nAnswer with only the letter (A, B).",
+      "gold": "B",
+      "response": "A",
+      "parsed": "A",
+      "scores": {
+        "correct": 0.0
+      },
+      "stop_reason": "stop",
+      "usage": {
+        "input": 151,
+        "output": 3,
+        "cache_read": 0,
+        "reasoning": 0
+      },
+      "error": null
+    },
+    {
+      "id": "winogrande-17",
+      "prompt": "Sentence: Michael just bought brand new wheels for his truck unlike Leslie because _ wheels were old and used.\n\nWhich option correctly fills in the blank (_)?\nA. Michael\nB. Leslie\n\nAnswer with only the letter (A, B).",
+      "gold": "A",
+      "response": "B",
+      "parsed": "B",
+      "scores": {
+        "correct": 0.0
+      },
+      "stop_reason": "stop",
+      "usage": {
+        "input": 149,
+        "output": 3,
+        "cache_read": 0,
+        "reasoning": 0
+      },
+      "error": null
+    },
+    {
+      "id": "winogrande-18",
+      "prompt": "Sentence: Leslie was nervous around parrots but Neil was not, since _ was bitten by a bird early in life.\n\nWhich option correctly fills in the blank (_)?\nA. Leslie\nB. Neil\n\nAnswer with only the letter (A, B).",
+      "gold": "A",
+      "response": "A",
+      "parsed": "A",
+      "scores": {
+        "correct": 1.0
+      },
+      "stop_reason": "stop",
+      "usage": {
+        "input": 149,
+        "output": 3,
+        "cache_read": 0,
+        "reasoning": 0
+      },
+      "error": null
+    },
+    {
+      "id": "winogrande-19",
+      "prompt": "Sentence: Christmas was a special holiday to Eric but not Adam since _ was a Jew.\n\nWhich option correctly fills in the blank (_)?\nA. Eric\nB. Adam\n\nAnswer with only the letter (A, B).",
+      "gold": "B",
+      "response": "B",
+      "parsed": "B",
+      "scores": {
+        "correct": 1.0
+      },
+      "stop_reason": "stop",
+      "usage": {
+        "input": 142,
+        "output": 3,
+        "cache_read": 0,
+        "reasoning": 0
+      },
+      "error": null
+    }
+  ],
+  "usage_total": {
+    "input": 2927,
+    "output": 60,
+    "cache_read": 0,
+    "reasoning": 0
+  },
+  "cost_usd_est": 0.0065
+}

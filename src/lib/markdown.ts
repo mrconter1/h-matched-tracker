@@ -1,6 +1,7 @@
 import { BASELINE_LABELS, calculateTimeToSolve, formatScore, getStatus, type Benchmark } from '@/data/benchmarks';
 import { ABOUT_SECTIONS, SITE_TAGLINE, SITE_TITLE, SITE_URL } from '@/data/siteCopy';
 import { survivalByCohort, type SurvivalPoint } from '@/lib/survival';
+import { REJECTION_LABELS, REJECTION_ORDER, rejectedBenchmarks } from '@/data/rejected';
 
 /**
  * The subset of the across-benchmark statistics the export needs. Structurally
@@ -292,6 +293,29 @@ export const buildBenchmarksMarkdown = (
       ]
         .join('\n')
         .trimEnd()
+    );
+  }
+
+  const rejected = REJECTION_ORDER.flatMap(reason => rejectedBenchmarks.filter(item => item.reason === reason));
+  if (rejected.length > 0) {
+    sections.push(
+      [
+        '## Excluded benchmarks',
+        '',
+        'Considered and left out. A benchmark qualifies only with a published human score measured on the',
+        "same metric and split that models are scored on; these do not have one. Note how many are a model's",
+        'own score being circulated as the human number.',
+        '',
+        table(
+          ['Benchmark', 'Quoted as', 'What the number is', 'Why'],
+          rejected.map(item => [
+            escapeCell(item.benchmark),
+            item.quoted ? escapeCell(item.quoted) : '-',
+            REJECTION_LABELS[item.reason],
+            escapeCell(item.detail),
+          ])
+        ),
+      ].join('\n')
     );
   }
 
