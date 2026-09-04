@@ -103,3 +103,27 @@ WinoGrande item, which is the model correctly judging the task trivial rather
 than a configuration failure. Sonnet 5 returns zero reasoning tokens on this
 route even for the hard item. Record which of the two a result is: `usage.reasoning`
 is stored per run in the results file.
+
+## Dating an h-match
+
+The tracker's `solved.date` is the **release date of the first model known to
+reach the human baseline**, not the date the measurement was taken. A run of
+this harness produces evidence that a benchmark is h-matched; it does not
+produce the date.
+
+So a measured pass is only half the job. The other half is a backward search:
+run progressively older models until one fails, and date the h-match to the
+oldest model that still clears. Two things make this necessary rather than
+pedantic:
+
+- The gap is large. Nobody had run a frontier model on SocialIQA for two
+  years, so dating it to the measurement would have overstated the interval by
+  however long the capability had gone unnoticed.
+- Capability is not monotonic in release date. Claude Opus 4.6 (Feb 2026)
+  scores 83.62% on SocialIQA and fails; Claude Fable 5.1 (Sep 2026) clears at
+  86.44%. Different families sit at different points regardless of date, so
+  this is a search over the catalogue, not a walk along a timeline.
+
+The result is always an upper bound - an older model may clear a benchmark
+nobody has run it on - so a date can move earlier as more models are tested,
+and never later. Record the model that set the date alongside the score.
