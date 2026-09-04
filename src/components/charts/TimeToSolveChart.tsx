@@ -32,7 +32,7 @@ function PointTooltip({ active, payload }: TooltipProps<number, string> & { payl
   const point = active && payload?.find(p => p.payload?.name)?.payload;
   if (!point) return null;
   return (
-    <div className="rounded border border-border bg-popover p-3 text-xs shadow-sm">
+    <div className="rounded border border-border bg-popover text-popover-foreground p-3 text-xs shadow-lg">
       <p className="font-medium">
         {point.name}
         {point.contested && <span className="ml-1.5 text-muted-foreground">(contested)</span>}
