@@ -706,20 +706,21 @@ export const benchmarkData: Benchmark[] = [
   },
   {
     benchmark: "BoolQ",
-    status: "unreported",
-    lastReported: "2025-03-25",
     release: "2019-05-24",
     human: { score: 90.0, baselineType: "unspecified" },
     solved: {
-      date: null,
+      date: "2026-02-06",
+      model: "Claude Opus 4.6",
+      score: 91.9,
+      conditions: "zero-shot, full 3,270-item validation set, measured for this tracker",
+      contested: true,
       source: {
-        text: "BoolQ tests complex inferential reasoning through naturally occurring yes/no questions. Human performance is 90% accuracy; models scored 80.4% at release.<sup class='reference'>[1]</sup> The most recent published score is 82.4% (Gemma 3 27B, zero-shot, pretrained), still 7.6 points short.<sup class='reference'>[2]</sup> No frontier chat model has been reported on it.",
+        text: "BoolQ tests inferential reasoning with naturally occurring yes/no questions against a supporting passage. Human performance is 90%; models scored 80.4% at release and the most recent published score was 82.4% (Gemma 3 27B, zero-shot, pretrained).<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup> Measured here over the full validation set, zero-shot: Claude Opus 4.6 scores 91.90%, 95% CI [90.96, 92.84], clearing the baseline with its whole interval above it.<sup class='reference'>[3]</sup> GPT-4o mini (July 2024) scores 88.26% and fails.<sup class='reference'>[4]</sup> THE DATE IS PROVISIONAL: the backward search is incomplete, because GPT-4o, GPT-4.1, Claude Sonnet 4 and GPT-5 all sit between the two and are untested, and any of them clearing 90% would move this date earlier by up to 19 months. It is recorded as contested for that reason.",
         references: [
-
           { url: "https://arxiv.org/pdf/1905.10044" },
-
-          { url: "https://arxiv.org/abs/2503.19786" }
-
+          { url: "https://arxiv.org/abs/2503.19786" },
+          { url: "https://github.com/mrconter1/h-matched-tracker/blob/main/eval/results/boolq/anthropic__claude-opus-4.6_2026-09-04.json" },
+          { url: "https://github.com/mrconter1/h-matched-tracker/blob/main/eval/results/boolq/openai__gpt-4o-mini_2026-09-04.json" }
         ]
       }
     },
@@ -849,20 +850,21 @@ export const benchmarkData: Benchmark[] = [
   },
   {
     benchmark: "SocialIQA",
-    status: "unreported",
-    lastReported: "2025-03-25",
     release: "2019-09-09",
     human: { score: 84.4, baselineType: "crowd" },
     solved: {
-      date: null,
+      date: "2026-09-01",
+      model: "Claude Fable 5.1",
+      score: 86.44,
+      conditions: "zero-shot, full 1,954-item dev set, measured for this tracker",
       source: {
-        text: "SocialIQA tests commonsense reasoning about social interactions: motivations, emotional reactions and likely next actions. Human performance is 84.4% accuracy; BERT-large scored 64.5% at release.<sup class='reference'>[1]</sup> The most recent published score is 54.9% (Gemma 3 27B, zero-shot, pretrained) - a 29.5 point gap, the widest of the unreported set, and the thinnest evidence base.<sup class='reference'>[2]</sup>",
+        text: "SocialIQA tests commonsense reasoning about social interactions: motivations, emotional reactions and likely next actions. Human performance is 84.4%; BERT-large scored 64.5% at release and the most recent published score was 54.9% (Gemma 3 27B), which this tracker recorded as a 29.5 point gap, the widest it held.<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup> That gap was an artefact of nobody having evaluated a frontier chat model in two years. Measured here over the full dev set, zero-shot: Claude Fable 5.1 scores 86.44%, 95% CI [84.92, 87.96], clearing the baseline with its whole interval above it.<sup class='reference'>[3]</sup> The date is Fable 5.1's release, not the measurement date, found by testing older models until they failed: GPT-4o 79.32%, GPT-4.1 81.73%, Claude Sonnet 4 82.70%, GPT-5.6 Sol 82.80%, Claude Opus 4.6 83.62% - six frontier models fail and only the newest clears.<sup class='reference'>[4]</sup><sup class='reference'>[5]</sup> Claude 3.5 and 3.7 Sonnet could not be tested because they have been retired from the API, so an earlier crossing cannot be ruled out and this date can only move earlier. Note also that the gold labels are crowd consensus and several are contestable, so this measures agreement with crowdworkers - which is what the 84.4% baseline measures too.",
         references: [
-
           { url: "https://arxiv.org/pdf/1904.09728" },
-
-          { url: "https://arxiv.org/abs/2503.19786" }
-
+          { url: "https://arxiv.org/abs/2503.19786" },
+          { url: "https://github.com/mrconter1/h-matched-tracker/blob/main/eval/results/socialiqa/anthropic__claude-fable-5.1_2026-09-04.json" },
+          { url: "https://github.com/mrconter1/h-matched-tracker/blob/main/eval/results/socialiqa/anthropic__claude-opus-4.6_2026-09-04.json" },
+          { url: "https://github.com/mrconter1/h-matched-tracker/blob/main/eval/results/socialiqa/openai__gpt-5.6-sol_2026-09-04.json" }
         ]
       }
     },
@@ -1195,5 +1197,27 @@ export const benchmarkData: Benchmark[] = [
     },
     url: "https://mathverse-cuhk.github.io/",
     paperUrl: "https://arxiv.org/abs/2403.14624"
+  },
+  {
+    benchmark: "ARC-AGI-3",
+    release: "2026-03-25",
+    human: { score: 100.0, baselineType: "crowd", n: 458 },
+    solved: {
+      date: "2026-09-03",
+      model: "GPT-6 Astra (OpenAI)",
+      score: 99.9,
+      conditions: "Provider Adapter harness, $19K; 62.7% on the Standard harness",
+      contested: true,
+      source: {
+        text: "ARC-AGI-3 is interactive rather than static: an agent is dropped into an unfamiliar game, has to work out the goal, and is scored on how efficiently it does so. The score is human-normalised, so 100% means beating every level of every environment at or above the median human action efficiency.<sup class='reference'>[1]</sup> The baseline is the best measured on this tracker: 458 members of the general public, in-person 90-minute sessions, one attempt per environment, identical information to the AI, with the reference moved from the second-best player to the median so outliers cannot set the bar.<sup class='reference'>[2]</sup> GPT-6 Astra reached 99.9%, using 51.7% fewer actions than the human baseline and beating it on 96.0% of levels.<sup class='reference'>[3]</sup> Marked contested for three reasons: the 99.9% comes from a Provider Adapter harness costing $19,000 while the same model on the Standard harness scored 62.7% for $26,000, a 37 point spread that is a property of the scaffold rather than the model; ARC Prize declines to call the benchmark solved; and the date is the announcement, since GPT-6 Astra's own release date is not public and papers from July and August 2026 already reported 97.4%, 97.8% and 99% human-relative action efficiency, so an earlier crossing is plausible.",
+        references: [
+          { url: "https://arcprize.org/arc-agi/3" },
+          { url: "https://arcprize.org/blog/arc-agi-3-human-dataset" },
+          { url: "https://arcprize.org/blog/astra" }
+        ]
+      }
+    },
+    url: "https://arcprize.org/arc-agi/3",
+    paperUrl: "https://arcprize.org/blog/arc-agi-3-launch"
   }
 ];

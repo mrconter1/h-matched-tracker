@@ -23,4 +23,12 @@ export const ABOUT_SECTIONS: AboutSection[] = [
     heading: "What does this mean?",
     body: "The shrinking time-to-solve for new benchmarks suggests an acceleration in AI capabilities. This metric helps visualize how quickly AI systems are catching up to human-level performance across various tasks and domains.",
   },
+  {
+    heading: "How the h-match date is chosen",
+    body: "The date is the RELEASE DATE OF THE FIRST MODEL known to reach the human baseline, not the date somebody published a score. Those two differ, sometimes by years: a benchmark stops being fashionable to report on long before it stops being informative, so the first published pass can arrive well after the capability did. Dating to the model keeps the interval a measure of when AI got there, rather than of when the field last looked. It is still an upper bound - an older model may clear a benchmark nobody has run it on - so a date can move earlier as more models are tested, and never later.",
+  },
+  {
+    heading: "What a human baseline has to be",
+    body: "A published number, measured on humans, on the same metric and split that models are scored on. Not an estimated ceiling, not a pass mark, not inter-annotator agreement, and not a model's own score. That last one is not hypothetical: three benchmarks in the excluded list circulate a model's score as the human baseline, and one of them was on this page until it was checked.",
+  },
 ];

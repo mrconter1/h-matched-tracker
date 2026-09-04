@@ -74,6 +74,10 @@ ANTHROPIC_PRICES = {
 OUTPUT_GUESS = {"minimal": 30, "low": 60, "medium": 250, "high": 600, "xhigh": 1200, "max": 2500}
 
 
+class OutOfCredit(RuntimeError):
+    """Raised on HTTP 402 so the run stops instead of failing every remaining item."""
+
+
 @dataclass
 class Reply:
     text: str
@@ -160,6 +164,8 @@ class OpenRouterBackend:
                 extra_body={"reasoning": {"effort": effort, "exclude": True}},
             )
         except APIStatusError as e:
+            if e.status_code == 402:
+                raise OutOfCredit(e.message) from e
             return Reply("", None, None, error=f"{e.status_code}: {e.message}")
         if not response.choices:
             err = getattr(response, "error", None)
@@ -244,6 +250,14 @@ def run_path(spec: Spec, model: str) -> Path:
         counter += 1
         path = RESULTS_DIR / spec.name / f"{slug}_{stamp}-{counter}.json"
     return path
+
+
+def display_path(path: Path) -> str:
+    """Path relative to the repo where possible; --resume may be given any path."""
+    try:
+        return str(path.resolve().relative_to(RESULTS_DIR.parent))
+    except ValueError:
+        return str(path)
 
 
 def save(path: Path, record: dict[str, Any]) -> None:
@@ -335,7 +349,7 @@ def run_sync(spec: Spec, examples: list[Example], record: dict[str, Any], path: 
     done_ids = {item["id"] for item in record["items"]}
     todo = [ex for ex in examples if ex.id not in done_ids]
     print(f"=== {spec.display_name}: {len(todo)} items to run ({len(done_ids)} already done), {backend.name}, "
-          f"{args.model} @ {args.effort}, concurrency {args.concurrency} -> {path.relative_to(RESULTS_DIR.parent)}")
+          f"{args.model} @ {args.effort}, concurrency {args.concurrency} -> {display_path(path)}")
     lock = threading.Lock()
     finished = 0
     correct = 0.0
@@ -359,10 +373,17 @@ def run_sync(spec: Spec, examples: list[Example], record: dict[str, Any], path: 
                     if finished % 25 == 0:
                         save(path, record)
         except KeyboardInterrupt:
-            print("\ninterrupted - saving progress; resume with --resume", path)
+            print("\ninterrupted - saving progress; resume with --resume", display_path(path))
             pool.shutdown(wait=False, cancel_futures=True)
             save(path, record)
             raise SystemExit(130)
+        except OutOfCredit as e:
+            print(f"\nout of credit: {e}")
+            print(f"  {len(record['items'])} items kept. Top up, then:")
+            print(f"  python run_eval.py sync --resume {display_path(path)}")
+            pool.shutdown(wait=False, cancel_futures=True)
+            save(path, record)
+            raise SystemExit(2)
 
     order = {ex.id: i for i, ex in enumerate(examples)}
     record["items"].sort(key=lambda item: order.get(item["id"], 1 << 30))
@@ -373,10 +394,14 @@ def run_sync(spec: Spec, examples: list[Example], record: dict[str, Any], path: 
 
 def cmd_sync(args: argparse.Namespace) -> None:
     if args.resume:
-        path = Path(args.resume)
+        path = Path(args.resume).resolve()
         record = json.loads(path.read_text(encoding="utf-8"))
         spec = SPECS[record["benchmark"]]
         args.model, args.effort, args.max_tokens = record["model"], record["effort"], record["max_tokens"]
+        failed = [i for i in record["items"] if i.get("error")]
+        if failed:
+            print(f"retrying {len(failed)} previously errored items")
+            record["items"] = [i for i in record["items"] if not i.get("error")]
         examples = select_examples(spec, record["n_requested"])
         run_sync(spec, examples, record, path, args)
         return
