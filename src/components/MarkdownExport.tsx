@@ -1,8 +1,6 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Check, Copy, Download, X } from 'lucide-react';
 
 type CopyState = 'idle' | 'copied' | 'error';
@@ -36,16 +34,12 @@ export function MarkdownExport({ getMarkdown, fileName = 'h-matched-tracker.md' 
   const resetTimer = useRef<number | null>(null);
 
   useEffect(() => () => {
-    if (resetTimer.current !== null) {
-      window.clearTimeout(resetTimer.current);
-    }
+    if (resetTimer.current !== null) window.clearTimeout(resetTimer.current);
   }, []);
 
   const flash = (state: CopyState) => {
     setCopyState(state);
-    if (resetTimer.current !== null) {
-      window.clearTimeout(resetTimer.current);
-    }
+    if (resetTimer.current !== null) window.clearTimeout(resetTimer.current);
     resetTimer.current = window.setTimeout(() => setCopyState('idle'), 2000);
   };
 
@@ -81,54 +75,41 @@ export function MarkdownExport({ getMarkdown, fileName = 'h-matched-tracker.md' 
   };
 
   return (
-    <Card className="mt-6 shadow-md hover:shadow-lg transition-shadow">
-      <CardHeader>
-        <CardTitle className="text-2xl">Export</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-6">
-          <p className="text-muted-foreground text-lg leading-relaxed">
-            Take the whole tracker with you as structured Markdown - statistics, both
-            benchmark tables and every source note. Handy for pasting into notes or
-            feeding to a language model.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button
-              className="flex-1"
-              variant="default"
-              onClick={handleCopy}
-              aria-live="polite"
-            >
-              {copyState === 'copied' ? (
-                <>
-                  <Check className="mr-2 h-4 w-4" />
-                  Copied to clipboard
-                </>
-              ) : copyState === 'error' ? (
-                <>
-                  <X className="mr-2 h-4 w-4" />
-                  Copy failed
-                </>
-              ) : (
-                <>
-                  <Copy className="mr-2 h-4 w-4" />
-                  Copy as Markdown
-                </>
-              )}
-            </Button>
-
-            <Button
-              className="flex-1"
-              variant="outline"
-              onClick={handleDownload}
-            >
-              <Download className="mr-2 h-4 w-4" />
-              Download .md
-            </Button>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+    <div className="p-5">
+      <h3 className="heading text-[15px]">Export</h3>
+      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+        The whole table as one Markdown document: the summary statistics, the survival table by cohort, both benchmark
+        lists, and every per-benchmark note with its references.
+      </p>
+      <p className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm">
+        <button
+          type="button"
+          onClick={handleCopy}
+          aria-live="polite"
+          className="inline-flex items-center gap-1.5 text-brand underline underline-offset-4"
+        >
+          {copyState === 'copied' ? (
+            <>
+              <Check className="h-3.5 w-3.5" /> Copied
+            </>
+          ) : copyState === 'error' ? (
+            <>
+              <X className="h-3.5 w-3.5" /> Copy failed
+            </>
+          ) : (
+            <>
+              <Copy className="h-3.5 w-3.5" /> Copy to clipboard
+            </>
+          )}
+        </button>
+        <button
+          type="button"
+          onClick={handleDownload}
+          className="inline-flex items-center gap-1.5 text-brand underline underline-offset-4"
+        >
+          <Download className="h-3.5 w-3.5" /> Download .md
+        </button>
+      </p>
+    </div>
   );
 }

@@ -1,6 +1,7 @@
 import { BASELINE_LABELS, calculateTimeToSolve, formatScore, getStatus, type Benchmark } from '@/data/benchmarks';
 import { ABOUT_SECTIONS, SITE_TAGLINE, SITE_TITLE, SITE_URL } from '@/data/siteCopy';
 import { survivalByCohort, type SurvivalPoint } from '@/lib/survival';
+import { REJECTION_LABELS, REJECTION_ORDER, rejectedBenchmarks } from '@/data/rejected';
 
 /**
  * The subset of the across-benchmark statistics the export needs. Structurally
@@ -8,7 +9,7 @@ import { survivalByCohort, type SurvivalPoint } from '@/lib/survival';
  */
 export type ExportStats = {
   solvedCount: number;
-  unsolvedCount: number;
+  openCount: number;
   unreportedCount: number;
   avgTimeToSolveYears: number;
   avgTimeToSolveLast3Years: number | null;
@@ -18,7 +19,7 @@ export type ExportStats = {
   solvedWithin1yFraction: number;
   solvedWithin2yFraction: number;
   solvedWithin3yFraction: number;
-  longestUnsolvedYears: number | null;
+  longestOpenYears: number | null;
   survivalMedianYears: number | null;
 };
 
@@ -145,9 +146,7 @@ export const buildBenchmarksMarkdown = (
       '',
       `- Source: ${SITE_URL}`,
       `- Exported: ${exportedOn}`,
-      `- Benchmarks tracked: ${data.length} (${stats.solvedCount} h-matched, ${
-        stats.unsolvedCount - stats.unreportedCount
-      } open, ${stats.unreportedCount} unreported)`,
+      `- Benchmarks tracked: ${data.length} (${stats.solvedCount} h-matched, ${stats.openCount} open, ${stats.unreportedCount} unreported)`,
       '',
       'All dates are ISO 8601 (UTC). "Time to h-matched" is the gap between a',
       "benchmark's release and the date AI reached human-level performance on it;",
@@ -191,7 +190,7 @@ export const buildBenchmarksMarkdown = (
           ['H-matched within 3 years', `${formatPercent(stats.solvedWithin3yFraction)} of h-matched benchmarks`],
           [
             'Longest open (since release, unreported excluded)',
-            stats.longestUnsolvedYears !== null ? formatYears(stats.longestUnsolvedYears) : 'N/A',
+            stats.longestOpenYears !== null ? formatYears(stats.longestOpenYears) : 'N/A',
           ],
         ]
       ),
@@ -294,6 +293,29 @@ export const buildBenchmarksMarkdown = (
       ]
         .join('\n')
         .trimEnd()
+    );
+  }
+
+  const rejected = REJECTION_ORDER.flatMap(reason => rejectedBenchmarks.filter(item => item.reason === reason));
+  if (rejected.length > 0) {
+    sections.push(
+      [
+        '## Excluded benchmarks',
+        '',
+        'Considered and left out. A benchmark qualifies only with a published human score measured on the',
+        "same metric and split that models are scored on; these do not have one. Note how many are a model's",
+        'own score being circulated as the human number.',
+        '',
+        table(
+          ['Benchmark', 'Quoted as', 'What the number is', 'Why'],
+          rejected.map(item => [
+            escapeCell(item.benchmark),
+            item.quoted ? escapeCell(item.quoted) : '-',
+            REJECTION_LABELS[item.reason],
+            escapeCell(item.detail),
+          ])
+        ),
+      ].join('\n')
     );
   }
 

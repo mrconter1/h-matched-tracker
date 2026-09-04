@@ -4,48 +4,65 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    color-scheme: light;
+    /* Paper: a warm off-white ground with near-black text, as close to print as a screen gets. */
+    --background: 40 24% 98%;
+    --foreground: 220 14% 13%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
+    --card-foreground: 220 14% 13%;
+    --popover: 40 24% 99%;
+    --popover-foreground: 220 14% 13%;
+    --primary: 220 14% 16%;
+    --primary-foreground: 40 24% 98%;
+    --secondary: 40 12% 94%;
+    --secondary-foreground: 220 14% 16%;
+    --muted: 40 12% 94%;
+    --muted-foreground: 220 8% 42%;
+    --accent: 40 12% 93%;
+    --accent-foreground: 220 14% 16%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 40 24% 98%;
+    --border: 35 12% 87%;
+    --input: 35 12% 87%;
+    --ring: 220 40% 45%;
+    /* One restrained accent, reserved for data and links - never for decoration. */
+    --brand: 220 45% 42%;
+    --brand-foreground: 0 0% 100%;
+    /* Cohort curves: four steps of one hue, oldest lightest. */
+    --chart-1: 220 10% 58%;
+    --chart-2: 220 26% 46%;
+    --chart-3: 220 44% 38%;
+    --chart-4: 220 60% 29%;
+    --radius: 0.25rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    color-scheme: dark;
+    --background: 220 12% 9%;
+    --foreground: 210 12% 91%;
+    --card: 220 12% 11%;
+    --card-foreground: 210 12% 91%;
+    --popover: 220 12% 12%;
+    --popover-foreground: 210 12% 91%;
+    --primary: 210 12% 91%;
+    --primary-foreground: 220 14% 13%;
+    --secondary: 220 10% 17%;
+    --secondary-foreground: 210 12% 91%;
+    --muted: 220 10% 16%;
+    --muted-foreground: 215 10% 60%;
+    --accent: 220 10% 17%;
+    --accent-foreground: 210 12% 91%;
+    --destructive: 0 55% 48%;
+    --destructive-foreground: 210 12% 91%;
+    --border: 220 8% 20%;
+    --input: 220 8% 20%;
+    --ring: 212 45% 60%;
+    --brand: 212 55% 65%;
+    --brand-foreground: 220 14% 13%;
+    --chart-1: 220 8% 56%;
+    --chart-2: 215 24% 64%;
+    --chart-3: 212 44% 70%;
+    --chart-4: 210 68% 76%;
   }
 }
 
@@ -53,17 +70,35 @@
   * {
     @apply border-border;
   }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+  }
+  /* Numbers line up in columns; that is most of what makes a table read as a table. */
+  table,
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  ::selection {
+    background: hsl(var(--brand) / 0.18);
   }
 }
 
-@layer utilities {
-  .card-hover {
-    @apply transition-all duration-300 hover:translate-y-[-2px];
+@layer components {
+  /* Section and figure headings: serif, the one typographic signal that this is a paper. */
+  .heading {
+    font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
   }
-  
-  .icon-hover {
-    @apply transition-transform duration-200 hover:scale-110;
+  /* Column headers and field labels. */
+  .label {
+    @apply text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground;
+  }
+  /* A horizontal rule with the weight of a printed one. */
+  .rule {
+    @apply border-t border-border;
   }
 }
