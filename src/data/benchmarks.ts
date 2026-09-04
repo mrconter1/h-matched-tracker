@@ -728,16 +728,17 @@ export const benchmarkData: Benchmark[] = [
   },
   {
     benchmark: "WinoGrande",
-    lastReported: "2026-09-03",
+    lastReported: "2026-09-04",
     release: "2019-11-21",
     human: { score: 94.0, baselineType: "crowd" },
     solved: {
       date: null,
       source: {
-        text: "WinoGrande tests commonsense reasoning through adversarially filtered pronoun resolution. Human performance is 94% accuracy; models scored 59.4-79.1% at release.<sup class='reference'>[1]</sup> The best published score was 89.5% (Nemotron-4-340B base, 5-shot), and no frontier chat model had been reported on it since.<sup class='reference'>[2]</sup> Measured for this tracker on 2026-09-03: Claude Sonnet 5 scores 87.37% zero-shot over the full 1,267-item validation set, 95% CI [85.54, 89.20], leaving the 94% baseline outside the interval. Every prompt, reply and per-item score is in the repository.<sup class='reference'>[3]</sup>",
+        text: "WinoGrande tests commonsense reasoning through adversarially filtered pronoun resolution. Human performance is 94% accuracy; models scored 59.4-79.1% at release, and the best published score since was 89.5% (Nemotron-4-340B base, 5-shot) - no frontier chat model had been evaluated on it in two years.<sup class='reference'>[1]</sup><sup class='reference'>[2]</sup> Measured for this tracker over the full 1,267-item validation set, zero-shot: Claude Opus 4.6 scores 91.08%, 95% CI [89.51, 92.65], and Claude Sonnet 5 scores 87.37%, 95% CI [85.54, 89.20]. Opus 4.6 is the best score on record and still 2.9 points short, with the baseline outside its interval, so the benchmark is measurably open rather than merely unmeasured. Every prompt, reply and per-item score is in the repository.<sup class='reference'>[3]</sup><sup class='reference'>[4]</sup>",
         references: [
           { url: "https://arxiv.org/pdf/1907.10641" },
           { url: "https://arxiv.org/abs/2406.11704" },
+          { url: "https://github.com/mrconter1/h-matched-tracker/blob/main/eval/results/winogrande/anthropic__claude-opus-4.6_2026-09-04.json" },
           { url: "https://github.com/mrconter1/h-matched-tracker/blob/main/eval/results/winogrande/anthropic__claude-sonnet-5_2026-09-03.json" }
         ]
       }

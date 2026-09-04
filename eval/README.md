@@ -81,3 +81,25 @@ summary, `solved.conditions` to `"zero-shot, effort=<x>, measured by this repo"`
 and link the results file as a reference. Leave `status: "unreported"` in place
 if the run is below the baseline - it is now *measured and open*, so drop the
 status field and let it fall into the open group instead.
+
+## Two findings from the first runs
+
+**Subsets of these datasets are not random samples.** The validation files ship
+in a fixed order and the early items are easier. On WinoGrande the first 300
+items overstated the full-set score by about three points for both models
+measured:
+
+| Model | First 300 | Full 1,267 |
+|---|---|---|
+| Claude Sonnet 5 | 91.00% | 87.37% |
+| Claude Opus 4.6 | 93.67% | 91.08% |
+
+Use `--limit` to check plumbing and cost, never to produce a number. Shuffling
+before slicing would fix this and is not yet implemented.
+
+**Adaptive thinking is not the same as thinking.** Reasoning-token counts show
+Opus 4.6 spending 128 tokens on a hard arithmetic item and none at all on a
+WinoGrande item, which is the model correctly judging the task trivial rather
+than a configuration failure. Sonnet 5 returns zero reasoning tokens on this
+route even for the hard item. Record which of the two a result is: `usage.reasoning`
+is stored per run in the results file.
